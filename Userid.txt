@@ -1,0 +1,3 @@
+allowedUserIds = {
+"908138", -- pahri
+}
