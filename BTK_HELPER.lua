@@ -593,7 +593,7 @@ function takegems()
         Count = 0;
         if data[2] > data[1] then
 			SendPacket(2, "action|input\n|text|`w[`2WIN`w] Kiri (gems) `2"..data[2].." `bVS `4"..data[1].." `w(gems) [`4LOSE`w] Kanan");
-            ProxyOverlay("`9Pos Left `2WIN!")
+            
             cg2 = data[2]
 			LogWinner("LEFT", data[2], data[1])
             
@@ -625,7 +625,7 @@ function takegems()
             ProxyOverlay("`9Nothing Winner `4TIE!")
         elseif data[2] < data[1] then
 			SendPacket(2, "action|input\n|text|`w[`4LOSE`w] Kiri (gems) `4"..data[2].." `bVS `2"..data[1].." `w(gems) [`2WIN`w] Kanan");
-            ProxyOverlay("`9Pos Right `2WIN!")
+            
             cg1 = data[1]
 			LogWinner("RIGHT", data[1], data[2])
             
