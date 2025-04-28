@@ -12,7 +12,7 @@ function open()
 "\nadd_textbox|`w[`2+`w] `0Added `w/top `w[`9Set Chand On Top`w]|"..
 "\nadd_textbox|`w[`2+`w] `0Added `w/down `w[`9Set Chand On Down`w]|"..
 "\nadd_textbox|`w[`2+`w] `0Added `w/emoji `w[`9Rainbow Chat with Emoji`w]|"..
-"\nadd_textbox|`w[`2+`w] `0Added `w/wlog `w[`9Show Winner Log`w]|"..
+"\nadd_textbox|`w[`2+`w] `0Added `w/log `w[`9Show Winner Log`w]|"..
 "\nadd_spacer|small|"..
 "\nadd_label_with_icon|small|`^Information|left|5956|"..
 "\nadd_textbox|`w/cmd `w[`9Shows all proxy commands`w]|"..
@@ -185,6 +185,17 @@ local cg2 = 0
 local Growid = GetLocal().name
 local WinnerLog = {}
 local emojiChatEnabled = false
+
+function LogWinner(side, gemsCount, opponentGems)
+    local timestamp = os.date("%H:%M on %d/%m")
+    local logEntry = {
+        side = side,
+        gems = gemsCount,
+        opponentGems = opponentGems,
+        time = timestamp
+    }
+    table.insert(WinnerLog, logEntry)
+end
 
 function ShowWinnerLog()
     local dialogContent = "\nadd_label_with_icon|big|`9Gems Winner Log|left|112|"..
