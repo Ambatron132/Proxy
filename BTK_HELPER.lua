@@ -381,7 +381,8 @@ function ProxyLog(str)
 end
 
 LogToConsole("`9Script Will Run In `25 `9Seconds")
-SendPacket(2, "action|input\n|text|`0Proxy `9BTK `0By `#Brofus `2ON!")
+SendPacket(2, "action|input\n|text|`0Proxy `9BTK HELPER `2ON!")
+SendPacket(2, "action|input\n|text|`0Contact Me If Bug / Error")
 Sleep(1000)
 open()
 
