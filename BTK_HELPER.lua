@@ -4,16 +4,17 @@ function open()
 "\nadd_spacer|small|"..
 "\nadd_label_with_icon|small|`^Change Log|left|2480|"..
 "\nadd_textbox|`2Version : `93.4|"..
-"\nadd_textbox|`w[ `2+ `w] `0Added `2/win `w[`9Auto drop to winners`w]|"..
-"\nadd_textbox|`w[ `2+ `w] `0Added `2/cg `w[`9Check Gems`w]|"..
-"\nadd_textbox|`w[ `2+ `w] `0Added `2/fps `w[`9Fast Setup`w]|"..
-"\nadd_textbox|`w[ `2+ `w] `0Added `2/ar `w[`9Drop Arroz`w]|"..
-"\nadd_textbox|`w[ `2+ `w] `0Added `2/cl `w[`9Drop Clover`w]|"..
-"\nadd_textbox|`w[ `2+ `w] `0Added `2/top `w[`9Set Chand On Top`w]|"..
-"\nadd_textbox|`w[ `2+ `w] `0Added `2/down `w[`9Set Chand On Down`w]|"..
+"\nadd_textbox|`w[ `2+ `w] `0Added `w/win `w[`9Auto drop to winners`w]|"..
+"\nadd_textbox|`w[ `2+ `w] `0Added `w/cg `w[`9Check Gems`w]|"..
+"\nadd_textbox|`w[ `2+ `w] `0Added `w/fps `w[`9Fast Setup`w]|"..
+"\nadd_textbox|`w[ `2+ `w] `0Added `w/ar `w[`9Drop Arroz`w]|"..
+"\nadd_textbox|`w[ `2+ `w] `0Added `w/cl `w[`9Drop Clover`w]|"..
+"\nadd_textbox|`w[ `2+ `w] `0Added `w/top `w[`9Set Chand On Top`w]|"..
+"\nadd_textbox|`w[ `2+ `w] `0Added `w/down `w[`9Set Chand On Down`w]|"..
+"\nadd_textbox|`w[ `2+ `w] `0Added `w/log `w[`9Winner Gems Logs`w]|"..
 "\nadd_spacer|small|"..
 "\nadd_label_with_icon|small|`^Information|left|5956|"..
-"\nadd_textbox|`2/cmd `w[`9Shows all proxy commands`w]|"..
+"\nadd_textbox|`w/cmd `w[`9Shows all proxy commands`w]|"..
 "\nadd_spacer|small|"..
 "\nadd_quick_exit||"..
 "\nend_dialog|cl|Enjoy|"
@@ -99,36 +100,37 @@ function command()
 	cmd = "\nadd_label_with_icon|big|`wAll BTK Command                                                             |left|2480|"..
 "\nadd_spacer|small|"..
 "\nadd_label|small|`^Information|left|"..
-"\nadd_textbox|`2/cmd `w[`wShows all commands`w]|"..
+"\nadd_textbox|`w/cmd `w[`9Shows all commands`w]|"..
 "\nadd_spacer|small|"..
 "\nadd_label|small|`^Main Command|left|"..
-"\nadd_textbox|`2/eat `w[`wEnabled/disabled auto eat bgems`w]|"..
-"\nadd_textbox|`2/sdb `w[`wEnabled/disabled blok SDB`w]|"..
-"\nadd_textbox|`2/blue `w[`wConvert black gem lock to blue gem lock`w]|"..
-"\nadd_textbox|`2/black `w[`wConvert blue gem lock to black gem lock`w]|"..
-"\nadd_textbox|`2/cv `wor `2/c `w[`wEnabled/disabled fast convert blue gem lock`w]|"..
+"\nadd_textbox|`w/eat `w[`9Enabled/disabled auto eat bgems`w]|"..
+"\nadd_textbox|`w/sdb `w[`9Enabled/disabled blok SDB`w]|"..
+"\nadd_textbox|`w/blue `w[`9Convert black gem lock to blue gem lock`w]|"..
+"\nadd_textbox|`w/black `w[`9Convert blue gem lock to black gem lock`w]|"..
+"\nadd_textbox|`w/cv `wor `w/c `w[`9Enabled/disabled fast convert blue gem lock`w]|"..
 "\nadd_spacer|small|"..
 "\nadd_label|small|`^Hoster Command|left|"..
-"\nadd_textbox|`2/w `7{amount} `w[`wDrop world lock`w]|"..
-"\nadd_textbox|`2/dd `7{amount} `w[`wDrop diamond lock`w]|"..
-"\nadd_textbox|`2/b `7{amount} `w[`wDrop blue gem lock`w]|"..
-"\nadd_textbox|`2/bb `7{amount} `w[`wDrop black gem lock`w]|"..
-"\nadd_textbox|`2/setup `w[`wManual Setup`w]"..
-"\nadd_textbox|`2/tax `7{amount} `w[`wSet tax`w]|"..
-"\nadd_textbox|`2/tb `w[`wTake Bet`w]|"..
-"\nadd_textbox|`2/tg `w[`wShows Gems and Auto Drop to Winner`w]|"..
-"\nadd_textbox|`2/win `w[`wAuto drop to winners`w]|"..
-"\nadd_textbox|`2/wp `w[`wEnabled/disabled wrench mode pull`w]|"..
-"\nadd_textbox|`2/put `w[`wEnabled/disabled auto put chand`w]|"..
+"\nadd_textbox|`w/w `7{amount} `w[`9Drop world lock`w]|"..
+"\nadd_textbox|`w/dd `7{amount} `w[`9Drop diamond lock`w]|"..
+"\nadd_textbox|`w/b `7{amount} `w[`9Drop blue gem lock`w]|"..
+"\nadd_textbox|`w/bb `7{amount} `w[`9Drop black gem lock`w]|"..
+"\nadd_textbox|`w/setup `w[`9Manual Setup`w]"..
+"\nadd_textbox|`w/tax `7{amount} `w[`9Set tax`w]|"..
+"\nadd_textbox|`w/tb `w[`9Take Bet`w]|"..
+"\nadd_textbox|`w/tg `w[`9Shows Gems and Auto Drop to Winner`w]|"..
+"\nadd_textbox|`w/win `w[`9Auto drop to winners`w]|"..
+"\nadd_textbox|`w/wp `w[`9Enabled/disabled wrench mode pull`w]|"..
+"\nadd_textbox|`w/put `w[`9Enabled/disabled auto put chand`w]|"..
+"\nadd_textbox|`w/log `w[`9Winner Gems Logs`w]|"..
 "\nadd_spacer|small|"..
 "\nadd_label|small|`^Bgl Bank Command|left|"..
-"\nadd_textbox|`2/wd `w[`wWithdraw blue gem lock from bank`w]|"..
-"\nadd_textbox|`2/depo `wor `2/dp `w[`wDeposit blue gem lock to bank`w]|"..
+"\nadd_textbox|`w/wd `w[`9Withdraw blue gem lock from bank`w]|"..
+"\nadd_textbox|`w/depo `wor `w/dp `w[`9Deposit blue gem lock to bank`w]|"..
 "\nadd_spacer|small|"..
 "\nadd_label|small|`^Spammer Command|left|"..
-"\nadd_textbox|`2/spam `w[`w<<Text>>`w]|"..
-"\nadd_textbox|`2/os `w[`wEnable auto spam`w]|"..
-"\nadd_textbox|`2/ofs `w[`wDisabled auto spam`w]|"..
+"\nadd_textbox|`w/spam `w[`9<<Text>>`w]|"..
+"\nadd_textbox|`w/os `w[`9Enable auto spam`w]|"..
+"\nadd_textbox|`w/ofs `w[`9Disabled auto spam`w]|"..
 "\nadd_quick_exit||"..
 "\nend_dialog|proxy|Enjoy|"
 	SendVariantList({
