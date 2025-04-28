@@ -1,22 +1,19 @@
 function open()
 	opening = "\nadd_label_with_icon|big|`9BTK`w-`9HELPER|left|2480|"..
-"\nadd_textbox|`0Hi, "..GetLocal().name.." `0Thanks for Using this script!|"..
+"\nadd_textbox|`0Thanks for purchase this script!|"..
 "\nadd_spacer|small|"..
-"\nadd_label_with_icon|small|`^Change Log|left|2480|"..
-"\nadd_textbox|`2Version : `52|"..
-"\nadd_textbox|`w[`2+`w] `0Added `w/win `w[`9Auto drop to winners`w]|"..
-"\nadd_textbox|`w[`2+`w] `0Added `w/tg `w[`9Take Gems and drop to winners`w]|"..
-"\nadd_textbox|`w[`2+`w] `0Added `w/cg `w[`9Check Gems`w]|"..
-"\nadd_textbox|`w[`2+`w] `0Added `w/ar `w[`9Drop Arroz`w]|"..
-"\nadd_textbox|`w[`2+`w] `0Added `w/cl `w[`9Drop Clover`w]|"..
-"\nadd_textbox|`w[`2+`w] `0Added `w/top `w[`9Set Chand On Top`w]|"..
-"\nadd_textbox|`w[`2+`w] `0Added `w/down `w[`9Set Chand On Down`w]|"..
-"\nadd_textbox|`w[`2+`w] `0Added `w/log `w[`9Drop / Collected`w]|"..
-"\nadd_textbox|`w[`2+`w] `0Added `w/emoji `w[`9Rainbow Chat with Emoji`w]|"..
-"\nadd_textbox|`w[`2+`w] `0Added `w/wlog `w[`9Show Winner Log`w]|"..
+"\nadd_label_with_icon|small|`^Change Log|left|6128|"..
+"\nadd_textbox|`2Version : `53.4|"..
+"\nadd_textbox|`w[ `2+ `w] `0Added command `2/win `w[`5Auto drop to winners`w]|"..
+"\nadd_textbox|`w[ `2+ `w] `0Added command `2/cg `w[`5Check Gems`w]|"..
+"\nadd_textbox|`w[ `2+ `w] `0Added command `2/fps `w[`5Fast Setup`w]|"..
+"\nadd_textbox|`w[ `2+ `w] `0Added command `2/ar `w[`5Drop Arroz`w]|"..
+"\nadd_textbox|`w[ `2+ `w] `0Added command `2/cl `w[`5Drop Clover`w]|"..
+"\nadd_textbox|`w[ `2+ `w] `0Added command `2/ctop `w[`5Set Chand On Top`w]|"..
+"\nadd_textbox|`w[ `2+ `w] `0Added command `2/cdown `w[`5Set Chand On Down`w]|"..
 "\nadd_spacer|small|"..
 "\nadd_label_with_icon|small|`^Information|left|5956|"..
-"\nadd_textbox|`w/cmd `w[`9Shows all proxy commands`w]|"..
+"\nadd_textbox|`2/cmd `w[`5Shows all proxy commands`w]|"..
 "\nadd_spacer|small|"..
 "\nadd_quick_exit||"..
 "\nend_dialog|cl|Enjoy|"
@@ -34,7 +31,7 @@ function xxx()
     "\nadd_label_with_icon|small|`0World: `2"..GetWorld().name.."|left|3802|"..
     "\nadd_label_with_icon|small|`0Current Tax: `2"..taxset.."`9%|left|15580|"..
 	"\nadd_label_with_icon|small|`0Current Position `2X:`0"..math.floor(GetLocal().pos.x / 32).." `2Y:`0"..math.floor(GetLocal().pos.y / 32).."|left|15476|"..
-    "\nadd_spacer|small|"..
+    "\nadd_spacer|big|"..
     "\nadd_button_with_icon|pt|   `cBTK Setup   |staticYellowFrame|340|"..
 	"\nadd_button_with_icon|tel|   `cTelephone   |staticYellowFrame|3898||"..
     "\nadd_button_with_icon|wrench|   `cWrench Setting   |staticYellowFrame|32||"..
@@ -67,9 +64,10 @@ end
 function tele()
 	dialog = "\nadd_label_with_icon|small|Wrench Mode|left|3898|"..
 	"\nadd_spacer|small|"..
-	"\nadd_button_with_icon|cbgl|   `cConvert BGL   |staticYellowFrame|3898||"..
-	"\nadd_button_with_icon|cbl|   `cBGL to Black   |staticYellowFrame|3898||"..
-	"\nadd_button_with_icon|cbb|   `cBlack to BGL   |staticYellowFrame|3898||"..
+	"\nadd_button_with_icon|cbgl|   `0Convert BGL   |staticYellowFrame|3898||"..
+	"\nadd_button_with_icon|bbgl|   `0Buy BGL   |staticYellowFrame|3898||"..
+	"\nadd_button_with_icon|cbl|   `0BGL to Black   |staticYellowFrame|3898||"..
+	"\nadd_button_with_icon|cbb|   `0Black to BGL   |staticYellowFrame|3898||"..
 	"\nadd_button_with_icon||END_LIST|noflags|0||"..
 	"\nadd_button|back|`wBack|noflags|0|0|"..
 	"\nend_quick_exit||"
@@ -101,35 +99,39 @@ end
 function command()
 	cmd = "\nadd_label_with_icon|big|`wAll BTK Command                                                             |left|2480|"..
 "\nadd_spacer|small|"..
-"\nadd_label_with_icon|small|`wInformation|left|2480|"..
-"\nadd_textbox|`w/cmd `w[`9Shows all commands`w]|"..
+"\nadd_label|small|`^Information|left|"..
+"\nadd_textbox|`2/cmd `w[`wShows all commands`w]|"..
+"\nadd_textbox|`2/discord `w[`wOfficial discord server`w]|"..
+"\nadd_textbox|`2/fps `w[`wSetup positions by punching (no buttons)`w]|"..
 "\nadd_spacer|small|"..
-"\nadd_label_with_icon|small|`wMain Command|left|340|"..
-"\nadd_textbox|`w/sdb `w[`9Enabled/disabled blok SDB`w]|"..
-"\nadd_textbox|`w/blue `w[`9Convert black to blue gem lock`w]|"..
-"\nadd_textbox|`w/black `w[`9Convert blue to black gem lock`w]|"..
+"\nadd_label|small|`^Main Command|left|"..
+"\nadd_textbox|`2/eat `w[`wEnabled/disabled auto eat bgems`w]|"..
+"\nadd_textbox|`2/sdb `w[`wEnabled/disabled blok SDB`w]|"..
+"\nadd_textbox|`2/blue `w[`wConvert black gem lock to blue gem lock`w]|"..
+"\nadd_textbox|`2/black `w[`wConvert blue gem lock to black gem lock`w]|"..
+"\nadd_textbox|`2/cv `wor `2/c `w[`wEnabled/disabled fast convert blue gem lock`w]|"..
 "\nadd_spacer|small|"..
-"\nadd_label_with_icon|small|`wHoster Command|left|340|"..
-"\nadd_textbox|`w/w `7{amount} `w[`9Drop world lock`w]|"..
-"\nadd_textbox|`w/dd `7{amount} `w[`9Drop diamond lock`w]|"..
-"\nadd_textbox|`w/b `7{amount} `w[`9Drop blue gem lock`w]|"..
-"\nadd_textbox|`w/bb `7{amount} `w[`9Drop black gem lock`w]|"..
-"\nadd_textbox|`w/setup `w[`9Manual Setup`w]"..
-"\nadd_textbox|`w/tax `7{amount} `w[`9Set tax`w]|"..
-"\nadd_textbox|`w/tb `w[`9Take lock`w]|"..
-"\nadd_textbox|`w/tg `w[`9Shows Gems and Auto Drop to Winner`w]|"..
-"\nadd_textbox|`w/win `w[`9Auto drop to winners`w]|"..
-"\nadd_textbox|`w/wp `w[`9Enabled/disabled wrench mode pull`w]|"..
-"\nadd_textbox|`w/put `w[`9Enabled/disabled auto put chand`w]|"..
+"\nadd_label|small|`^Hoster Command|left|"..
+"\nadd_textbox|`2/w `7{amount} `w[`wDrop world lock`w]|"..
+"\nadd_textbox|`2/dd `7{amount} `w[`wDrop diamond lock`w]|"..
+"\nadd_textbox|`2/b `7{amount} `w[`wDrop blue gem lock`w]|"..
+"\nadd_textbox|`2/bb `7{amount} `w[`wDrop black gem lock`w]|"..
+"\nadd_textbox|`2/setup `w[`wManual Setup`w]"..
+"\nadd_textbox|`2/tax `7{amount} `w[`wSet tax`w]|"..
+"\nadd_textbox|`2/take `w[`wTake lock`w]|"..
+"\nadd_textbox|`2/tg `w[`wShows Gems and Auto Drop to Winner`w]|"..
+"\nadd_textbox|`2/win `w[`wAuto drop to winners`w]|"..
+"\nadd_textbox|`2/wp `w[`wEnabled/disabled wrench mode pull`w]|"..
+"\nadd_textbox|`2/put `w[`wEnabled/disabled auto put chand`w]|"..
 "\nadd_spacer|small|"..
-"\nadd_label_with_icon|small|`wBnk Command|left|340|"..
-"\nadd_textbox|`w/wd `w[`9Withdraw blue gem lock from bank`w]|"..
-"\nadd_textbox|`w/depo `wor `w/dp `w[`9Deposit blue gem lock to bank`w]|"..
+"\nadd_label|small|`^Bgl Bank Command|left|"..
+"\nadd_textbox|`2/wd `w[`wWithdraw blue gem lock from bank`w]|"..
+"\nadd_textbox|`2/depo `wor `2/dp `w[`wDeposit blue gem lock to bank`w]|"..
 "\nadd_spacer|small|"..
-"\nadd_label_with_icon|small|`wSpam Command|left|340|"..
-"\nadd_textbox|`w/spam `w[`9<<Text>>`w]|"..
-"\nadd_textbox|`w/os `w[`9Enable auto spam`w]|"..
-"\nadd_textbox|`w/ofs `w[`9Disabled auto spam`w]|"..
+"\nadd_label|small|`^Spammer Command|left|"..
+"\nadd_textbox|`2/spam `w[`w<<Text>>`w]|"..
+"\nadd_textbox|`2/os `w[`wEnable auto spam`w]|"..
+"\nadd_textbox|`2/ofs `w[`wDisabled auto spam`w]|"..
 "\nadd_quick_exit||"..
 "\nend_dialog|proxy|Enjoy|"
 	SendVariantList({
@@ -138,12 +140,26 @@ function command()
 	})
 end
 
+function discord()
+	ds = "\nadd_label_with_icon|big|`2Official Discord Server|left|6292|"..
+"\nadd_spacer|small||"..
+"\nadd_textbox|`wThanks for purchase our script! We welcome you to join official discord server, click the button below:|left|"..
+"\nadd_url_button||`cDoctorr `oScript|noflags|https://discord.com/invite/qfhaZTq6Xa|Would you like to join Doctorr Script Discord?|0|0|"..
+"\nadd_spacer|small||"..
+"\nend_dialog|popup|Thanks for the info!||"
+	SendVariantList({
+		[0] = "OnDialogRequest",
+		[1] = ds
+	})
+end
 
 data = {}
 local pull = false
 local kick = false
 local ban = false
 local cbgl = false
+local buybgl = false
+local bgems = false
 Count = 0
 local sdbb = false
 local takeleftx
@@ -168,11 +184,11 @@ local DropMode = false
 local putchand = true
 local cg1 = 0
 local cg2 = 0
+local fpsMode = false -- Added FPS mode variable
 local Growid = GetLocal().name
-local ActivityLog = {}
-local emojiChatEnabled = false
 local WinnerLog = {}
 
+-- Add this function to log winners
 function LogWinner(side, gemsCount, opponentGems)
     local timestamp = os.date("%H:%M on %d/%m")
     local logEntry = {
@@ -184,86 +200,7 @@ function LogWinner(side, gemsCount, opponentGems)
     table.insert(WinnerLog, logEntry)
 end
 
-local emoji = {
-    "sigh",
-    "mad",
-    "smile",
-    "tongue",
-    "wow",
-    "no",
-    "shy",
-    "wink",
-    "music",
-    "lol",
-    "yes",
-    "love",
-    "megaphone",
-    "heart",
-    "cool",
-    "kiss",
-    "agree",
-    "see-no-evil",
-    "dance",
-    "build",
-    "oops",
-    "sleep",
-    "punch",
-    "bheart",
-    "cry",
-    "party",
-    "wl",
-    "grow",
-    "gems",
-    "gtoken",
-    "plead",
-    "vend",
-    "bunny",
-    "cactus",
-    "peace",
-    "terror",
-    "troll",
-    "halo",
-    "nuke",
-    "pine",
-    "football",
-    "fireworks",
-    "song",
-    "ghost",
-    "evil",
-    "pizza",
-    "alien",
-    "clap",
-    "turkey",
-    "gift",
-    "cake",
-    "heartarrow",
-    "shamrock",
-    "grin",
-    "ill",
-    "eyes",
-    "weary",
-    "moyai",
-}
-
--- Add the rainbow text/emoji chat hook from Anubeast x Draco
-AddHook("onsendpacket", "rainbowsText", function(type, packet)
-if not emojiChatEnabled then return false end
-    if type == 2 and packet:find("action|input\n|text|") then
-        args = string.gsub(packet, "action|input\n|text|", "")
-        if args:sub(1, 1) == "/" or args:sub(5, 5) == "(" or args:sub(5, 5) == ")" or args:sub(5, 5) == "5" then
-            return false
-        end
-        text = args
-        textMessage = ""
-        for chart in text:gmatch("(.)") do
-            textMessage = textMessage .. "`" .. math.random(0) .. chart
-        end
-        SendPacket(2, "action|input\ntext|`b("..emoji[math.random(1, #emoji)]..") : ".. textMessage)
-        return true
-    end
-end)
-
--- Add this function to display the winner log with green color for winners
+-- Add this function to display the winner log
 function ShowWinnerLog()
     local dialogContent = "\nadd_label_with_icon|big|`9Gems Winner Log|left|112|"..
                          "\nadd_spacer|small|"
@@ -272,7 +209,6 @@ function ShowWinnerLog()
         dialogContent = dialogContent.."\nadd_textbox|`9No winner logs yet|left|"
     else
         for i, log in ipairs(WinnerLog) do
-            -- Both Left and Right winners will be shown in green
             dialogContent = dialogContent..
                 "\nadd_label_with_icon|small|`2"..log.side.." `wWin `2"..log.gems.." `wVS `4"..log.opponentGems.." `w("..log.time..")|left|112|"
         end
@@ -289,23 +225,6 @@ function ShowWinnerLog()
     })
 end
 
--- Add ActivityLogPage function
-function ActivityLogPage()
-    local Action = {}
-    if #ActivityLog == 0 then
-        table.insert(Action, "\nadd_textbox|`9No activity logged yet|left|")
-    else
-        for _, log in pairs(ActivityLog) do
-            table.insert(Action, log.act)
-        end
-    end
-    
-    SendVariantList({
-        [0] = "OnDialogRequest",
-        [1] = "set_default_color|`w|\nadd_label_with_icon|big|Activity Log|left|3524|\nadd_spacer|small|\n"..
-               table.concat(Action).."\nadd_spacer|small|\nadd_quick_exit|||\nend_dialog|ActivityLog|Close||"
-    })
-end
 
 function removeColorAndSymbols(str)
     cleanedStr = string.gsub(str, "`(%S)", '')
@@ -381,7 +300,7 @@ function ProxyLog(str)
 end
 
 LogToConsole("`9Script Will Run In `25 `9Seconds")
-SendPacket(2, "action|input\n|text|`0Proxy `9BTK HELPER `2ON!")
+SendPacket(2, "action|input\n|text|`0Proxy `9BTK `0By `#Brofus `2ON!")
 Sleep(1000)
 open()
 
@@ -476,23 +395,32 @@ function Data()
 end
 
 AddHook("onvariant", "variabel", function(var)
+
+    -- Additional logic for Collected messages and logging
     if var[0] == "OnConsoleMessage" and var[1]:find("Collected  `w(%d+) World Lock") then
         local AmountCollectWL = tonumber(var[1]:match("Collected  `w(%d+) World Lock"))
-        LogToActivity("`oCollected `w", "`9World Lock", AmountCollectWL)
-        return true
-    elseif var[0] == "OnConsoleMessage" and var[1]:find("Collected  `w(%d+) Diamond Lock") then
-        local AmountCollectDL = tonumber(var[1]:match("Collected  `w(%d+) Diamond Lock"))
-        LogToActivity("`oCollected `w", "`cDiamond Lock", AmountCollectDL)
-        return true
-    elseif var[0] == "OnConsoleMessage" and var[1]:find("Collected  `w(%d+) Blue Gem Lock") then
-        local AmountCollectBGL = tonumber(var[1]:match("Collected  `w(%d+) Blue Gem Lock"))
-        LogToActivity("`oCollected `w", "`eBlue Gem Lock", AmountCollectBGL)
-        return true
-    elseif var[0] == "OnConsoleMessage" and var[1]:find("Collected  `w(%d+) Black Gem Lock") then
-        local AmountCollectBBGL = tonumber(var[1]:match("Collected  `w(%d+) Black Gem Lock"))
-        LogToActivity("`oCollected `w", "`bBlack Gem Lock", AmountCollectBBGL)
+        SendPacket(2, "action|input\ntext|"..Growid.." `0Collected `2"..AmountCollectWL.." `9World Lock")
         return true
     end
+
+    if var[0] == "OnConsoleMessage" and var[1]:find("Collected  `w(%d+) Diamond Lock") then
+        local AmountCollectDL = tonumber(var[1]:match("Collected  `w(%d+) Diamond Lock"))
+        SendPacket(2, "action|input\ntext|"..Growid.." `0Collected `2"..AmountCollectDL.." `1Diamond Lock")
+        return true
+    end
+
+    if var[0] == "OnConsoleMessage" and var[1]:find("Collected  `w(%d+) Blue Gem Lock") then
+        local AmountCollectBGL = tonumber(var[1]:match("Collected  `w(%d+) Blue Gem Lock"))
+        SendPacket(2, "action|input\ntext|"..Growid.." `0Collected `2"..AmountCollectBGL.." `cBlue Gem Lock")
+        return true
+    end
+
+    if var[0] == "OnConsoleMessage" and var[1]:find("Collected  `w(%d+) Black Gem Lock") then
+        local AmountCollectBBGL = tonumber(var[1]:match("Collected  `w(%d+) Black Gem Lock"))
+        SendPacket(2, "action|input\ntext|"..Growid.." `0Collected `2"..AmountCollectBBGL.." `bBlack Gem Lock")
+        return true
+    end
+
     return false
 end)
 
@@ -575,7 +503,7 @@ function takegems()
     do
         for _, obj in pairs(GetObjectList()) do
             for _, tiles in pairs(tile.pos1) do
-                if obj.id == 112 and (obj.pos.x) // 32 == tiles.x and (obj.pos.y) // 32 == tiles.y then
+                if obj.id == 112 and (obj.pos.x)//32 == tiles.x and (obj.pos.y)//32 == tiles.y then
                     Count = Count + obj.amount;
                 end
             end
@@ -584,7 +512,7 @@ function takegems()
         Count = 0;
         for _, obj in pairs(GetObjectList()) do
             for _, tiles in pairs(tile.pos2) do
-                if obj.id == 112 and (obj.pos.x) // 32 == tiles.x and (obj.pos.y) // 32 == tiles.y then
+                if obj.id == 112 and (obj.pos.x)//32 == tiles.x and (obj.pos.y)//32 == tiles.y then
                     Count = Count + obj.amount;
                 end
             end
@@ -592,10 +520,9 @@ function takegems()
         table.insert(data, Count)
         Count = 0;
         if data[2] > data[1] then
-			SendPacket(2, "action|input\n|text|`w[`2WIN`w] Kiri (gems) `2"..data[2].." `bVS `4"..data[1].." `w(gems) [`4LOSE`w] Kanan");
-            ProxyOverlay("`9Pos Left `2WIN!")
+            SendPacket(2, "action|input\n|text|`0[`2Win`0] Kiri `2: " .. data[2] .. "(gems) `bVs `0[`4Lose`0] Kanan `2: " .. data[1] .. "(gems)");
             cg2 = data[2]
-			LogWinner("LEFT", data[2], data[1]) -- LEFT WINNER LOG
+            LogWinner("LEFT", data[2], data[1]) -- Log left winner
             
             -- Auto drop to left winner
             if jatuh then
@@ -614,20 +541,14 @@ function takegems()
                     wear(7188)
                 end
                 DropMode = true
-                -- Log the locks dropped to winner (Left)
-                if ireng > 0 then LogToActivity("Dropped to Winner", "`bBlack Gem Lock", ireng) end
-                if bgl > 0 then LogToActivity("Dropped to Winner", "`cBlue Gem Lock", bgl) end
-                if dl > 0 then LogToActivity("Dropped to Winner", "`1Diamond Lock", dl) end
-                if wl > 0 then LogToActivity("Dropped to Winner", "`9World Lock", wl) end
             end
         elseif data[1] == data[2] then
             SendPacket(2, "action|input\n|text|Ya Sama `2: " .. data[2] .. "(wink) `0[ `bTie `0] Ya Sama `w: " .. data[1] .. "(wink)");
             ProxyOverlay("`9Nothing Winner `4TIE!")
         elseif data[2] < data[1] then
-			SendPacket(2, "action|input\n|text|`w[`4LOSE`w] Kiri (gems) `4"..data[2].." `bVS `2"..data[1].." `w(gems) [`2WIN`w] Kanan");
-            ProxyOverlay("`9Pos Right `2WIN!")
+            SendPacket(2, "action|input\n|text|`0[`4Lose`0] Kiri `2: " .. data[2] .. "(gems) `bVs `0[`2Win`0] Kanan `2: " .. data[1] .. "(gems)");
             cg1 = data[1]
-			LogWinner("RIGHT", data[1], data[2])
+            LogWinner("RIGHT", data[1], data[2]) -- Log right winner
             
             -- Auto drop to right winner
             if jatuh then
@@ -646,45 +567,10 @@ function takegems()
                     wear(7188)
                 end
                 DropMode = true
-                -- Log the locks dropped to winner (Right)
-                if ireng > 0 then LogToActivity("Dropped to Winner", "`bBlack Gem Lock", ireng) end
-                if bgl > 0 then LogToActivity("Dropped to Winner", "`cBlue Gem Lock", bgl) end
-                if dl > 0 then LogToActivity("Dropped to Winner", "`1Diamond Lock", dl) end
-                if wl > 0 then LogToActivity("Dropped to Winner", "`9World Lock", wl) end
             end
         end
         data = {};
     end;
-end
-
--- Keep the existing LogToActivity function
-function LogToActivity(action, itemType, amount)
-    local itemIcon = 242  -- Default to World Lock icon
-    
-    -- Determine the correct icon based on item type
-    if itemType:find("Black Gem Lock") then
-        itemIcon = 11550  -- Black Gem Lock icon
-    elseif itemType:find("Blue Gem Lock") then
-        itemIcon = 7188   -- Blue Gem Lock icon
-    elseif itemType:find("Diamond Lock") then
-        itemIcon = 1796   -- Diamond Lock icon
-    elseif itemType:find("World Lock") then
-        itemIcon = 242    -- World Lock icon
-    elseif itemType:find("Arroz") then
-        itemIcon = 4604   -- Arroz icon
-    elseif itemType:find("Clover") then
-        itemIcon = 528    -- Clover icon
-    end
-    
-    -- Clean up itemType string for display (remove color codes)
-    local displayItemType = itemType
-    
-    -- Format the log entry with matching icon
-    table.insert(ActivityLog, {
-        act = "\nadd_label_with_icon|small|"..GetLocal().name.." "..action.." `w"..amount.." "..displayItemType.." `wat "..os.date("%H:%M on %d/%m").."|left|"..itemIcon.."|\n",
-        netid = GetLocal().netID,
-        acts = action.." "..amount.." "..displayItemType
-    })
 end
 
 function get(val)
@@ -768,7 +654,58 @@ function hook(type, str)
 			return true
 		end
 	end
-	if str:find("/cmd") or str:find("buttonClicked|cmd") then
+	if str:find("/bbgl") or str:find("buttonClicked|bbgl") then
+		if buybgl == false then
+			buybgl = true
+			ProxyOverlay("`2Enabled `9Fast Buy Blue Gem Lock")
+			return true
+		else
+			buybgl = false
+			ProxyOverlay("`4Disabled `9Fast Buy Blue Gem Lock")
+			return true
+		end
+	end
+    if str:find("/fps") then
+    if fpsMode == false then
+        fpsMode = true
+		SendPacket(2, "action|input\n|text|`0Fast Setup `2Enabled")
+        ProxyOverlay("`9Punch All Right Chand Position")
+        return true
+    else
+        fpsMode = false
+        -- Reset all position variables
+        gemsrightx1, gemsrighty1 = nil, nil
+        gemsrightx2, gemsrighty2 = nil, nil
+        gemsrightx3, gemsrighty3 = nil, nil
+        gemsleftx1, gemslefty1 = nil, nil
+        gemsleftx2, gemslefty2 = nil, nil
+        gemsleftx3, gemslefty3 = nil, nil
+        gemsleftx4, gemslefty4 = nil, nil
+        takerightx, takerighty = nil, nil
+        takeleftx, takelefty = nil, nil
+        
+        -- Update the tile table
+        tile = {
+            pos1 = {
+                {x = gemsrightx1, y = gemsrighty1},
+                {x = gemsrightx2, y = gemsrighty2},
+                {x = gemsrightx3, y = gemsrighty3}
+            },
+            pos2 = {
+                {x = gemsleftx1, y = gemslefty1},
+                {x = gemsleftx2, y = gemslefty2},
+                {x = gemsleftx3, y = gemslefty3}
+            }
+        }
+        
+        SendPacket(2, "action|input\n|text|`0Fast Setup `4Disabled")
+        return true
+    end
+	end
+	if str:find("/discord") then
+		discord()
+		return true
+	elseif str:find("/cmd") or str:find("buttonClicked|cmd") then
 		command()
 		return true
 	elseif str:find("/setup") or str:find("buttonClicked|cui") then
@@ -811,6 +748,17 @@ dialog_name|cheats
 check_autospam|0]])
 		ProxyOverlay("`9Deactivate Spam Mode")
 		return true
+	end
+	if str:find("/eat") then
+		if bgems == false then
+			bgems = true
+			ProxyOverlay("`2Enabled `9Auto Eat Black Gems")
+			return true
+		else
+			bgems = false
+			ProxyOverlay("`4Disabled `9Auto Eat Black Gems")
+			return true
+		end
 	end
 	if str:find("/blue") or str:find("buttonClicked|cbb") then
 		SendPacket(2, "action|dialog_return\ndialog_name|info_box\nbuttonClicked|make_bluegl")
@@ -882,7 +830,6 @@ check_autospam|0]])
 		end
 		SendPacket(2, "action|dialog_return\ndialog_name|drop\nitem_drop|242|\nitem_count|" .. count)
 		ProxyLog("`9Dropped `2" .. count .. " `9World Lock")
-		LogToActivity("`oDropped `w", "`9World Lock", count)
 		return true
 	end
 	if str:find("/dd (%d+)") then
@@ -893,41 +840,30 @@ check_autospam|0]])
 			wear(242)
 		end
 		SendPacket(2, "action|dialog_return\ndialog_name|drop\nitem_drop|1796|\nitem_count|" .. count)
-		SendPacket(2, "action|input\n|text|`c"..Growid.." `0Dropped `2" .. count .. " `cDiamond Lock")
-		LogToActivity("`oDropped `w", "`cDiamond Lock", count)
+		SendPacket(2, "action|input\n|text|`c"..Growid.." `0Dropped `2" .. count .. " `1Diamond Lock")
 		return true
 	end
 	if str:find("/b (%d+)") then
 		count = str:match("/b (%d+)")
 		SendPacket(2, "action|dialog_return\ndialog_name|drop\nitem_drop|7188|\nitem_count|" .. count)
-		SendPacket(2, "action|input\n|text|"..Growid.." `0Dropped `2" .. count .. " `eBlue Gem Lock")
-		LogToActivity("`oDropped `w", "`eBlue Gem Lock", count)
+		SendPacket(2, "action|input\n|text|`c"..Growid.." `0Dropped `2" .. count .. " `cBlue Gem Lock")
 		return true
 	end
 	if str:find("/bb (%d+)") then
 		count = str:match("/bb (%d+)")
 		SendPacket(2, "action|dialog_return\ndialog_name|drop\nitem_drop|11550|\nitem_count|" .. count)
-		SendPacket(2, "action|input\n|text|"..Growid.." `0Dropped `2" .. count .. " `bBlack Gem Lock")
-		LogToActivity("`oDropped `w", "`bBlack Gem Lock", count)
+		SendPacket(2, "action|input\n|text|`c"..Growid.." `0Dropped `2" .. count .. " `bBlack Gem Lock")
 		return true
 	end
-	if str:find("/log") then
-        ActivityLogPage()
-        return true
-    end
-	if str:find("/wlog") then
-    ShowWinnerLog()
-    return true
-    end
 	if str:find("/ar (%d+)") then
 	    count = str:match("/ar (%d+)")
-		SendPacket(2, "action|input\n|text|"..Growid.." `0Dropped `2" .. count .. " `9Arroz")
+		SendPacket(2, "action|input\n|text|`c"..Growid.." `0Dropped `2" .. count .. " `9Arroz")
         SendPacket(2, "action|dialog_return\ndialog_name|drop\nitem_drop|4604|\nitem_count|"..count)
         return true
     end
 	if str:find("/cl (%d+)") then
 	    count = str:match("/cl (%d+)")
-		SendPacket(2, "action|input\n|text|"..Growid.." `0Dropped `2" .. count .. " `9Clover")
+		SendPacket(2, "action|input\n|text|`c"..Growid.." `0Dropped `2" .. count .. " `9Clover")
         SendPacket(2, "action|dialog_return\ndialog_name|drop\nitem_drop|528||\nitem_count|"..count)
         return true
     end	
@@ -935,11 +871,15 @@ check_autospam|0]])
 		takegems()
 		return true
 	end
-	if str:find("/top") or str:find("buttonClicked|V1") then
+	if str:find("/wlog") then
+        ShowWinnerLog()
+        return true
+    end
+	if str:find("/ctop") or str:find("buttonClicked|V1") then
         setupTopPositions()
     return true
     end
-    if str:find("/down") or str:find("buttonClicked|V2") then
+    if str:find("/cdown") or str:find("buttonClicked|V2") then
         setupDownPositions()
     return true
     end
@@ -963,12 +903,6 @@ check_autospam|0]])
 	    checkGems()
 		return true
 	end
-	if str:find("/emoji") then
-        emojiChatEnabled = not emojiChatEnabled
-        local status = emojiChatEnabled and "`2Enabled" or "`4Disabled"
-        SendPacket(2, "action|input\n|text|`9Emoji chat: "..status)
-        return true
-    end
     if str:find("/tb") or str:find("buttonClicked|dw") then
         take()
         tax = math.floor(Amount * taxset / 100)
@@ -980,18 +914,18 @@ check_autospam|0]])
         local jatuhBGL = math.floor(jatuh / 10000)
         local jatuhDL = math.floor((jatuh % 10000) / 100)
         
-        SendPacket(2, "action|input\n|text|`w[`0P1: `e"..totalBGL.." BGL `c"..totalDL.." DL`w]`bVS`w[`0P2 :`e"..totalBGL.." BGL `c"..totalDL.." DL`w] `w[`0Tax: `2"..taxset.."%`w] `w[`0Drop to Win: `e"..jatuhBGL.." BGL `c"..jatuhDL.." DL`w]")
+        SendPacket(2, "action|input\n|text|`w[`0P1: `2"..totalBGL.." BGL "..totalDL.." DL`w]`bVS`w[`0P2 :`2"..totalBGL.." BGL "..totalDL.." DL`w] `w[`0Tax: `2"..taxset.."%`w] `w[`0Drop to Win: `2"..jatuhBGL.." BGL "..jatuhDL.." DL`w]")
         return true
     end
 	if str:find("/depo (%d+)") or str:find("/dp (%d+)") then
 		count = str:match("/depo (%d+)") or str:match("/dp (%d+)")
 		SendPacket(2, "action|dialog_return\ndialog_name|bank_deposit\nbgl_count|" .. count)
-		SendPacket(2, "action|input\n|text|"..Growid.." `wDeposit `e" .. count .. " Blue Gem Lock")
+		ProxyOverlay("`9Deposited `2" .. count .. " `9Blue Gem Lock")
 		return true
 	elseif str:find("/wd (%d+)") then
 		count = str:match("/wd (%d+)")
 		SendPacket(2, "action|dialog_return\ndialog_name|bank_withdraw\nbgl_count|" .. count)
-		SendPacket(2, "action|input\n|text|"..Growid.." `wWithdraw `e" .. count .. " Blue Gem Lock")
+		ProxyOverlay("`9Withdraw `2" .. count .. " `9Blue Gem Lock")
 		return true
 	end
 	if str:find("buttonClicked|gemsright1") then
@@ -1137,6 +1071,51 @@ function setupDownPositions()
     SendPacket(2, "action|input\n|text|`2BTK MODE `9CHAND ON DOWN")
 end
 
+function setupDownPositions()
+    local xhost = GetLocal().pos.x // 32
+    local yhost = GetLocal().pos.y // 32
+    
+    -- Take positions (display)
+    takeleftx = xhost - 3
+    takelefty = yhost - 1
+    takerightx = xhost + 3
+    takerighty = yhost - 1
+    
+    -- Gem positions (bottom)
+    gemsleftx1 = xhost - 3
+    gemslefty1 = yhost +1
+    gemsleftx2 = gemsleftx1 - 1
+    gemslefty2 = gemslefty1
+    gemsleftx3 = gemsleftx1 - 2
+    gemslefty3 = gemslefty1
+    
+    gemsrightx1 = xhost + 3
+    gemsrighty1 = yhost + 1
+    gemsrightx2 = gemsrightx1 + 1
+    gemsrighty2 = gemsrighty1
+    gemsrightx3 = gemsrightx1 + 2
+    gemsrighty3 = gemsrighty1
+    
+    -- Back position
+    gemsleftx4 = xhost
+    gemslefty4 = yhost
+    
+    -- Update tile table
+    tile = {
+        pos1 = {
+            {x = gemsrightx1, y = gemsrighty1},
+            {x = gemsrightx2, y = gemsrighty2},
+            {x = gemsrightx3, y = gemsrighty3}
+        },
+        pos2 = {
+            {x = gemsleftx1, y = gemslefty1},
+            {x = gemsleftx2, y = gemslefty2},
+            {x = gemsleftx3, y = gemslefty3}
+        }
+    }
+    
+    SendPacket(2, "action|input\n|text|`2BTK MODE `9CHAND ON DOWN")
+end
 
 function var(var)
 	if var[0]:find("OnConsoleMessage") and var[1]:find("(%d+) Diamond Lock") then
@@ -1169,6 +1148,14 @@ function var(var)
 	if var[0]:find("OnConsoleMessage") then
 		ProxyLog(var[1])
 		return true
+	end
+	if var[0]:find("OnConsoleMessage") and var[1]:find("Collected") and var[1]:find("(%d+) Black Gems") then
+		jumlah = var[1]:match("(%d+) Black Gems")
+		if bgems == true then
+			SendPacket(2, "action|dialog_return\ndialog_name|givexgems\nitem_id|-484|\nitem_count|" .. jumlah)
+			ProxyLog("`9Auto Eat `2" .. jumlah .. " `9Black Gems")
+			return true
+		end
 	end
 	if var[0]:find("OnSDBroadcast") then
 		if sdbb == true then
@@ -1204,6 +1191,87 @@ end
 AddHook("onvariant", "any", var)
 
 function raw(a)
+    -- FPS Mode Handling
+    if fpsMode and a.type == 3 and a.value == 18 then
+        -- Get all position names that need to be set
+        local positionsToSet = {}
+        if not gemsrightx1 then table.insert(positionsToSet, "gemsright1") end
+        if not gemsrightx2 then table.insert(positionsToSet, "gemsright2") end
+        if not gemsrightx3 then table.insert(positionsToSet, "gemsright3") end
+        if not gemsleftx1 then table.insert(positionsToSet, "gemsleft1") end
+        if not gemsleftx2 then table.insert(positionsToSet, "gemsleft2") end
+        if not gemsleftx3 then table.insert(positionsToSet, "gemsleft3") end
+        if not gemsleftx4 then table.insert(positionsToSet, "gemsleft4") end
+        if not takerightx then table.insert(positionsToSet, "takeright") end
+        if not takeleftx then table.insert(positionsToSet, "takeleft") end
+        
+        if #positionsToSet > 0 then
+            local nextPos = positionsToSet[1]
+            
+            if nextPos == "gemsright1" then
+                gemsrightx1 = a.px
+                gemsrighty1 = a.py
+                --ProxyOverlay("`2Right 1")
+            elseif nextPos == "gemsright2" then
+                gemsrightx2 = a.px
+                gemsrighty2 = a.py
+                --ProxyOverlay("`2Right 2")
+            elseif nextPos == "gemsright3" then
+                gemsrightx3 = a.px
+                gemsrighty3 = a.py
+				--ProxyOverlay("`2Right 3")
+				ProxyOverlay("`9Punch All Left Chand Position")
+            elseif nextPos == "gemsleft1" then
+                gemsleftx1 = a.px
+                gemslefty1 = a.py
+                --ProxyOverlay("`2Left 1")
+            elseif nextPos == "gemsleft2" then
+                gemsleftx2 = a.px
+                gemslefty2 = a.py
+                --ProxyOverlay("`2Left 2")
+            elseif nextPos == "gemsleft3" then
+                gemsleftx3 = a.px
+                gemslefty3 = a.py
+				--ProxyOverlay("`2Left 3\n`9Punch Back Position")
+				ProxyOverlay("`9Punch Back Position")
+            elseif nextPos == "gemsleft4" then
+                gemsleftx4 = a.px
+                gemslefty4 = a.py
+                ProxyOverlay("`9Punch Take Right")
+            elseif nextPos == "takeright" then
+                takerightx = a.px
+                takerighty = a.py
+                ProxyOverlay("`9Punch Take Left")
+            elseif nextPos == "takeleft" then
+                takeleftx = a.px
+                takelefty = a.py
+                ProxyOverlay("`2All positions set!")
+                fpsMode = true -- Automatically turn off when done
+            end
+            
+            -- Update the tile table
+            tile = {
+                pos1 = {
+                    {x = gemsrightx1, y = gemsrighty1},
+                    {x = gemsrightx2, y = gemsrighty2},
+                    {x = gemsrightx3, y = gemsrighty3}
+                },
+                pos2 = {
+                    {x = gemsleftx1, y = gemslefty1},
+                    {x = gemsleftx2, y = gemslefty2},
+                    {x = gemsleftx3, y = gemslefty3}
+                }
+            }
+            
+            return true
+        else
+            fpsMode = false
+            ProxyOverlay("`9All positions already set! Disabling FPS mode.")
+            return true
+        end
+    end
+    
+    -- Original buttonClicked handling
 	if gemsright1 == true then
 		if a.type == 3 and a.value == 18 then
 			gemsrightx1 = a.px
