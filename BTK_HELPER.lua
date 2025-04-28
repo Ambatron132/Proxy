@@ -1,19 +1,19 @@
 function open()
 	opening = "\nadd_label_with_icon|big|`9BTK`w-`9HELPER|left|2480|"..
-"\nadd_textbox|`0Thanks for purchase this script!|"..
+"\nadd_textbox|Hi, "..Growid.." `0Thanks for using this script!|"..
 "\nadd_spacer|small|"..
-"\nadd_label_with_icon|small|`^Change Log|left|6128|"..
-"\nadd_textbox|`2Version : `53.4|"..
-"\nadd_textbox|`w[ `2+ `w] `0Added command `2/win `w[`5Auto drop to winners`w]|"..
-"\nadd_textbox|`w[ `2+ `w] `0Added command `2/cg `w[`5Check Gems`w]|"..
-"\nadd_textbox|`w[ `2+ `w] `0Added command `2/fps `w[`5Fast Setup`w]|"..
-"\nadd_textbox|`w[ `2+ `w] `0Added command `2/ar `w[`5Drop Arroz`w]|"..
-"\nadd_textbox|`w[ `2+ `w] `0Added command `2/cl `w[`5Drop Clover`w]|"..
-"\nadd_textbox|`w[ `2+ `w] `0Added command `2/ctop `w[`5Set Chand On Top`w]|"..
-"\nadd_textbox|`w[ `2+ `w] `0Added command `2/cdown `w[`5Set Chand On Down`w]|"..
+"\nadd_label_with_icon|small|`^Change Log|left|2480|"..
+"\nadd_textbox|`2Version : `93.4|"..
+"\nadd_textbox|`w[ `2+ `w] `0Added `2/win `w[`9Auto drop to winners`w]|"..
+"\nadd_textbox|`w[ `2+ `w] `0Added `2/cg `w[`9Check Gems`w]|"..
+"\nadd_textbox|`w[ `2+ `w] `0Added `2/fps `w[`9Fast Setup`w]|"..
+"\nadd_textbox|`w[ `2+ `w] `0Added `2/ar `w[`9Drop Arroz`w]|"..
+"\nadd_textbox|`w[ `2+ `w] `0Added `2/cl `w[`9Drop Clover`w]|"..
+"\nadd_textbox|`w[ `2+ `w] `0Added `2/top `w[`9Set Chand On Top`w]|"..
+"\nadd_textbox|`w[ `2+ `w] `0Added `2/down `w[`9Set Chand On Down`w]|"..
 "\nadd_spacer|small|"..
 "\nadd_label_with_icon|small|`^Information|left|5956|"..
-"\nadd_textbox|`2/cmd `w[`5Shows all proxy commands`w]|"..
+"\nadd_textbox|`2/cmd `w[`9Shows all proxy commands`w]|"..
 "\nadd_spacer|small|"..
 "\nadd_quick_exit||"..
 "\nend_dialog|cl|Enjoy|"
@@ -65,7 +65,6 @@ function tele()
 	dialog = "\nadd_label_with_icon|small|Wrench Mode|left|3898|"..
 	"\nadd_spacer|small|"..
 	"\nadd_button_with_icon|cbgl|   `0Convert BGL   |staticYellowFrame|3898||"..
-	"\nadd_button_with_icon|bbgl|   `0Buy BGL   |staticYellowFrame|3898||"..
 	"\nadd_button_with_icon|cbl|   `0BGL to Black   |staticYellowFrame|3898||"..
 	"\nadd_button_with_icon|cbb|   `0Black to BGL   |staticYellowFrame|3898||"..
 	"\nadd_button_with_icon||END_LIST|noflags|0||"..
@@ -101,8 +100,6 @@ function command()
 "\nadd_spacer|small|"..
 "\nadd_label|small|`^Information|left|"..
 "\nadd_textbox|`2/cmd `w[`wShows all commands`w]|"..
-"\nadd_textbox|`2/discord `w[`wOfficial discord server`w]|"..
-"\nadd_textbox|`2/fps `w[`wSetup positions by punching (no buttons)`w]|"..
 "\nadd_spacer|small|"..
 "\nadd_label|small|`^Main Command|left|"..
 "\nadd_textbox|`2/eat `w[`wEnabled/disabled auto eat bgems`w]|"..
@@ -118,7 +115,7 @@ function command()
 "\nadd_textbox|`2/bb `7{amount} `w[`wDrop black gem lock`w]|"..
 "\nadd_textbox|`2/setup `w[`wManual Setup`w]"..
 "\nadd_textbox|`2/tax `7{amount} `w[`wSet tax`w]|"..
-"\nadd_textbox|`2/take `w[`wTake lock`w]|"..
+"\nadd_textbox|`2/tb `w[`wTake Bet`w]|"..
 "\nadd_textbox|`2/tg `w[`wShows Gems and Auto Drop to Winner`w]|"..
 "\nadd_textbox|`2/win `w[`wAuto drop to winners`w]|"..
 "\nadd_textbox|`2/wp `w[`wEnabled/disabled wrench mode pull`w]|"..
@@ -140,18 +137,6 @@ function command()
 	})
 end
 
-function discord()
-	ds = "\nadd_label_with_icon|big|`2Official Discord Server|left|6292|"..
-"\nadd_spacer|small||"..
-"\nadd_textbox|`wThanks for purchase our script! We welcome you to join official discord server, click the button below:|left|"..
-"\nadd_url_button||`cDoctorr `oScript|noflags|https://discord.com/invite/qfhaZTq6Xa|Would you like to join Doctorr Script Discord?|0|0|"..
-"\nadd_spacer|small||"..
-"\nend_dialog|popup|Thanks for the info!||"
-	SendVariantList({
-		[0] = "OnDialogRequest",
-		[1] = ds
-	})
-end
 
 data = {}
 local pull = false
@@ -300,7 +285,7 @@ function ProxyLog(str)
 end
 
 LogToConsole("`9Script Will Run In `25 `9Seconds")
-SendPacket(2, "action|input\n|text|`0Proxy `9BTK `0By `#Brofus `2ON!")
+SendPacket(2, "action|input\n|text|`0Proxy `#BTK HELPER `2ON!")
 Sleep(1000)
 open()
 
@@ -613,33 +598,33 @@ function hook(type, str)
 	if str:find("/wp") or str:find("buttonClicked|wp") then
 		if pull == false then
 			pull = true
-			SendPacket(2, "action|input\n|text|`2Enabled `9Wrench `5Pull `9Mode")
+			SendPacket(2, "action|input\n|text|`2Enabled `9Wrench `9Pull `9Mode")
 			return true
 		else
 			pull = false
-			SendPacket(2, "action|input\n|text|`4Disabled `9Wrench `5Pull `9Mode")
+			SendPacket(2, "action|input\n|text|`4Disabled `9Wrench `9Pull `9Mode")
 			return true
 		end
 	end
 	if str:find("/wk") or str:find("buttonClicked|wk") then
 		if kick == false then
 			kick = true
-			SendPacket(2, "action|input\n|text|`2Enabled `9Wrench `5Kick `9Mode")
+			SendPacket(2, "action|input\n|text|`2Enabled `9Wrench `9Kick `9Mode")
 			return true
 		else
 			kick = false
-			SendPacket(2, "action|input\n|text|`4Disabled `9Wrench `5kick `9Mode")
+			SendPacket(2, "action|input\n|text|`4Disabled `9Wrench `9kick `9Mode")
 			return true
 		end
 	end
 	if str:find("/wb") or str:find("buttonClicked|wb") then
 		if ban == false then
 			ban = true
-			SendPacket(2, "action|input\n|text|`2Enabled `9Wrench `5Ban `9Mode")
+			SendPacket(2, "action|input\n|text|`2Enabled `9Wrench `9Ban `9Mode")
 			return true
 		else
 			ban = false
-			SendPacket(2, "action|input\n|text|`4Disabled `9Wrench `5Ban `9Mode")
+			SendPacket(2, "action|input\n|text|`4Disabled `9Wrench `9Ban `9Mode")
 			return true
 		end
 	end
@@ -654,58 +639,7 @@ function hook(type, str)
 			return true
 		end
 	end
-	if str:find("/bbgl") or str:find("buttonClicked|bbgl") then
-		if buybgl == false then
-			buybgl = true
-			ProxyOverlay("`2Enabled `9Fast Buy Blue Gem Lock")
-			return true
-		else
-			buybgl = false
-			ProxyOverlay("`4Disabled `9Fast Buy Blue Gem Lock")
-			return true
-		end
-	end
-    if str:find("/fps") then
-    if fpsMode == false then
-        fpsMode = true
-		SendPacket(2, "action|input\n|text|`0Fast Setup `2Enabled")
-        ProxyOverlay("`9Punch All Right Chand Position")
-        return true
-    else
-        fpsMode = false
-        -- Reset all position variables
-        gemsrightx1, gemsrighty1 = nil, nil
-        gemsrightx2, gemsrighty2 = nil, nil
-        gemsrightx3, gemsrighty3 = nil, nil
-        gemsleftx1, gemslefty1 = nil, nil
-        gemsleftx2, gemslefty2 = nil, nil
-        gemsleftx3, gemslefty3 = nil, nil
-        gemsleftx4, gemslefty4 = nil, nil
-        takerightx, takerighty = nil, nil
-        takeleftx, takelefty = nil, nil
-        
-        -- Update the tile table
-        tile = {
-            pos1 = {
-                {x = gemsrightx1, y = gemsrighty1},
-                {x = gemsrightx2, y = gemsrighty2},
-                {x = gemsrightx3, y = gemsrighty3}
-            },
-            pos2 = {
-                {x = gemsleftx1, y = gemslefty1},
-                {x = gemsleftx2, y = gemslefty2},
-                {x = gemsleftx3, y = gemslefty3}
-            }
-        }
-        
-        SendPacket(2, "action|input\n|text|`0Fast Setup `4Disabled")
-        return true
-    end
-	end
-	if str:find("/discord") then
-		discord()
-		return true
-	elseif str:find("/cmd") or str:find("buttonClicked|cmd") then
+	if str:find("/cmd") or str:find("buttonClicked|cmd") then
 		command()
 		return true
 	elseif str:find("/setup") or str:find("buttonClicked|cui") then
@@ -840,13 +774,13 @@ check_autospam|0]])
 			wear(242)
 		end
 		SendPacket(2, "action|dialog_return\ndialog_name|drop\nitem_drop|1796|\nitem_count|" .. count)
-		SendPacket(2, "action|input\n|text|`c"..Growid.." `0Dropped `2" .. count .. " `1Diamond Lock")
+		SendPacket(2, "action|input\n|text|`c"..Growid.." `0Dropped `2" .. count .. " `cDiamond Lock")
 		return true
 	end
 	if str:find("/b (%d+)") then
 		count = str:match("/b (%d+)")
 		SendPacket(2, "action|dialog_return\ndialog_name|drop\nitem_drop|7188|\nitem_count|" .. count)
-		SendPacket(2, "action|input\n|text|`c"..Growid.." `0Dropped `2" .. count .. " `cBlue Gem Lock")
+		SendPacket(2, "action|input\n|text|`c"..Growid.." `0Dropped `2" .. count .. " `eBlue Gem Lock")
 		return true
 	end
 	if str:find("/bb (%d+)") then
@@ -871,15 +805,15 @@ check_autospam|0]])
 		takegems()
 		return true
 	end
-	if str:find("/wlog") then
+	if str:find("/log") then
         ShowWinnerLog()
         return true
     end
-	if str:find("/ctop") or str:find("buttonClicked|V1") then
+	if str:find("/top") or str:find("buttonClicked|V1") then
         setupTopPositions()
     return true
     end
-    if str:find("/cdown") or str:find("buttonClicked|V2") then
+    if str:find("/down") or str:find("buttonClicked|V2") then
         setupDownPositions()
     return true
     end
@@ -1164,18 +1098,6 @@ function var(var)
 	end
 	if var[0]:find("OnDialogRequest") and var[1]:find("Wow, that's fast delivery.") then
 		return true
-	end
-	if var[0]:find("OnDialogRequest") and var[1]:find("`wTelephone") then
-		if buybgl == true then
-			if GetPlayerInfo().gems >= 11000000 then
-				for _, tile in pairs(GetTiles()) do
-					if tile.fg == 3898 then -- Telephone tile
-						SendPacket(2, "action|dialog_return\ndialog_name|telephone\nnum|53785|\nx|"..tile.x.."|\ny|"..tile.y.."|\nbuttonClicked|bglconvert2")
-						ProxyOverlay("`2Successfully `9Buy `cBlue Gem Lock")
-					end
-				end
-			end
-		end
 	end
 	if var[0]:find("OnDialogRequest") and var[1]:find("`wTelephone") then
 		if cbgl == true then
