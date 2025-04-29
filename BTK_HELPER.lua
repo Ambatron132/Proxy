@@ -468,13 +468,13 @@ AddHook("onvariant", "variabel", function(var)
 
     if var[0] == "OnConsoleMessage" and var[1]:find("Collected  `w(%d+) Diamond Lock") then
         local AmountCollectDL = tonumber(var[1]:match("Collected  `w(%d+) Diamond Lock"))
-        SendPacket(2, "action|input\ntext|"..Growid.." `0Collected `2"..AmountCollectDL.." `1Diamond Lock")
+        SendPacket(2, "action|input\ntext|"..Growid.." `0Collected `2"..AmountCollectDL.." `cDiamond Lock")
         return true
     end
 
     if var[0] == "OnConsoleMessage" and var[1]:find("Collected  `w(%d+) Blue Gem Lock") then
         local AmountCollectBGL = tonumber(var[1]:match("Collected  `w(%d+) Blue Gem Lock"))
-        SendPacket(2, "action|input\ntext|"..Growid.." `0Collected `2"..AmountCollectBGL.." `cBlue Gem Lock")
+        SendPacket(2, "action|input\ntext|"..Growid.." `0Collected `2"..AmountCollectBGL.." `eBlue Gem Lock")
         return true
     end
 
@@ -932,12 +932,12 @@ check_autospam|0]])
 	if str:find("/depo (%d+)") or str:find("/dp (%d+)") then
 		count = str:match("/depo (%d+)") or str:match("/dp (%d+)")
 		SendPacket(2, "action|dialog_return\ndialog_name|bank_deposit\nbgl_count|" .. count)
-		ProxyOverlay("`9Deposited `2" .. count .. " `9Blue Gem Lock")
+		SendPacket(2, "action|input\n|text|"..Growid.." `wDeposit `e" .. count .. " Blue Gem Lock")
 		return true
 	elseif str:find("/wd (%d+)") then
 		count = str:match("/wd (%d+)")
 		SendPacket(2, "action|dialog_return\ndialog_name|bank_withdraw\nbgl_count|" .. count)
-		ProxyOverlay("`9Withdraw `2" .. count .. " `9Blue Gem Lock")
+		SendPacket(2, "action|input\n|text|"..Growid.." `wWithdraw `e" .. count .. " Blue Gem Lock")
 		return true
 	end
 	if str:find("buttonClicked|gemsright1") then
