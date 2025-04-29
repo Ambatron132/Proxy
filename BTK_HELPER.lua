@@ -99,35 +99,33 @@ end
 function command()
 	cmd = "\nadd_label_with_icon|big|`wAll BTK Command                                                             |left|2480|"..
 "\nadd_spacer|small|"..
-"\nadd_label|small|`^Information|left|"..
+"\nadd_label_with_icon|small|`wInformation|left|2480|"..
 "\nadd_textbox|`w/cmd `w[`9Shows all commands`w]|"..
 "\nadd_spacer|small|"..
-"\nadd_label|small|`^Main Command|left|"..
-"\nadd_textbox|`w/eat `w[`9Enabled/disabled auto eat bgems`w]|"..
+"\nadd_label_with_icon|small|`wMain Command|left|340|"..
 "\nadd_textbox|`w/sdb `w[`9Enabled/disabled blok SDB`w]|"..
-"\nadd_textbox|`w/blue `w[`9Convert black gem lock to blue gem lock`w]|"..
-"\nadd_textbox|`w/black `w[`9Convert blue gem lock to black gem lock`w]|"..
-"\nadd_textbox|`w/cv `wor `w/c `w[`9Enabled/disabled fast convert blue gem lock`w]|"..
+"\nadd_textbox|`w/blue `w[`9Convert black to blue gem lock`w]|"..
+"\nadd_textbox|`w/black `w[`9Convert blue to black gem lock`w]|"..
 "\nadd_spacer|small|"..
-"\nadd_label|small|`^Hoster Command|left|"..
+"\nadd_label_with_icon|small|`wHoster Command|left|340|"..
 "\nadd_textbox|`w/w `7{amount} `w[`9Drop world lock`w]|"..
 "\nadd_textbox|`w/dd `7{amount} `w[`9Drop diamond lock`w]|"..
 "\nadd_textbox|`w/b `7{amount} `w[`9Drop blue gem lock`w]|"..
 "\nadd_textbox|`w/bb `7{amount} `w[`9Drop black gem lock`w]|"..
 "\nadd_textbox|`w/setup `w[`9Manual Setup`w]"..
 "\nadd_textbox|`w/tax `7{amount} `w[`9Set tax`w]|"..
-"\nadd_textbox|`w/tb `w[`9Take Bet`w]|"..
+"\nadd_textbox|`w/tb `w[`9Take lock`w]|"..
 "\nadd_textbox|`w/tg `w[`9Shows Gems and Auto Drop to Winner`w]|"..
 "\nadd_textbox|`w/win `w[`9Auto drop to winners`w]|"..
 "\nadd_textbox|`w/wp `w[`9Enabled/disabled wrench mode pull`w]|"..
 "\nadd_textbox|`w/put `w[`9Enabled/disabled auto put chand`w]|"..
 "\nadd_textbox|`w/log `w[`9Winner Gems Logs`w]|"..
 "\nadd_spacer|small|"..
-"\nadd_label|small|`^Bgl Bank Command|left|"..
+"\nadd_label_with_icon|small|`wBnk Command|left|340|"..
 "\nadd_textbox|`w/wd `w[`9Withdraw blue gem lock from bank`w]|"..
 "\nadd_textbox|`w/depo `wor `w/dp `w[`9Deposit blue gem lock to bank`w]|"..
 "\nadd_spacer|small|"..
-"\nadd_label|small|`^Spammer Command|left|"..
+"\nadd_label_with_icon|small|`wSpam Command|left|340|"..
 "\nadd_textbox|`w/spam `w[`9<<Text>>`w]|"..
 "\nadd_textbox|`w/os `w[`9Enable auto spam`w]|"..
 "\nadd_textbox|`w/ofs `w[`9Disabled auto spam`w]|"..
@@ -145,7 +143,6 @@ local pull = false
 local kick = false
 local ban = false
 local cbgl = false
-local buybgl = false
 local bgems = false
 Count = 0
 local sdbb = false
@@ -171,7 +168,6 @@ local DropMode = false
 local putchand = true
 local cg1 = 0
 local cg2 = 0
-local fpsMode = false -- Added FPS mode variable
 local Growid = GetLocal().name
 local WinnerLog = {}
 
