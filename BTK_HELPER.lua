@@ -119,7 +119,6 @@ function command()
 "\nadd_textbox|`w/tg `w[`9Shows Gems and Auto Drop to Winner`w]|"..
 "\nadd_textbox|`w/win `w[`9Auto drop to winners`w]|"..
 "\nadd_textbox|`w/wp `w[`9Enabled/disabled wrench mode pull`w]|"..
-"\nadd_textbox|`w/put `w[`9Enabled/disabled auto put chand`w]|"..
 "\nadd_textbox|`w/log `w[`9Winner Gems Logs`w]|"..
 "\nadd_spacer|small|"..
 "\nadd_label_with_icon|small|`wBnk Command|left|340|"..
@@ -845,10 +844,6 @@ check_autospam|0]])
     end	
 	if str:find("/tg") or str:find("buttonClicked|tk") then
 		takegems()
-		return true
-	end
-	if str:find("/put") then
-	    putchand()
 		return true
 	end
             if str:find("/emoji") then
