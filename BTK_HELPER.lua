@@ -883,6 +883,12 @@ check_autospam|0]])
 		takegems()
 		return true
 	end
+            if str:find("/emoji") then
+        emojiChatEnabled = not emojiChatEnabled
+        local status = emojiChatEnabled and "`2Enabled" or "`4Disabled"
+        SendPacket(2, "action|input\n|text|`9Emoji chat: "..status)
+        return true
+    end
 	if str:find("/log") then
         ShowWinnerLog()
         return true
