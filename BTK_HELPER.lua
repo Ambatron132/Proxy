@@ -33,7 +33,7 @@ function xxx()
     "\nadd_label_with_icon|small|`0World: `2"..GetWorld().name.."|left|3802|"..
     "\nadd_label_with_icon|small|`0Current Tax: `2"..taxset.."`9%|left|15580|"..
 	"\nadd_label_with_icon|small|`0Current Position `2X:`0"..math.floor(GetLocal().pos.x / 32).." `2Y:`0"..math.floor(GetLocal().pos.y / 32).."|left|15476|"..
-    "\nadd_spacer|big|"..
+    "\nadd_spacer|small|"..
     "\nadd_button_with_icon|pt|   `cBTK Setup   |staticYellowFrame|340|"..
 	"\nadd_button_with_icon|tel|   `cTelephone   |staticYellowFrame|3898||"..
     "\nadd_button_with_icon|wrench|   `cWrench Setting   |staticYellowFrame|32||"..
@@ -119,7 +119,6 @@ function command()
 "\nadd_textbox|`w/tg `w[`9Shows Gems and Auto Drop to Winner`w]|"..
 "\nadd_textbox|`w/win `w[`9Auto drop to winners`w]|"..
 "\nadd_textbox|`w/wp `w[`9Enabled/disabled wrench mode pull`w]|"..
-"\nadd_textbox|`w/put `w[`9Enabled/disabled auto put chand`w]|"..
 "\nadd_textbox|`w/log `w[`9Winner Gems Logs`w]|"..
 "\nadd_spacer|small|"..
 "\nadd_label_with_icon|small|`wBnk Command|left|340|"..
@@ -547,7 +546,7 @@ function takegems()
         table.insert(data, Count)
         Count = 0;
         if data[2] > data[1] then
-            SendPacket(2, "action|input\n|text|`0[`2Win`0] Kiri `2: " .. data[2] .. "(gems) `bVs `0[`4Lose`0] Kanan `2: " .. data[1] .. "(gems)");
+            SendPacket(2, "action|input\n|text|`w[`2WIN`w]Kiri `2"..data[2].." `bVS `4"..data[1].." `wKanan[`4LOSE`w]Kanan");
             cg2 = data[2]
             LogWinner("LEFT", data[2], data[1]) -- Log left winner
             
@@ -573,7 +572,7 @@ function takegems()
             SendPacket(2, "action|input\n|text|Ya Sama `2: " .. data[2] .. "(wink) `0[ `bTie `0] Ya Sama `w: " .. data[1] .. "(wink)");
             ProxyOverlay("`9Nothing Winner `4TIE!")
         elseif data[2] < data[1] then
-            SendPacket(2, "action|input\n|text|`0[`4Lose`0] Kiri `2: " .. data[2] .. "(gems) `bVs `0[`2Win`0] Kanan `2: " .. data[1] .. "(gems)");
+            SendPacket(2, "action|input\n|text|`w[`4LOSE`w]Kiri `4"..data[2].." `bVS `2"..data[1].." `wKanan[`2WIN`w]");
             cg1 = data[1]
             LogWinner("RIGHT", data[1], data[2]) -- Log right winner
             
@@ -1573,11 +1572,11 @@ function checkGems()
     
     -- Determine winner and send appropriate message
     if Count1 > Count2 then
-        SendPacket(2, "action|input\n|text|`w[`4Lose`w] Kiri (gems) `4"..Count2.." `b/ `2"..Count1.." `w(gems) [`2Win`w] Kanan")
+        SendPacket(2, "action|input\n|text|`w[`4Lose`w]Kiri `4"..Count2.." `b/ `2"..Count1.." `w Kanan[`2Win`w]")
     elseif Count1 == Count2 then
         SendPacket(2, "action|input\n|text|`0[TIE] Kiri (gems) `0"..Count2.." `b/ `0"..Count1.." `0(gems) Kanan [TIE]")
     else
-        SendPacket(2, "action|input\n|text|`w[`2Win`w] Kiri (gems) `2"..Count2.." `b/ `4"..Count1.." `w(gems) [`4Lose`w] Kanan")
+        SendPacket(2, "action|input\n|text|`w[`2Win`w]Kiri `2"..Count2.." `b/ `4"..Count1.." `w Kanan[`4Lose`w]")
     end
 end
 
