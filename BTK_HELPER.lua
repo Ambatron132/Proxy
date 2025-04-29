@@ -171,6 +171,7 @@ local cg2 = 0
 local Growid = GetLocal().name
 local WinnerLog = {}
 local emojiChatEnabled = false
+local N = N or function() end
 
 local emojiChatEnabled = true
 local emoji = {
