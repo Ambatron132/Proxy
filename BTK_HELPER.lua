@@ -738,11 +738,11 @@ check_autospam|0]])
 	end
 	if str:find("/blue") or str:find("buttonClicked|cbb") then
 		SendPacket(2, "action|dialog_return\ndialog_name|info_box\nbuttonClicked|make_bluegl")
-		bubble("`9You Compressed a `w100 `eBlue Gem Locks `winto `bBlack Gem Locks`w!")
+		bubble("`9You Sharttered `bBlack Gem Lock `9into a `w100 `eBlue Gem Locks`w!")
 		return true
 	elseif str:find("/black") or str:find("buttonClicked|cbl") then
 		SendPacket(2, "action|dialog_return\ndialog_name|info_box\nbuttonClicked|make_bgl")
-		bubble("`9You Sharttered `bBlack Gem Lock `9into a `w100 `eBlue Gem Locks`w!")
+		bubble("`9You Compressed a `w100 `eBlue Gem Locks `winto `bBlack Gem Locks`w!")
 		return true
 	end
 	if str:find("/win") then
