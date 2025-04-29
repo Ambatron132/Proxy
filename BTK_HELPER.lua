@@ -547,7 +547,7 @@ function takegems()
         table.insert(data, Count)
         Count = 0;
         if data[2] > data[1] then
-            SendPacket(2, "action|input\n|text|`0[`2Win`0] Kiri `2: " .. data[2] .. "(gems) `bVs `0[`4Lose`0] Kanan `2: " .. data[1] .. "(gems)");
+            SendPacket(2, "action|input\n|text|`w[`2WIN`w] Kiri (gems) `2"..data[2].." `bVS `4"..data[1].." `w(gems) [`4LOSE`w] Kanan");
             cg2 = data[2]
             LogWinner("LEFT", data[2], data[1]) -- Log left winner
             
@@ -573,7 +573,7 @@ function takegems()
             SendPacket(2, "action|input\n|text|Ya Sama `2: " .. data[2] .. "(wink) `0[ `bTie `0] Ya Sama `w: " .. data[1] .. "(wink)");
             ProxyOverlay("`9Nothing Winner `4TIE!")
         elseif data[2] < data[1] then
-            SendPacket(2, "action|input\n|text|`0[`4Lose`0] Kiri `2: " .. data[2] .. "(gems) `bVs `0[`2Win`0] Kanan `2: " .. data[1] .. "(gems)");
+            SendPacket(2, "action|input\n|text|`w[`4LOSE`w] Kiri (gems) `4"..data[2].." `bVS `2"..data[1].." `w(gems) [`2WIN`w] Kanan");
             cg1 = data[1]
             LogWinner("RIGHT", data[1], data[2]) -- Log right winner
             
