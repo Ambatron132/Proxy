@@ -421,6 +421,9 @@ function Data()
 end
 
 AddHook("onvariant", "variabel", function(var)
+    if var[0]:find("OnConsoleMessage") and var[1]:find("Spam detected!") then
+        return true
+    end
     if var[0] == "OnConsoleMessage" and var[1]:find("Collected  `w(%d+) World Lock") then
         local AmountCollectWL = tonumber(var[1]:match("Collected  `w(%d+) World Lock"))
         SendPacket(2, "action|input\ntext|"..Growid.." `0Collected `2"..AmountCollectWL.." `9World Lock")
@@ -429,7 +432,7 @@ AddHook("onvariant", "variabel", function(var)
 
     if var[0] == "OnConsoleMessage" and var[1]:find("Collected  `w(%d+) Diamond Lock") then
         local AmountCollectDL = tonumber(var[1]:match("Collected  `w(%d+) Diamond Lock"))
-        SendPacket(2, "action|input\ntext|"..Growid.." `0Collected `2"..AmountCollectDL.." `cDiamond Lock")
+        SendPacket(2, "action|input\ntext|"..Growid.." `0Collected `2"..AmountCollectDL.." `1Diamond Lock")
         return true
     end
 
