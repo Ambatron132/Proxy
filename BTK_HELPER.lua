@@ -170,9 +170,6 @@ local cg1 = 0
 local cg2 = 0
 local Growid = GetLocal().name
 local WinnerLog = {}
-local emojiChatEnabled = false
-local N = N or function() end
-
 local emojiChatEnabled = true
 local emoji = {
     "sigh", "mad", "smile", "tongue", "wow", "no", "shy", "wink", "music", "lol",
@@ -190,6 +187,7 @@ local function randomOutput(list)
     return list[randomIndex]
 end
 
+math.randomseed(os.time())
 -- Add this hook to modify chat messages with emojis
 AddHook("onsendpacket", "emojiChat", function(type, packet)
     if type == 2 and packet:find("action|input\n|text|") then
