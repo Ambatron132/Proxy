@@ -1,6 +1,6 @@
 function open()
 	opening = "\nadd_label_with_icon|big|`9BTK`w-`9HELPER|left|2480|"..
-"\nadd_textbox|Hi, "..Growid.." `0Thanks for using this script!|"..
+"\nadd_textbox|`0Hi, "..GetLocal().name.." `0Thanks for Using this script!|"..
 "\nadd_spacer|small|"..
 "\nadd_label_with_icon|small|`^Change Log|left|2480|"..
 "\nadd_textbox|`2Version : `93.4|"..
