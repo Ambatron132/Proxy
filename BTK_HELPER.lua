@@ -33,7 +33,7 @@ function xxx()
     "\nadd_label_with_icon|small|`0World: `2"..GetWorld().name.."|left|3802|"..
     "\nadd_label_with_icon|small|`0Current Tax: `2"..taxset.."`9%|left|15580|"..
 	"\nadd_label_with_icon|small|`0Current Position `2X:`0"..math.floor(GetLocal().pos.x / 32).." `2Y:`0"..math.floor(GetLocal().pos.y / 32).."|left|15476|"..
-    "\nadd_spacer|big|"..
+    "\nadd_spacer|small|"..
     "\nadd_button_with_icon|pt|   `cBTK Setup   |staticYellowFrame|340|"..
 	"\nadd_button_with_icon|tel|   `cTelephone   |staticYellowFrame|3898||"..
     "\nadd_button_with_icon|wrench|   `cWrench Setting   |staticYellowFrame|32||"..
