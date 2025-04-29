@@ -228,7 +228,7 @@ end
 
 -- Add this function to display the winner log
 function ShowWinnerLog()
-    local dialogContent = "\nadd_label_with_icon|big|`9Gems Winner Log|left|112|"..
+    local dialogContent = "\nadd_label_with_icon|big|`9Gems Winner Log|left|9438|"..
                          "\nadd_spacer|small|"
     
     if #WinnerLog == 0 then
@@ -236,7 +236,7 @@ function ShowWinnerLog()
     else
         for i, log in ipairs(WinnerLog) do
             dialogContent = dialogContent..
-                "\nadd_label_with_icon|small|`2"..log.side.." `wWin `2"..log.gems.." `wVS `4"..log.opponentGems.." `w("..log.time..")|left|112|"
+                "\nadd_label_with_icon|small|`2"..log.side.." `wWin `2"..log.gems.." `wVS `4"..log.opponentGems.." `w("..log.time..")|left|9438|"
         end
     end
     
