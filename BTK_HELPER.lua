@@ -847,6 +847,10 @@ check_autospam|0]])
 		takegems()
 		return true
 	end
+	if str:find("/put") then
+	    putchand()
+		return true
+	end
             if str:find("/emoji") then
         emojiChatEnabled = not emojiChatEnabled
         local status = emojiChatEnabled and "`2Enabled" or "`4Disabled"
