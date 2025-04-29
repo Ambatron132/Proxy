@@ -182,10 +182,6 @@ local emoji = {
 }
 
 -- Add this function with other utility functions
-local function randomOutput(list)
-    local randomIndex = math.random(1, #list)
-    return list[randomIndex]
-end
 
 math.randomseed(os.time())
 -- Add this hook to modify chat messages with emojis
