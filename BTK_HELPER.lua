@@ -170,6 +170,86 @@ local cg1 = 0
 local cg2 = 0
 local Growid = GetLocal().name
 local WinnerLog = {}
+local emojiChatEnabled = false
+
+local emoji = {
+    "sigh",
+    "mad",
+    "smile",
+    "tongue",
+    "wow",
+    "no",
+    "shy",
+    "wink",
+    "music",
+    "lol",
+    "yes",
+    "love",
+    "megaphone",
+    "heart",
+    "cool",
+    "kiss",
+    "agree",
+    "see-no-evil",
+    "dance",
+    "build",
+    "oops",
+    "sleep",
+    "punch",
+    "bheart",
+    "cry",
+    "party",
+    "wl",
+    "grow",
+    "gems",
+    "gtoken",
+    "plead",
+    "vend",
+    "bunny",
+    "cactus",
+    "peace",
+    "terror",
+    "troll",
+    "halo",
+    "nuke",
+    "pine",
+    "football",
+    "fireworks",
+    "song",
+    "ghost",
+    "evil",
+    "pizza",
+    "alien",
+    "clap",
+    "turkey",
+    "gift",
+    "cake",
+    "heartarrow",
+    "shamrock",
+    "grin",
+    "ill",
+    "eyes",
+    "weary",
+    "moyai",
+}
+
+-- Add the rainbow text/emoji chat hook from Anubeast x Draco
+AddHook("onsendpacket", "rainbowsText", function(type, packet)
+if not emojiChatEnabled then return false end
+    if type == 2 and packet:find("action|input\n|text|") then
+        args = string.gsub(packet, "action|input\n|text|", "")
+        if args:sub(1, 1) == "/" or args:sub(5, 5) == "(" or args:sub(5, 5) == ")" or args:sub(5, 5) == "5" then
+            return false
+        end
+        text = args
+        textMessage = ""
+        for chart in text:gmatch("(.)") do
+            textMessage = textMessage .. "`" .. math.random(0) .. chart
+        end
+        SendPacket(2, "action|input\ntext|`b("..emoji[math.random(1, #emoji)]..") : ".. textMessage)
+        return true
+    end
+end)
 
 -- Add this function to log winners
 function LogWinner(side, gemsCount, opponentGems)
