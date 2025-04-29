@@ -3,15 +3,15 @@ function open()
 "\nadd_textbox|`0Hi, "..GetLocal().name.." `0Thanks for Using this script!|"..
 "\nadd_spacer|small|"..
 "\nadd_label_with_icon|small|`^Change Log|left|2480|"..
-"\nadd_textbox|`2Version : `93.4|"..
-"\nadd_textbox|`w[ `2+ `w] `0Added `w/win `w[`9Auto drop to winners`w]|"..
-"\nadd_textbox|`w[ `2+ `w] `0Added `w/cg `w[`9Check Gems`w]|"..
-"\nadd_textbox|`w[ `2+ `w] `0Added `w/fps `w[`9Fast Setup`w]|"..
-"\nadd_textbox|`w[ `2+ `w] `0Added `w/ar `w[`9Drop Arroz`w]|"..
-"\nadd_textbox|`w[ `2+ `w] `0Added `w/cl `w[`9Drop Clover`w]|"..
-"\nadd_textbox|`w[ `2+ `w] `0Added `w/top `w[`9Set Chand On Top`w]|"..
-"\nadd_textbox|`w[ `2+ `w] `0Added `w/down `w[`9Set Chand On Down`w]|"..
-"\nadd_textbox|`w[ `2+ `w] `0Added `w/log `w[`9Winner Gems Logs`w]|"..
+"\nadd_textbox|`2Version : `92|"..
+"\nadd_textbox|`w[`2+`w] `0Added `w/win `w[`9Auto drop to winners`w]|"..
+"\nadd_textbox|`w[`2+`w] `0Added `w/cg `w[`9Check Gems`w]|"..
+"\nadd_textbox|`w[`2+`w] `0Added `w/fps `w[`9Fast Setup`w]|"..
+"\nadd_textbox|`w[`2+`w] `0Added `w/ar `w[`9Drop Arroz`w]|"..
+"\nadd_textbox|`w[`2+`w] `0Added `w/cl `w[`9Drop Clover`w]|"..
+"\nadd_textbox|`w[`2+`w] `0Added `w/top `w[`9Set Chand On Top`w]|"..
+"\nadd_textbox|`w[`2+`w] `0Added `w/down `w[`9Set Chand On Down`w]|"..
+"\nadd_textbox|`w[`2+`w] `0Added `w/log `w[`9Winner Gems Logs`w]|"..
 "\nadd_textbox|`w[`2+`w] `0Added `w/emoji `w[`9Rainbow Chat with Emoji`w]|"..
 "\nadd_spacer|small|"..
 "\nadd_label_with_icon|small|`^Information|left|5956|"..
