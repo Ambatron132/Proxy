@@ -173,7 +173,47 @@ local Growid = GetLocal().name
 local WinnerLog = {}
 local emojiChatEnabled = false
 
+local emojiChatEnabled = true
+local emoji = {
+    "sigh", "mad", "smile", "tongue", "wow", "no", "shy", "wink", "music", "lol",
+    "yes", "love", "megaphone", "heart", "cool", "kiss", "agree", "see-no-evil",
+    "dance", "build", "oops", "sleep", "punch", "bheart", "cry", "party", "wl",
+    "grow", "gems", "gtoken", "plead", "vend", "bunny", "cactus", "peace", "terror",
+    "troll", "halo", "nuke", "pine", "football", "fireworks", "song", "ghost", "evil",
+    "pizza", "alien", "clap", "turkey", "gift", "cake", "heartarrow", "shamrock",
+    "grin", "ill", "eyes", "weary", "moyai",
+}
 
+-- Add this function with other utility functions
+local function randomOutput(list)
+    local randomIndex = math.random(1, #list)
+    return list[randomIndex]
+end
+
+-- Add this hook to modify chat messages with emojis
+AddHook("onsendpacket", "emojiChat", function(type, packet)
+    if type == 2 and packet:find("action|input\n|text|") then
+        args = string.gsub(packet, "action|input\n|text|", "")
+        
+        -- Check if it's the toggle command
+        if args:lower() == "/emoji" then
+            emojiChatEnabled = not emojiChatEnabled
+            local status = emojiChatEnabled and "`2Enabled" or "`4Disabled"
+            SendPacket(2, "action|input\n|text|`9Emoji chat is now "..status.."`9!")
+            return true
+        end
+        
+        -- Don't modify commands or if emoji chat is disabled
+        if args:sub(1, 1) == "/" or not emojiChatEnabled then
+            return false
+        end
+        
+        -- Send message with random emoji (without rainbow colors)
+        SendPacket(2, "action|input\ntext|("..randomOutput(emoji)..") ".. args)
+        return true
+    end
+    return false
+end)
 
 -- Add this function to log winners
 function LogWinner(side, gemsCount, opponentGems)
