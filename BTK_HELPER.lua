@@ -3,15 +3,15 @@ function open()
 "\nadd_textbox|`0Hi, "..GetLocal().name.." `0Thanks for Using this script!|"..
 "\nadd_spacer|small|"..
 "\nadd_label_with_icon|small|`^Change Log|left|2480|"..
-"\nadd_textbox|`2Version : `92|"..
-"\nadd_textbox|`w[`2+`w] `0Added `w/win `w[`9Auto drop to winners`w]|"..
-"\nadd_textbox|`w[`2+`w] `0Added `w/cg `w[`9Check Gems`w]|"..
-"\nadd_textbox|`w[`2+`w] `0Added `w/fps `w[`9Fast Setup`w]|"..
-"\nadd_textbox|`w[`2+`w] `0Added `w/ar `w[`9Drop Arroz`w]|"..
-"\nadd_textbox|`w[`2+`w] `0Added `w/cl `w[`9Drop Clover`w]|"..
-"\nadd_textbox|`w[`2+`w] `0Added `w/top `w[`9Set Chand On Top`w]|"..
-"\nadd_textbox|`w[`2+`w] `0Added `w/down `w[`9Set Chand On Down`w]|"..
-"\nadd_textbox|`w[`2+`w] `0Added `w/log `w[`9Winner Gems Logs`w]|"..
+"\nadd_textbox|`2Version : `93.4|"..
+"\nadd_textbox|`w[ `2+ `w] `0Added `w/win `w[`9Auto drop to winners`w]|"..
+"\nadd_textbox|`w[ `2+ `w] `0Added `w/cg `w[`9Check Gems`w]|"..
+"\nadd_textbox|`w[ `2+ `w] `0Added `w/fps `w[`9Fast Setup`w]|"..
+"\nadd_textbox|`w[ `2+ `w] `0Added `w/ar `w[`9Drop Arroz`w]|"..
+"\nadd_textbox|`w[ `2+ `w] `0Added `w/cl `w[`9Drop Clover`w]|"..
+"\nadd_textbox|`w[ `2+ `w] `0Added `w/top `w[`9Set Chand On Top`w]|"..
+"\nadd_textbox|`w[ `2+ `w] `0Added `w/down `w[`9Set Chand On Down`w]|"..
+"\nadd_textbox|`w[ `2+ `w] `0Added `w/log `w[`9Winner Gems Logs`w]|"..
 "\nadd_textbox|`w[`2+`w] `0Added `w/emoji `w[`9Rainbow Chat with Emoji`w]|"..
 "\nadd_spacer|small|"..
 "\nadd_label_with_icon|small|`^Information|left|5956|"..
@@ -33,7 +33,7 @@ function xxx()
     "\nadd_label_with_icon|small|`0World: `2"..GetWorld().name.."|left|3802|"..
     "\nadd_label_with_icon|small|`0Current Tax: `2"..taxset.."`9%|left|15580|"..
 	"\nadd_label_with_icon|small|`0Current Position `2X:`0"..math.floor(GetLocal().pos.x / 32).." `2Y:`0"..math.floor(GetLocal().pos.y / 32).."|left|15476|"..
-    "\nadd_spacer|small|"..
+    "\nadd_spacer|big|"..
     "\nadd_button_with_icon|pt|   `cBTK Setup   |staticYellowFrame|340|"..
 	"\nadd_button_with_icon|tel|   `cTelephone   |staticYellowFrame|3898||"..
     "\nadd_button_with_icon|wrench|   `cWrench Setting   |staticYellowFrame|32||"..
@@ -119,6 +119,7 @@ function command()
 "\nadd_textbox|`w/tg `w[`9Shows Gems and Auto Drop to Winner`w]|"..
 "\nadd_textbox|`w/win `w[`9Auto drop to winners`w]|"..
 "\nadd_textbox|`w/wp `w[`9Enabled/disabled wrench mode pull`w]|"..
+"\nadd_textbox|`w/put `w[`9Enabled/disabled auto put chand`w]|"..
 "\nadd_textbox|`w/log `w[`9Winner Gems Logs`w]|"..
 "\nadd_spacer|small|"..
 "\nadd_label_with_icon|small|`wBnk Command|left|340|"..
@@ -170,8 +171,49 @@ local cg1 = 0
 local cg2 = 0
 local Growid = GetLocal().name
 local WinnerLog = {}
-local emojiChatEnabled = true
+local emojiChatEnabled = false
 
+local emojiChatEnabled = true
+local emoji = {
+    "sigh", "mad", "smile", "tongue", "wow", "no", "shy", "wink", "music", "lol",
+    "yes", "love", "megaphone", "heart", "cool", "kiss", "agree", "see-no-evil",
+    "dance", "build", "oops", "sleep", "punch", "bheart", "cry", "party", "wl",
+    "grow", "gems", "gtoken", "plead", "vend", "bunny", "cactus", "peace", "terror",
+    "troll", "halo", "nuke", "pine", "football", "fireworks", "song", "ghost", "evil",
+    "pizza", "alien", "clap", "turkey", "gift", "cake", "heartarrow", "shamrock",
+    "grin", "ill", "eyes", "weary", "moyai",
+}
+
+-- Add this function with other utility functions
+local function randomOutput(list)
+    local randomIndex = math.random(1, #list)
+    return list[randomIndex]
+end
+
+-- Add this hook to modify chat messages with emojis
+AddHook("onsendpacket", "emojiChat", function(type, packet)
+    if type == 2 and packet:find("action|input\n|text|") then
+        args = string.gsub(packet, "action|input\n|text|", "")
+        
+        -- Check if it's the toggle command
+        if args:lower() == "/emoji" then
+            emojiChatEnabled = not emojiChatEnabled
+            local status = emojiChatEnabled and "`2Enabled" or "`4Disabled"
+            SendPacket(2, "action|input\n|text|`9Emoji chat is now "..status.."`9!")
+            return true
+        end
+        
+        -- Don't modify commands or if emoji chat is disabled
+        if args:sub(1, 1) == "/" or not emojiChatEnabled then
+            return false
+        end
+        
+        -- Send message with random emoji (without rainbow colors)
+        SendPacket(2, "action|input\ntext|("..randomOutput(emoji)..") ".. args)
+        return true
+    end
+    return false
+end)
 
 -- Add this function to log winners
 function LogWinner(side, gemsCount, opponentGems)
@@ -187,7 +229,7 @@ end
 
 -- Add this function to display the winner log
 function ShowWinnerLog()
-    local dialogContent = "\nadd_label_with_icon|big|`9Gems Winner Log|left|9438|"..
+    local dialogContent = "\nadd_label_with_icon|big|`9Gems Winner Log|left|112|"..
                          "\nadd_spacer|small|"
     
     if #WinnerLog == 0 then
@@ -195,7 +237,7 @@ function ShowWinnerLog()
     else
         for i, log in ipairs(WinnerLog) do
             dialogContent = dialogContent..
-                "\nadd_label_with_icon|small|`2"..log.side.." `wWin `2"..log.gems.." `wVS `4"..log.opponentGems.." `w("..log.time..")|left|9438|"
+                "\nadd_label_with_icon|small|`2"..log.side.." `wWin `2"..log.gems.." `wVS `4"..log.opponentGems.." `w("..log.time..")|left|112|"
         end
     end
     
@@ -505,7 +547,7 @@ function takegems()
         table.insert(data, Count)
         Count = 0;
         if data[2] > data[1] then
-            SendPacket(2, "action|input\n|text|`w[`2WIN`w]Kiri `2"..data[2].." `bVS `4"..data[1].." `wKanan`w[`4LOSE`w]");
+            SendPacket(2, "action|input\n|text|`0[`2Win`0] Kiri `2: " .. data[2] .. "(gems) `bVs `0[`4Lose`0] Kanan `2: " .. data[1] .. "(gems)");
             cg2 = data[2]
             LogWinner("LEFT", data[2], data[1]) -- Log left winner
             
@@ -531,7 +573,7 @@ function takegems()
             SendPacket(2, "action|input\n|text|Ya Sama `2: " .. data[2] .. "(wink) `0[ `bTie `0] Ya Sama `w: " .. data[1] .. "(wink)");
             ProxyOverlay("`9Nothing Winner `4TIE!")
         elseif data[2] < data[1] then
-            SendPacket(2, "action|input\n|text|`w[`4LOSE`w]Kiri `4"..data[2].." `bVS `2"..data[1].." `wKanan`w[`2WIN`w]");
+            SendPacket(2, "action|input\n|text|`0[`4Lose`0] Kiri `2: " .. data[2] .. "(gems) `bVs `0[`2Win`0] Kanan `2: " .. data[1] .. "(gems)");
             cg1 = data[1]
             LogWinner("RIGHT", data[1], data[2]) -- Log right winner
             
@@ -1531,11 +1573,11 @@ function checkGems()
     
     -- Determine winner and send appropriate message
     if Count1 > Count2 then
-        SendPacket(2, "action|input\n|text|`w[`4Lose`w]Kiri `4"..Count2.." `b/ `2"..Count1.." Kanan"[`2Win`w])
+        SendPacket(2, "action|input\n|text|`w[`4Lose`w] Kiri (gems) `4"..Count2.." `b/ `2"..Count1.." `w(gems) [`2Win`w] Kanan")
     elseif Count1 == Count2 then
         SendPacket(2, "action|input\n|text|`0[TIE] Kiri (gems) `0"..Count2.." `b/ `0"..Count1.." `0(gems) Kanan [TIE]")
     else
-        SendPacket(2, "action|input\n|text|`w[`2Win`w]Kiri `2"..Count2.." `b/ `4"..Count1.."  `wKanan`w[`4Lose`w]")
+        SendPacket(2, "action|input\n|text|`w[`2Win`w] Kiri (gems) `2"..Count2.." `b/ `4"..Count1.." `w(gems) [`4Lose`w] Kanan")
     end
 end
 
