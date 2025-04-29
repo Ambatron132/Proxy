@@ -250,7 +250,7 @@ if not emojiChatEnabled then return false end
         SendPacket(2, "action|input\ntext|`b("..emoji[math.random(1, #emoji)]..") : ".. textMessage)
         return true
     end
-end)
+end
 
 -- Add this function to log winners
 function LogWinner(side, gemsCount, opponentGems)
