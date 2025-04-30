@@ -547,7 +547,7 @@ function takegems()
         table.insert(data, Count)
         Count = 0;
         if data[2] > data[1] then
-            SendPacket(2, "action|input\n|text|`w[`2WIN`w]Kiri `2"..data[2].." `bVS `4"..data[1].." `wKanan[`4LOSE`w]Kanan");
+            SendPacket(2, "action|input\n|text|`w[`2WIN`w]Kiri `2"..data[2].." `bVS `4"..data[1].." `wKanan[`4LOSE`w]");
             cg2 = data[2]
             LogWinner("LEFT", data[2], data[1]) -- Log left winner
             
