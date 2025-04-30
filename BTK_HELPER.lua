@@ -4,15 +4,15 @@ function open()
 "\nadd_spacer|small|"..
 "\nadd_label_with_icon|small|`^Change Log|left|2480|"..
 "\nadd_textbox|`2Version : `93.4|"..
-"\nadd_textbox|`w[ `2+ `w] `0Added `w/win `w[`9Auto drop to winners`w]|"..
-"\nadd_textbox|`w[ `2+ `w] `0Added `w/cg `w[`9Check Gems`w]|"..
-"\nadd_textbox|`w[ `2+ `w] `0Added `w/fps `w[`9Fast Setup`w]|"..
-"\nadd_textbox|`w[ `2+ `w] `0Added `w/ar `w[`9Drop Arroz`w]|"..
-"\nadd_textbox|`w[ `2+ `w] `0Added `w/cl `w[`9Drop Clover`w]|"..
-"\nadd_textbox|`w[ `2+ `w] `0Added `w/top `w[`9Set Chand On Top`w]|"..
-"\nadd_textbox|`w[ `2+ `w] `0Added `w/down `w[`9Set Chand On Down`w]|"..
-"\nadd_textbox|`w[ `2+ `w] `0Added `w/log `w[`9Winner Gems Logs`w]|"..
-"\nadd_textbox|`w[`2+`w] `0Added `w/emoji `w[`9Rainbow Chat with Emoji`w]|"..
+"\nadd_textbox|`w[`2+`w] `0Added `w/win `w[`9Auto drop to winners`w]|"..
+"\nadd_textbox|`w[`2+`w] `0Added `w/cg `w[`9Check Gems`w]|"..
+"\nadd_textbox|`w[`2+`w] `0Added `w/fps `w[`9Fast Setup`w]|"..
+"\nadd_textbox|`w[`2+`w] `0Added `w/ar `w[`9Drop Arroz`w]|"..
+"\nadd_textbox|`w[`2+`w] `0Added `w/cl `w[`9Drop Clover`w]|"..
+"\nadd_textbox|`w[`2+`w] `0Added `w/top `w[`9Set Chand On Top`w]|"..
+"\nadd_textbox|`w[`2+`w] `0Added `w/down `w[`9Set Chand On Down`w]|"..
+"\nadd_textbox|`w[`2+`w] `0Added `w/log `w[`9Winner Gems Logs`w]|"..
+"\nadd_textbox|`w[`2+`w] `0Added `w/emoji `w[`9Chat with Emoji`w]|"..
 "\nadd_spacer|small|"..
 "\nadd_label_with_icon|small|`^Information|left|5956|"..
 "\nadd_textbox|`w/cmd `w[`9Shows all proxy commands`w]|"..
@@ -547,7 +547,7 @@ function takegems()
         table.insert(data, Count)
         Count = 0;
         if data[2] > data[1] then
-            SendPacket(2, "action|input\n|text|`w[`2WIN`w]Kiri `2"..data[2].." `bVS `4"..data[1].." `wKanan[`4LOSE`w]");
+            SendPacket(2, "action|input\n|text|`w[`2WIN`w]Kiri `2"..data[2].." `b/ `4"..data[1].." `wKanan[`4LOSE`w]");
             cg2 = data[2]
             LogWinner("LEFT", data[2], data[1]) -- Log left winner
             
@@ -573,7 +573,7 @@ function takegems()
             SendPacket(2, "action|input\n|text|Ya Sama `2: " .. data[2] .. "(wink) `0[ `bTie `0] Ya Sama `w: " .. data[1] .. "(wink)");
             ProxyOverlay("`9Nothing Winner `4TIE!")
         elseif data[2] < data[1] then
-            SendPacket(2, "action|input\n|text|`w[`4LOSE`w]Kiri `4"..data[2].." `bVS `2"..data[1].." `wKanan[`2WIN`w]");
+            SendPacket(2, "action|input\n|text|`w[`4LOSE`w]Kiri `4"..data[2].." `b/ `2"..data[1].." `wKanan[`2WIN`w]");
             cg1 = data[1]
             LogWinner("RIGHT", data[1], data[2]) -- Log right winner
             
