@@ -5,6 +5,7 @@ function open()
 "\nadd_label_with_icon|small|`^Change Log|left|2480|"..
 "\nadd_textbox|`2Version : `93.4|"..
 "\nadd_textbox|`w[`2+`w] `0Added `w/win `w[`9Auto drop to winners`w]|"..
+"\nadd_textbox|`w[`2+`w] `0Added `w/tg `w[`9Take Gems Drop to Winner`w]|"..
 "\nadd_textbox|`w[`2+`w] `0Added `w/cg `w[`9Check Gems`w]|"..
 "\nadd_textbox|`w[`2+`w] `0Added `w/fps `w[`9Fast Setup`w]|"..
 "\nadd_textbox|`w[`2+`w] `0Added `w/ar `w[`9Drop Arroz`w]|"..
