@@ -1004,7 +1004,7 @@ function setupTopPositions()
         }
     }
     
-    SendPacket(2, "action|input\n|text|`2BTK MODE `9CHAND ON TOP")
+    SendPacket(2, "action|input\n|text|`9SETUP CHAND ATAS `2ON")
 end
 
 function setupDownPositions()
@@ -1050,7 +1050,7 @@ function setupDownPositions()
         }
     }
     
-    SendPacket(2, "action|input\n|text|`2BTK MODE `9CHAND ON DOWN")
+    SendPacket(2, "action|input\n|text|`9SETUP CHAND BAWAH `2ON")
 end
 
 function setupDownPositions()
