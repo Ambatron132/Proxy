@@ -115,13 +115,13 @@ function command()
 "\nadd_textbox|`w/bb `7{amount} `w[`9Drop black gem lock`w]|"..
 "\nadd_textbox|`w/setup `w[`9Manual Setup`w]"..
 "\nadd_textbox|`w/tax `7{amount} `w[`9Set tax`w]|"..
-"\nadd_textbox|`w/tb `w[`9Take lock`w]|"..
+"\nadd_textbox|`w/tb `w[`9Take Bet`w]|"..
 "\nadd_textbox|`w/tg `w[`9Shows Gems and Auto Drop to Winner`w]|"..
 "\nadd_textbox|`w/win `w[`9Auto drop to winners`w]|"..
-"\nadd_textbox|`w/wp `w[`9Enabled/disabled wrench mode pull`w]|"..
+"\nadd_textbox|`w/pm `w[`9Enabled/disabled wrench mode pull`w]|"..
 "\nadd_textbox|`w/log `w[`9Winner Gems Logs`w]|"..
 "\nadd_spacer|small|"..
-"\nadd_label_with_icon|small|`wBnk Command|left|340|"..
+"\nadd_label_with_icon|small|`wBank Command|left|340|"..
 "\nadd_textbox|`w/wd `w[`9Withdraw blue gem lock from bank`w]|"..
 "\nadd_textbox|`w/depo `wor `w/dp `w[`9Deposit blue gem lock to bank`w]|"..
 "\nadd_spacer|small|"..
@@ -637,7 +637,7 @@ function hook(type, str)
 			end 
 		end 
 	end
-	if str:find("/wp") or str:find("buttonClicked|wp") then
+	if str:find("/pm") or str:find("buttonClicked|wp") then
 		if pull == false then
 			pull = true
 			SendPacket(2, "action|input\n|text|`2Enabled `9Wrench `9Pull `9Mode")
