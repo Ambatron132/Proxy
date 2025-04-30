@@ -1053,52 +1053,6 @@ function setupDownPositions()
     SendPacket(2, "action|input\n|text|`9SETUP CHAND BAWAH `2ON")
 end
 
-function setupDownPositions()
-    local xhost = GetLocal().pos.x // 32
-    local yhost = GetLocal().pos.y // 32
-    
-    -- Take positions (display)
-    takeleftx = xhost - 3
-    takelefty = yhost - 1
-    takerightx = xhost + 3
-    takerighty = yhost - 1
-    
-    -- Gem positions (bottom)
-    gemsleftx1 = xhost - 3
-    gemslefty1 = yhost +1
-    gemsleftx2 = gemsleftx1 - 1
-    gemslefty2 = gemslefty1
-    gemsleftx3 = gemsleftx1 - 2
-    gemslefty3 = gemslefty1
-    
-    gemsrightx1 = xhost + 3
-    gemsrighty1 = yhost + 1
-    gemsrightx2 = gemsrightx1 + 1
-    gemsrighty2 = gemsrighty1
-    gemsrightx3 = gemsrightx1 + 2
-    gemsrighty3 = gemsrighty1
-    
-    -- Back position
-    gemsleftx4 = xhost
-    gemslefty4 = yhost
-    
-    -- Update tile table
-    tile = {
-        pos1 = {
-            {x = gemsrightx1, y = gemsrighty1},
-            {x = gemsrightx2, y = gemsrighty2},
-            {x = gemsrightx3, y = gemsrighty3}
-        },
-        pos2 = {
-            {x = gemsleftx1, y = gemslefty1},
-            {x = gemsleftx2, y = gemslefty2},
-            {x = gemsleftx3, y = gemslefty3}
-        }
-    }
-    
-    SendPacket(2, "action|input\n|text|`2BTK MODE `9CHAND ON DOWN")
-end
-
 function var(var)
 	if var[0]:find("OnConsoleMessage") and var[1]:find("(%d+) Diamond Lock") then
 		jumlah = var[1]:match("(%d+) Diamond Lock")
