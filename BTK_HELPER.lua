@@ -387,28 +387,33 @@ open()
 
 function take()
     tiles = {
-        -- Left side positions (main and -1 x)
-        {takeleftx, takelefty},
-        {takeleftx-1, takelefty},
-        
-        -- Right side positions (main and +1 x)
-        {takerightx, takerighty},
-        {takerightx+1, takerighty}
+        -- Left side positions (takeleftx and takelefty)
+        {
+            {x = takeleftx, y = takelefty},    -- Main left position
+            {x = takeleftx - 1, y = takelefty}  -- Adjacent left position (-1 x)
+        },
+        -- Right side positions (takerightx and takerighty)
+        {
+            {x = takerightx, y = takerighty},    -- Main right position
+            {x = takerightx + 1, y = takerighty} -- Adjacent right position (+1 x)
+        }
     }
     
-    for _, tile in pairs(tiles) do
-        for _, obj in pairs(GetObjectList()) do
-            if (obj.pos.x) // 32 == tile[1] and (obj.pos.y) // 32 == tile[2] then
-                SendPacketRaw(false, {
-                    type = 11,
-                    value = obj.oid,
-                    x = obj.pos.x,
-                    y = obj.pos.y,
-                })
-                table.insert(data, {
-                    id = obj.id,
-                    count = obj.amount
-                })
+    for _, side in pairs(tiles) do
+        for _, pos in pairs(side) do
+            for _, obj in pairs(GetObjectList()) do
+                if (obj.pos.x) // 32 == pos.x and (obj.pos.y) // 32 == pos.y then
+                    SendPacketRaw(false, {
+                        type = 11,
+                        value = obj.oid,
+                        x = obj.pos.x,
+                        y = obj.pos.y,
+                    })
+                    table.insert(data, {
+                        id = obj.id,
+                        count = obj.amount
+                    })
+                end
             end
         end
     end
