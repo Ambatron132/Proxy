@@ -386,33 +386,33 @@ Sleep(1000)
 open()
 
 function take()
-	tiles = {
-		{
-			takeleftx,
-			takelefty
-		},
-		{
-			takerightx,
-			takerighty
-		}
-	}
-	for _, tiles in pairs(tiles) do
-		for _, obj in pairs(GetObjectList()) do
-			if (obj.pos.x) // 32 == tiles[1] and (obj.pos.y) // 32 == tiles[2] then
-				SendPacketRaw(false, {
-					type = 11,
-					value = obj.oid,
-					x = obj.pos.x,
-					y = obj.pos.y,
-				})
-				table.insert(data, {
-					id = obj.id,
-					count = obj.amount
-				})
-			end
-		end
-	end
-	Data()
+    tiles = {
+        -- Left side positions (main and -1 x)
+        {takeleftx, takelefty},
+        {takeleftx-1, takelefty},
+        
+        -- Right side positions (main and +1 x)
+        {takerightx, takerighty},
+        {takerightx+1, takerighty}
+    }
+    
+    for _, tile in pairs(tiles) do
+        for _, obj in pairs(GetObjectList()) do
+            if (obj.pos.x) // 32 == tile[1] and (obj.pos.y) // 32 == tile[2] then
+                SendPacketRaw(false, {
+                    type = 11,
+                    value = obj.oid,
+                    x = obj.pos.x,
+                    y = obj.pos.y,
+                })
+                table.insert(data, {
+                    id = obj.id,
+                    count = obj.amount
+                })
+            end
+        end
+    end
+    Data()
 end
 
 function checkBetLeft(x, y)
