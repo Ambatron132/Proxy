@@ -3,7 +3,7 @@ function open()
 "\nadd_textbox|`0Hi, "..GetLocal().name.." `0Thanks for Using this script!|"..
 "\nadd_spacer|small|"..
 "\nadd_label_with_icon|small|`^Change Log|left|2480|"..
-"\nadd_textbox|`2Version : `93.4|"..
+"\nadd_textbox|`2Version : `93|"..
 "\nadd_textbox|`w[`2+`w] `0Added `w/win `w[`9Auto drop to winners`w]|"..
 "\nadd_textbox|`w[`2+`w] `0Added `w/tg `w[`9Take Gems Drop to Winner`w]|"..
 "\nadd_textbox|`w[`2+`w] `0Added `w/cg `w[`9Check Gems`w]|"..
@@ -14,6 +14,10 @@ function open()
 "\nadd_textbox|`w[`2+`w] `0Added `w/down `w[`9Set Chand On Down`w]|"..
 "\nadd_textbox|`w[`2+`w] `0Added `w/log `w[`9Winner Gems Logs`w]|"..
 "\nadd_textbox|`w[`2+`w] `0Added `w/emoji `w[`9Chat with Emoji`w]|"..
+"\nadd_textbox|`w[`2+`w] `0Added `w/reme `w[`9Reme Mode`w]|"..
+"\nadd_textbox|`w[`2+`w] `0Added `w/leme `w[`9Leme Mode`w]|"..
+"\nadd_textbox|`w[`2+`w] `0Added `w/qeme `w[`9Qeme Mode`w]|"..
+"\nadd_textbox|`w[`2+`w] `0Added `w/lw `w[`9Log Wheel`w]|"..
 "\nadd_spacer|small|"..
 "\nadd_label_with_icon|small|`^Information|left|5956|"..
 "\nadd_textbox|`w/cmd `w[`9Shows all proxy commands`w]|"..
@@ -35,11 +39,11 @@ function xxx()
     "\nadd_label_with_icon|small|`0Current Tax: `2"..taxset.."`9%|left|15580|"..
 	"\nadd_label_with_icon|small|`0Current Position `2X:`0"..math.floor(GetLocal().pos.x / 32).." `2Y:`0"..math.floor(GetLocal().pos.y / 32).."|left|15476|"..
     "\nadd_spacer|small|"..
-    "\nadd_button_with_icon|pt|   `cBTK Setup   |staticYellowFrame|340|"..
-	"\nadd_button_with_icon|tel|   `cTelephone   |staticYellowFrame|3898||"..
-    "\nadd_button_with_icon|wrench|   `cWrench Setting   |staticYellowFrame|32||"..
-    "\nadd_button_with_icon|sdb|   `cBlock SDB   |staticYellowFrame|2480|"..
-    "\nadd_button_with_icon|cmd|   `c SHOW COMMANDS     |staticYellowFrame|3524|"..
+    "\nadd_button_with_icon|pt|   `wBTK Setup   |staticYellowFrame|340|"..
+	"\nadd_button_with_icon|tel|   `wTelephone   |staticYellowFrame|3898||"..
+    "\nadd_button_with_icon|wrench|   `wWrench Setting   |staticYellowFrame|32||"..
+    "\nadd_button_with_icon|csn|   `wCasino   |staticYellowFrame|758|"..
+    "\nadd_button_with_icon|cmd|   `wSHOW COMMANDS     |staticYellowFrame|3524|"..
     "\nadd_button_with_icon||END_LIST|noflags|0||"..
     "\nadd_quick_exit||".. 
     "\nend_dialog|xxx|Close||"   
@@ -49,12 +53,29 @@ function xxx()
     })
 end
 
+function casino()
+	dialog = "\nadd_label_with_icon|big|CASINO|left|758|"..
+"\nadd_spacer|small|"..
+"\nadd_button_with_icon|reme|   `wREME   |staticYellowFrame|758||"..
+"\nadd_button_with_icon|leme|   `wLEME   |staticYellowFrame|758||"..
+"\nadd_button_with_icon|qeme|   `wQEME   |staticYellowFrame|758||"..
+"\nadd_button_with_icon|lw|   `wLog Wheel  |staticYellowFrame|758||"..
+"\nadd_button_with_icon||END_LIST|noflags|0||"..
+"\nadd_button|back|`wBack|noflags|0|0|"..
+"\nend_quick_exit||"
+	SendVariantList({
+		[0] = "OnDialogRequest",
+		[1] = dialog
+	})
+end
+
+
 function wset()
 	dialog = "\nadd_label_with_icon|big|Wrench Mode|left|32|"..
 "\nadd_spacer|small|"..
-"\nadd_button_with_icon|wp|   `cWrench Autopull   |staticYellowFrame|32||"..
-"\nadd_button_with_icon|wk|   `cWrench Kick   |staticYellowFrame|32||"..
-"\nadd_button_with_icon|wb|   `cWrench Ban   |staticYellowFrame|32||"..
+"\nadd_button_with_icon|wp|   `wWrench Autopull   |staticYellowFrame|32||"..
+"\nadd_button_with_icon|wk|   `wWrench Kick   |staticYellowFrame|32||"..
+"\nadd_button_with_icon|wb|   `wWrench Ban   |staticYellowFrame|32||"..
 "\nadd_button_with_icon||END_LIST|noflags|0||"..
 "\nadd_button|back|`wBack|noflags|0|0|"..
 "\nend_quick_exit||"
@@ -122,6 +143,12 @@ function command()
 "\nadd_textbox|`w/pm `w[`9Enabled/disabled wrench mode pull`w]|"..
 "\nadd_textbox|`w/log `w[`9Winner Gems Logs`w]|"..
 "\nadd_spacer|small|"..
+"\nadd_label_with_icon|small|`wCasino Command|left|758|"..
+"\nadd_textbox|`w/reme `w[`9Reme Mode`w]|"..
+"\nadd_textbox|`w/leme `w[`9Leme Mode`w]|"..
+"\nadd_textbox|`w/qeme `w[`9Qeme Mode`w]|"..
+"\nadd_textbox|`w/lw `w[`9Log Wheel`w]|"..
+"\nadd_spacer|small|"..
 "\nadd_label_with_icon|small|`wBank Command|left|340|"..
 "\nadd_textbox|`w/wd `w[`9Withdraw blue gem lock from bank`w]|"..
 "\nadd_textbox|`w/depo `wor `w/dp `w[`9Deposit blue gem lock to bank`w]|"..
@@ -146,7 +173,7 @@ local ban = false
 local cbgl = false
 local bgems = false
 Count = 0
-local sdbb = false
+local sdbb = true
 local takeleftx
 local takelefty
 local takerightx
@@ -172,6 +199,8 @@ local cg2 = 0
 local Growid = GetLocal().name
 local WinnerLog = {}
 local emojiChatEnabled = false
+local HostCsn = "" -- For tracking wheel spin mode
+local LogSpin = {} -- For tracking spin logs
 
 local emojiChatEnabled = true
 local emoji = {
@@ -262,9 +291,6 @@ function removeColorAndSymbols(str)
     return cleanedStr
 end
 
-function mufflogs(text)
-    LogToConsole("`w[`2BTK Helper`w] `0"..text)
-end
 
 function pos(px, py)
 	local hasil
@@ -322,12 +348,40 @@ function btk()
     })
 end
 
+
+function GetName(id) 
+    for _, player in pairs(GetPlayerList()) do 
+        if player.netid == id then 
+            return player.name 
+        end 
+    end 
+end
+
+function FilterSpin(id) 
+    FilterLog = {} 
+    for _, log in pairs(LogSpin) do 
+        if log.netid == id then 
+            table.insert(FilterLog,"\nadd_label_with_icon|small|"..log.spin.."|left|758|\n") 
+        end 
+    end 
+    SendVariantList({[0] = "OnDialogRequest", [1] = "set_default_color|`w|\nadd_label_with_icon|big|"..GetName(id).." Spin|left|1400|\nadd_spacer|small|\n"..table.concat(FilterLog).."\nadd_spacer|small|\nadd_button|/cctv|Exit|noflags|0|0|\nadd_quick_exit|||\nend_dialog|FilterSpin|||"}) 
+end
+
+function SpinLog() 
+    SpunLog = {} 
+    for _, spin in pairs(LogSpin) do 
+        table.insert(SpunLog, spin.spin) 
+    end 
+    SendVariantList({[0] = "OnDialogRequest", [1] = "set_default_color|`w|\nadd_label_with_icon|big|Spin Log|left|1400|\nadd_spacer|small|\nadd_smalltext|Click the wheel button to focus player spun|\n"..table.concat(SpunLog).."\nadd_spacer|small|\nadd_quick_exit|||\nend_dialog|WorldSpin|Close||"}) 
+end
+
+
 function ProxyLog(str)
 	LogToConsole("`w[`2BTK Helper`w] `0" .. str)
 end
 
 LogToConsole("`9Script Will Run In `25 `9Seconds")
-SendPacket(2, "action|input\n|text|`0Proxy `#BTK HELPER `2ON!")
+SendPacket(2, "action|input\n|text|`0Proxy `#BTK `0By `#@Petal `2ON!")
 Sleep(1000)
 open()
 
@@ -854,6 +908,47 @@ check_autospam|0]])
         SendPacket(2, "action|input\n|text|`9Emoji chat: "..status)
         return true
     end
+	if str:find("/reme") or str:find("buttonClicked|reme") then 
+        if HostCsn ~= "Reme" then 
+            HostCsn = "Reme" 
+			SendPacket(2, "action|input\n|text| `9REME `2ON!")
+        else 
+            HostCsn = "" 
+            SendPacket(2, "action|input\n|text| `9REME `4OFF!")
+        end 
+        return true 
+    end 
+	if str:lower():find("/leme") or str:find("buttonClicked|leme") then 
+    if HostCsn ~= "Leme" then 
+        HostCsn = "Leme" 
+        SendPacket(2, "action|input\n|text|`9LEME `2ON!")
+    else 
+        HostCsn = "" 
+        SendPacket(2, "action|input\n|text|`9LEME Mode `4OFF!")
+    end 
+    return true 
+	end 
+    if str:find("/qeme") or str:find("buttonClicked|qeme") then 
+        if HostCsn ~= "Qeme" then 
+            HostCsn = "Qeme" 
+            SendPacket(2, "action|input\n|text| `9QEME `2ON!") 
+        else 
+            HostCsn = "" 
+            SendPacket(2, "action|input\n|text| `9QEME `4OFF!") 
+        end 
+        return true 
+    end 
+    
+    if str:find("/lw") or str:find("buttonClicked|lw") then 
+        SpinLog() 
+        return true 
+    end 
+    
+    if str:find("dialog_name|WorldSpin\nbuttonClicked|(%d+)") then 
+        NetID = tonumber(str:match("dialog_name|WorldSpin\nbuttonClicked|(%d+)")) 
+        FilterSpin(NetID) 
+        return true 
+    end
 	if str:find("/log") then
         ShowWinnerLog()
         return true
@@ -868,6 +963,10 @@ check_autospam|0]])
     end
 	if str:find("buttonClicked|pt") then
 	    btkw()
+		return true
+	end
+    if str:find("buttonClicked|csn") then
+	    casino()
 		return true
 	end
 	if str:find("buttonClicked|tel") then
@@ -1102,6 +1201,115 @@ function var(var)
 	if var[0]:find("OnDialogRequest") and var[1]:find("Wow, that's fast delivery.") then
 		return true
 	end
+	if var[0] == "OnTalkBubble" and var[3] ~= -1 and var[2]:find("spun the wheel and got") then
+        if var[2]:find("``6>``") then
+            p = {}
+            p[0] = "OnTalkBubble"
+            p[1] = var[1]
+            p[2] = "`0[`4FAKE`0] " .. var[2]
+            p[3] = -1
+            SendVariantList(p) 
+            table.insert(LogSpin, {spin = "\nadd_label_with_icon_button|small|`0[`4FAKE`0] " .. var[2].."|left|758|"..var[1].."|\n", netid = var[1], spins = "`0[`4FAKE`0] " .. var[2]})
+        elseif var[2]:find("``!]``") then
+            s2 = var[2]:find("`` spun") - 1
+            s1 = var[2]:sub(4, s2)
+            jml1 = var[2]:find("got ") + 6
+            jml2 = var[2]:find("``!") - 1
+            jml = var[2]:sub(jml1, jml2)
+            if HostCsn == "Qeme" then
+                Qeme = jml % 10 
+                if Qeme >= 10 then 
+                    Qeme = "`20"
+                elseif Qeme == 0 then 
+                    Qeme = "`2"..Qeme.."" -- Color green for Qeme when 0
+                elseif Qeme <= 3 then 
+                    Qeme = "`4"..Qeme.."" -- Color red for Qeme between 1 and 3
+                elseif Qeme <= 6 then 
+                    Qeme = "`8"..Qeme.."" -- Color yellow for Qeme between 4 and 6
+                elseif Qeme <= 9 then 
+                    Qeme = "`^"..Qeme.."" -- Color purple for Qeme between 7 and 9
+                end
+            p = {}
+            p[0] = "OnTalkBubble"
+            p[1] = var[1]
+            p[2] = "`0[`2REAL`0] " .. var[2].." `w[`2QEME: "..Qeme.."`w] "
+            p[3] = -1
+            SendVariantList(p) 
+            table.insert(LogSpin, {spin = "\nadd_label_with_icon_button|small|`0[`2REAL`0] " .. var[2].." `w[`2Qeme: "..Qeme.."`w]|left|758|"..var[1].."|\n", netid = var[1], spins = "`0[`2REAL`0] " .. var[2].." `w[`2Qeme: "..Qeme.."`w]"})
+            elseif HostCsn == "Reme" then
+                Num1 = math.floor(jml / 10)
+                Num2 = jml % 10
+                Reme = Num1 + Num2
+                if Reme > 10 then
+                    Reme = Reme % 10
+                elseif Reme == 10 then
+                    Reme = "`20"
+                elseif Reme == 0 then
+                    Reme = "`20"
+                end
+                if tonumber(Reme) and Reme >= 7 and Reme <= 9 then
+                    Reme = "`^" .. Reme
+                elseif tonumber(Reme) and Reme >= 5 and Reme <= 8 then
+                    Reme = "`9" .. Reme
+                elseif tonumber(Reme) and Reme >= 2 and Reme <= 4 then
+                    Reme = "`8" .. Reme
+                elseif tonumber(Reme) and Reme == 1 then
+                    Reme = "`4" .. Reme
+                end
+            p = {}
+            p[0] = "OnTalkBubble"
+            p[1] = var[1]
+            p[2] = "`0[`2REAL`0] " .. var[2].." `w[`2REME: "..Reme.."`w] "
+            p[3] = -1
+            SendVariantList(p) 
+            table.insert(LogSpin, {spin = "\nadd_label_with_icon_button|small|`0[`2REAL`0] " .. var[2].." `w[`2Reme: "..Reme.."`w]|left|758|"..var[1].."|\n", netid = var[1], spins = "`0[`2REAL`0] " .. var[2].." `w[`2Reme: "..Reme.."`w]"})
+            elseif HostCsn == "Leme" then
+                Num1 = math.floor(jml / 10)
+                Num2 = jml % 10
+                Leme = Num1 + Num2
+                if Leme > 10 then
+                    Leme = Leme % 10
+                elseif Leme == 10 then
+                    Leme = "`20"
+                elseif Leme == 0 then
+                    Leme = "`20"
+                end
+                if tonumber(Leme) and Leme >= 7 and Leme <= 9 then
+                    Leme = "`^" .. Leme
+                elseif tonumber(Leme) and Leme >= 5 and Leme <= 8 then
+                    Leme = "`9" .. Leme
+                elseif tonumber(Leme) and Leme >= 2 and Leme <= 4 then
+                    Leme = "`8" .. Leme
+                elseif tonumber(Leme) and Leme == 1 then
+                    Leme = "`4" .. Leme
+                end
+            p = {}
+            p[0] = "OnTalkBubble"
+            p[1] = var[1]
+            p[2] = "`0[`2REAL`0] " .. var[2].." `w[`2LEME: "..Leme.."`w] "
+            p[3] = -1
+            SendVariantList(p) 
+            table.insert(LogSpin, {spin = "\nadd_label_with_icon_button|small|`0[`2REAL`0] " .. var[2].." `w[`2Leme: "..Leme.."`w]|left|758|"..var[1].."|\n", netid = var[1], spins = "`0[`2REAL`0] " .. var[2].." `w[`2Leme: "..Leme.."`w]"})
+            else
+            p = {}
+            p[0] = "OnTalkBubble"
+            p[1] = var[1]
+            p[2] = "`0[`2REAL`0] " .. var[2]
+            p[3] = -1
+            SendVariantList(p) 
+            table.insert(LogSpin, {spin = "\nadd_label_with_icon_button|small|`0[`2REAL`0] " .. var[2].."|left|758|"..var[1].."|\n", netid = var[1], spins = "`0[`2REAL`0] " .. var[2]})
+            end
+        else
+            p = {}
+            p[0] = "OnTalkBubble"
+            p[1] = var[1]
+            p[2] = "`0[`4FAKE`0] " .. var[2]
+            p[3] = -1
+            SendVariantList(p) 
+            table.insert(LogSpin, {spin = "\nadd_label_with_icon_button|small|`0[`4FAKE`0] " .. var[2].."|left|758|"..var[1].."|\n", netid = var[1], spins = "`0[`4FAKE`0] " .. var[2]})
+        end
+        return true
+    end
 	if var[0]:find("OnDialogRequest") and var[1]:find("`wTelephone") then
 		if cbgl == true then
 			x = var[1]:match("embed_data|x|(%d+)")
