@@ -734,7 +734,8 @@ function takegems()
         end
         
     else -- Tie
-        SendPacket(2, "action|input\n|text|Ya Sama `2: " .. data[2] .. "(wink) `0[ `bTie `0] Ya Sama `w: " .. data[1] .. "(wink)");
+        
+	SendPacket(2, "action|input\n|text|`0[TIE] Kiri (gems) `0".. data[2] .." `b/ `0".. data[1] .." `0(gems) Kanan [TIE]");
         ProxyOverlay("`9Nothing Winner `4TIE!")
     end
     
