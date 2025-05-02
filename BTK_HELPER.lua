@@ -997,13 +997,12 @@ check_autospam|0]])
 	    checkGems()
 		return true
 	end
-if str:find("/tb") or str:find("buttonClicked|dw") then
-    take()
-    tax = math.floor(Amount * taxset / 100)
-    jatuh = Amount - tax
-    
-    -- Update current session total
-    CurrentTotalAfterTax = CurrentTotalAfterTax + jatuh
+	if str:find("/tb") or str:find("buttonClicked|dw") then
+        take()
+        tax = math.floor(Amount * taxset / 100)
+        jatuh = Amount - tax
+	 -- Update current session total
+		CurrentTotalAfterTax = CurrentTotalAfterTax + jatuh
     
     -- Add to permanent history
     table.insert(BetHistory, {
@@ -1011,20 +1010,16 @@ if str:find("/tb") or str:find("buttonClicked|dw") then
         time = os.date("%H:%M on %d/%m"),
         taxRate = taxset
     })
-    
-    -- Original /tb output
-    local totalBGL = math.floor(Amount / 10000)
-    local totalDL = math.floor((Amount % 10000) / 100)
-    local jatuhBGL = math.floor(jatuh / 10000)
-    local jatuhDL = math.floor((jatuh % 10000) / 100)
-    
-    SendPacket(2, "action|input\n|text|`w[`0P1: `2"..totalBGL.." BGL "..totalDL.." DL`w]`bVS`w[`0P2 :`2"..totalBGL.." BGL "..totalDL.." DL`w] `w[`0Tax: `2"..taxset.."%`w] `w[`0Drop to Win: `2"..jatuhBGL.." BGL "..jatuhDL.." DL`w]")
-    
-    -- Auto-show updated log
-    return true
-end
-
--- Command handler remains the same
+        
+        -- Convert to BGL and DL format
+        local totalBGL = math.floor(Amount / 20000)
+        local totalDL = math.floor((Amount % 10000) / 100)
+        local jatuhBGL = math.floor(jatuh / 10000)
+        local jatuhDL = math.floor((jatuh % 10000) / 100)
+        
+        SendPacket(2, "action|input\n|text|`w[`0P1: `2"..totalBGL.." BGL "..totalDL.." DL`w]`bVS`w[`0P2 :`2"..totalBGL.." BGL "..totalDL.." DL`w] `w[`0Tax: `2"..taxset.."%`w] `w[`0Drop to Win: `2"..jatuhBGL.." BGL "..jatuhDL.." DL`w]")
+        return true
+    end
 if str:find("/betlog") or str:find("buttonClicked|logbet") then
     ShowBetLog()
     return true
