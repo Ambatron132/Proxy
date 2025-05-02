@@ -18,6 +18,7 @@ function open()
 "\nadd_textbox|`w[`2+`w] `0Added `w/leme `w[`9Leme Mode`w]|"..
 "\nadd_textbox|`w[`2+`w] `0Added `w/qeme `w[`9Qeme Mode`w]|"..
 "\nadd_textbox|`w[`2+`w] `0Added `w/lw `w[`9Log Wheel`w]|"..
+"\nadd_textbox|`w[`2+`w] `0Added `w/betlog `w[`9Bet log after tax`w]|"..
 "\nadd_spacer|small|"..
 "\nadd_label_with_icon|small|`^Information|left|5956|"..
 "\nadd_textbox|`w/cmd `w[`9Shows all proxy commands`w]|"..
@@ -201,6 +202,56 @@ local WinnerLog = {}
 local emojiChatEnabled = false
 local HostCsn = "" -- For tracking wheel spin mode
 local LogSpin = {} -- For tracking spin logs
+local BetHistory = {} -- Stores all bet logs with timestamps
+local CurrentTotalAfterTax = 0 -- Stores current session total
+
+-- Add this function with other utility functions
+function ShowBetLog()
+    local dialogContent = "\nadd_label_with_icon|big|`9Bet Log History|left|7188|"..
+                         "\nadd_spacer|small|"
+    
+    -- Add each historical entry
+    if #BetHistory == 0 then
+        dialogContent = dialogContent.."\nadd_textbox|`9No bet history recorded|"
+    else
+        for i = #BetHistory, 1, -1 do -- Show newest first
+            local entry = BetHistory[i]
+            local bgl = math.floor(entry.amount / 10000)
+            local remaining = entry.amount % 10000
+            local dl = math.floor(remaining / 100)
+            local wl = remaining % 100
+            
+            dialogContent = dialogContent..
+                "\nadd_textbox|`e"..bgl.." BGL `c"..dl.." DL `9"..wl.." WL `0- "..entry.time.."|"
+        end
+    end
+    
+    dialogContent = dialogContent..
+        "\nadd_spacer|small|"..
+        "\nadd_quick_exit||"..
+        "\nend_dialog|betlog|Close|"
+    
+    SendVariantList({
+        [0] = "OnDialogRequest",
+        [1] = dialogContent
+    })
+end
+
+-- Add this hook to handle button clicks
+AddHook("onvariant", "handle_betlog", function(var)
+    if var[0] == "OnDialogRequest" and var[1]:find("dialog_name|betlog") then
+        if var[1]:find("buttonClicked|resetcurrent") then
+            CurrentTotalAfterTax = 0
+            ShowBetLog()
+            return true
+        elseif var[1]:find("buttonClicked|clearhistory") then
+            BetHistory = {}
+            ShowBetLog()
+            return true
+        end
+    end
+    return false
+end)
 
 local emojiChatEnabled = true
 local emoji = {
@@ -387,33 +438,28 @@ open()
 
 function take()
     tiles = {
-        -- Left side positions (takeleftx and takelefty)
-        {
-            {x = takeleftx, y = takelefty},    -- Main left position
-            {x = takeleftx - 1, y = takelefty}  -- Adjacent left position (-1 x)
-        },
-        -- Right side positions (takerightx and takerighty)
-        {
-            {x = takerightx, y = takerighty},    -- Main right position
-            {x = takerightx + 1, y = takerighty} -- Adjacent right position (+1 x)
-        }
+        -- Left side positions (main and -1 x)
+        {takeleftx, takelefty},
+        {takeleftx -1, takelefty},
+        
+        -- Right side positions (main and +1 x)
+        {takerightx, takerighty},
+        {takerightx +1, takerighty}
     }
     
-    for _, side in pairs(tiles) do
-        for _, pos in pairs(side) do
-            for _, obj in pairs(GetObjectList()) do
-                if (obj.pos.x) // 32 == pos.x and (obj.pos.y) // 32 == pos.y then
-                    SendPacketRaw(false, {
-                        type = 11,
-                        value = obj.oid,
-                        x = obj.pos.x,
-                        y = obj.pos.y,
-                    })
-                    table.insert(data, {
-                        id = obj.id,
-                        count = obj.amount
-                    })
-                end
+    for _, tile in pairs(tiles) do
+        for _, obj in pairs(GetObjectList()) do
+            if (obj.pos.x) // 32 == tile[1] and (obj.pos.y) // 32 == tile[2] then
+                SendPacketRaw(false, {
+                    type = 11,
+                    value = obj.oid,
+                    x = obj.pos.x,
+                    y = obj.pos.y,
+                })
+                table.insert(data, {
+                    id = obj.id,
+                    count = obj.amount
+                })
             end
         end
     end
@@ -584,80 +630,115 @@ tile = {
 }
 
 function takegems()
-    tile = (tile);
+    -- First collect all gems from both sides
+    for _, tiles in pairs(tile.pos1) do -- Right side gems
+        for _, obj in pairs(GetObjectList()) do
+            if obj.id == 112 and (obj.pos.x)//32 == tiles.x and (obj.pos.y)//32 == tiles.y then
+                SendPacketRaw(false, {
+                    type = 11,
+                    value = obj.oid,
+                    x = obj.pos.x,
+                    y = obj.pos.y,
+                })
+                
+            end
+        end
+    end
+    
+    for _, tiles in pairs(tile.pos2) do -- Left side gems
+        for _, obj in pairs(GetObjectList()) do
+            if obj.id == 112 and (obj.pos.x)//32 == tiles.x and (obj.pos.y)//32 == tiles.y then
+                SendPacketRaw(false, {
+                    type = 11,
+                    value = obj.oid,
+                    x = obj.pos.x,
+                    y = obj.pos.y,
+                })
+                
+            end
+        end
+    end
+    
+    -- Now count the gems
     Count = 0;
     data = {};
-    do
-        for _, obj in pairs(GetObjectList()) do
-            for _, tiles in pairs(tile.pos1) do
-                if obj.id == 112 and (obj.pos.x)//32 == tiles.x and (obj.pos.y)//32 == tiles.y then
-                    Count = Count + obj.amount;
-                end
+    
+    -- Count right side gems
+    for _, obj in pairs(GetObjectList()) do
+        for _, tiles in pairs(tile.pos1) do
+            if obj.id == 112 and (obj.pos.x)//32 == tiles.x and (obj.pos.y)//32 == tiles.y then
+                Count = Count + obj.amount;
             end
         end
-        table.insert(data, Count)
-        Count = 0;
-        for _, obj in pairs(GetObjectList()) do
-            for _, tiles in pairs(tile.pos2) do
-                if obj.id == 112 and (obj.pos.x)//32 == tiles.x and (obj.pos.y)//32 == tiles.y then
-                    Count = Count + obj.amount;
-                end
+    end
+    table.insert(data, Count)
+    
+    -- Count left side gems
+    Count = 0;
+    for _, obj in pairs(GetObjectList()) do
+        for _, tiles in pairs(tile.pos2) do
+            if obj.id == 112 and (obj.pos.x)//32 == tiles.x and (obj.pos.y)//32 == tiles.y then
+                Count = Count + obj.amount;
             end
         end
-        table.insert(data, Count)
-        Count = 0;
-        if data[2] > data[1] then
-            SendPacket(2, "action|input\n|text|`w[`2WIN`w]Kiri `2"..data[2].." `b/ `4"..data[1].." `wKanan[`4LOSE`w]");
-            cg2 = data[2]
-            LogWinner("LEFT", data[2], data[1]) -- Log left winner
-            
-            -- Auto drop to left winner
-            if jatuh then
-                ireng = math.floor(jatuh / 1000000)
-                bgl = math.floor(jatuh / 10000)
-                jatuh = jatuh - bgl * 10000
-                dl = math.floor(jatuh / 100)
-                wl = jatuh % 100
-                dropright(takeleftx - 2, takelefty)
-                dropwl = tonumber(wl)
-                dropdl = tonumber(dl)
-                if GetItemCount(242) < dropwl or GetItemCount(242) == 0 then
-                    wear(1796)
-                end
-                if GetItemCount(1796) < dropdl or GetItemCount(1796) == 0 then
-                    wear(7188)
-                end
-                DropMode = true
+    end
+    table.insert(data, Count)
+    
+    -- Determine winner and drop
+    if data[2] > data[1] then -- Left wins
+        SendPacket(2, "action|input\n|text|`w[`2WIN`w]Kiri `2"..data[2].." `b/ `4"..data[1].." `wKanan[`4LOSE`w]");
+        cg2 = data[2]
+        LogWinner("LEFT", data[2], data[1])
+        
+        -- Auto drop to left winner
+        if jatuh then
+            ireng = math.floor(jatuh / 1000000)
+            bgl = math.floor(jatuh / 10000)
+            jatuh = jatuh - bgl * 10000
+            dl = math.floor(jatuh / 100)
+            wl = jatuh % 100
+            dropright(takeleftx - 2, takelefty)
+            dropwl = tonumber(wl)
+            dropdl = tonumber(dl)
+            if GetItemCount(242) < dropwl or GetItemCount(242) == 0 then
+                wear(1796)
             end
-        elseif data[1] == data[2] then
-            SendPacket(2, "action|input\n|text|Ya Sama `2: " .. data[2] .. "(wink) `0[ `bTie `0] Ya Sama `w: " .. data[1] .. "(wink)");
-            ProxyOverlay("`9Nothing Winner `4TIE!")
-        elseif data[2] < data[1] then
-            SendPacket(2, "action|input\n|text|`w[`4LOSE`w]Kiri `4"..data[2].." `b/ `2"..data[1].." `wKanan[`2WIN`w]");
-            cg1 = data[1]
-            LogWinner("RIGHT", data[1], data[2]) -- Log right winner
-            
-            -- Auto drop to right winner
-            if jatuh then
-                ireng = math.floor(jatuh / 1000000)
-                bgl = math.floor(jatuh / 10000)
-                jatuh = jatuh - bgl * 10000
-                dl = math.floor(jatuh / 100)
-                wl = jatuh % 100
-                dropright(takerightx, takerighty)
-                dropwl = tonumber(wl)
-                dropdl = tonumber(dl)
-                if GetItemCount(242) < dropwl or GetItemCount(242) == 0 then
-                    wear(1796)
-                end
-                if GetItemCount(1796) < dropdl or GetItemCount(1796) == 0 then
-                    wear(7188)
-                end
-                DropMode = true
+            if GetItemCount(1796) < dropdl or GetItemCount(1796) == 0 then
+                wear(7188)
             end
+            DropMode = true
         end
-        data = {};
-    end;
+        
+    elseif data[1] > data[2] then -- Right wins
+        SendPacket(2, "action|input\n|text|`w[`4LOSE`w]Kiri `4"..data[2].." `b/ `2"..data[1].." `wKanan[`2WIN`w]");
+        cg1 = data[1]
+        LogWinner("RIGHT", data[1], data[2])
+        
+        -- Auto drop to right winner
+        if jatuh then
+            ireng = math.floor(jatuh / 1000000)
+            bgl = math.floor(jatuh / 10000)
+            jatuh = jatuh - bgl * 10000
+            dl = math.floor(jatuh / 100)
+            wl = jatuh % 100
+            dropright(takerightx, takerighty)
+            dropwl = tonumber(wl)
+            dropdl = tonumber(dl)
+            if GetItemCount(242) < dropwl or GetItemCount(242) == 0 then
+                wear(1796)
+            end
+            if GetItemCount(1796) < dropdl or GetItemCount(1796) == 0 then
+                wear(7188)
+            end
+            DropMode = true
+        end
+        
+    else -- Tie
+        SendPacket(2, "action|input\n|text|Ya Sama `2: " .. data[2] .. "(wink) `0[ `bTie `0] Ya Sama `w: " .. data[1] .. "(wink)");
+        ProxyOverlay("`9Nothing Winner `4TIE!")
+    end
+    
+    data = {};
 end
 
 function get(val)
@@ -990,20 +1071,38 @@ check_autospam|0]])
 	    checkGems()
 		return true
 	end
-    if str:find("/tb") or str:find("buttonClicked|dw") then
-        take()
-        tax = math.floor(Amount * taxset / 100)
-        jatuh = Amount - tax
-        
-        -- Convert to BGL and DL format
-        local totalBGL = math.floor(Amount / 20000)
-        local totalDL = math.floor((Amount % 10000) / 100)
-        local jatuhBGL = math.floor(jatuh / 10000)
-        local jatuhDL = math.floor((jatuh % 10000) / 100)
-        
-        SendPacket(2, "action|input\n|text|`w[`0P1: `2"..totalBGL.." BGL "..totalDL.." DL`w]`bVS`w[`0P2 :`2"..totalBGL.." BGL "..totalDL.." DL`w] `w[`0Tax: `2"..taxset.."%`w] `w[`0Drop to Win: `2"..jatuhBGL.." BGL "..jatuhDL.." DL`w]")
-        return true
-    end
+if str:find("/tb") or str:find("buttonClicked|dw") then
+    take()
+    tax = math.floor(Amount * taxset / 100)
+    jatuh = Amount - tax
+    
+    -- Update current session total
+    CurrentTotalAfterTax = CurrentTotalAfterTax + jatuh
+    
+    -- Add to permanent history
+    table.insert(BetHistory, {
+        amount = jatuh,
+        time = os.date("%H:%M on %d/%m"),
+        taxRate = taxset
+    })
+    
+    -- Original /tb output
+    local totalBGL = math.floor(Amount / 10000)
+    local totalDL = math.floor((Amount % 10000) / 100)
+    local jatuhBGL = math.floor(jatuh / 10000)
+    local jatuhDL = math.floor((jatuh % 10000) / 100)
+    
+    SendPacket(2, "action|input\n|text|`w[`0P1: `2"..totalBGL.." BGL "..totalDL.." DL`w]`bVS`w[`0P2 :`2"..totalBGL.." BGL "..totalDL.." DL`w] `w[`0Tax: `2"..taxset.."%`w] `w[`0Drop to Win: `2"..jatuhBGL.." BGL "..jatuhDL.." DL`w]")
+    
+    -- Auto-show updated log
+    return true
+end
+
+-- Command handler remains the same
+if str:find("/betlog") then
+    ShowBetLog()
+    return true
+end
 	if str:find("/depo (%d+)") or str:find("/dp (%d+)") then
 		count = str:match("/depo (%d+)") or str:match("/dp (%d+)")
 		SendPacket(2, "action|dialog_return\ndialog_name|bank_deposit\nbgl_count|" .. count)
