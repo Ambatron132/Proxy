@@ -14,10 +14,6 @@ function open()
 "\nadd_textbox|`w[`2+`w] `0Added `w/down `w[`9Set Chand On Down`w]|"..
 "\nadd_textbox|`w[`2+`w] `0Added `w/log `w[`9Winner Gems Logs`w]|"..
 "\nadd_textbox|`w[`2+`w] `0Added `w/emoji `w[`9Chat with Emoji`w]|"..
-"\nadd_textbox|`w[`2+`w] `0Added `w/reme `w[`9Reme Mode`w]|"..
-"\nadd_textbox|`w[`2+`w] `0Added `w/leme `w[`9Leme Mode`w]|"..
-"\nadd_textbox|`w[`2+`w] `0Added `w/qeme `w[`9Qeme Mode`w]|"..
-"\nadd_textbox|`w[`2+`w] `0Added `w/lw `w[`9Log Wheel`w]|"..
 "\nadd_textbox|`w[`2+`w] `0Added `w/betlog `w[`9Bet log after tax`w]|"..
 "\nadd_spacer|small|"..
 "\nadd_label_with_icon|small|`^Information|left|5956|"..
@@ -43,7 +39,7 @@ function xxx()
     "\nadd_button_with_icon|pt|   `wBTK Setup   |staticYellowFrame|340|"..
 	"\nadd_button_with_icon|tel|   `wTelephone   |staticYellowFrame|3898||"..
     "\nadd_button_with_icon|wrench|   `wWrench Setting   |staticYellowFrame|32||"..
-    "\nadd_button_with_icon|csn|   `wCasino   |staticYellowFrame|758|"..
+    "\nadd_button_with_icon|logbet|   `wBet History   |staticYellowFrame|7188|"..
     "\nadd_button_with_icon|cmd|   `wSHOW COMMANDS     |staticYellowFrame|3524|"..
     "\nadd_button_with_icon||END_LIST|noflags|0||"..
     "\nadd_quick_exit||".. 
@@ -54,21 +50,6 @@ function xxx()
     })
 end
 
-function casino()
-	dialog = "\nadd_label_with_icon|big|CASINO|left|758|"..
-"\nadd_spacer|small|"..
-"\nadd_button_with_icon|reme|   `wREME   |staticYellowFrame|758||"..
-"\nadd_button_with_icon|leme|   `wLEME   |staticYellowFrame|758||"..
-"\nadd_button_with_icon|qeme|   `wQEME   |staticYellowFrame|758||"..
-"\nadd_button_with_icon|lw|   `wLog Wheel  |staticYellowFrame|758||"..
-"\nadd_button_with_icon||END_LIST|noflags|0||"..
-"\nadd_button|back|`wBack|noflags|0|0|"..
-"\nend_quick_exit||"
-	SendVariantList({
-		[0] = "OnDialogRequest",
-		[1] = dialog
-	})
-end
 
 
 function wset()
@@ -408,23 +389,7 @@ function GetName(id)
     end 
 end
 
-function FilterSpin(id) 
-    FilterLog = {} 
-    for _, log in pairs(LogSpin) do 
-        if log.netid == id then 
-            table.insert(FilterLog,"\nadd_label_with_icon|small|"..log.spin.."|left|758|\n") 
-        end 
-    end 
-    SendVariantList({[0] = "OnDialogRequest", [1] = "set_default_color|`w|\nadd_label_with_icon|big|"..GetName(id).." Spin|left|1400|\nadd_spacer|small|\n"..table.concat(FilterLog).."\nadd_spacer|small|\nadd_button|/cctv|Exit|noflags|0|0|\nadd_quick_exit|||\nend_dialog|FilterSpin|||"}) 
-end
 
-function SpinLog() 
-    SpunLog = {} 
-    for _, spin in pairs(LogSpin) do 
-        table.insert(SpunLog, spin.spin) 
-    end 
-    SendVariantList({[0] = "OnDialogRequest", [1] = "set_default_color|`w|\nadd_label_with_icon|big|Spin Log|left|1400|\nadd_spacer|small|\nadd_smalltext|Click the wheel button to focus player spun|\n"..table.concat(SpunLog).."\nadd_spacer|small|\nadd_quick_exit|||\nend_dialog|WorldSpin|Close||"}) 
-end
 
 
 function ProxyLog(str)
@@ -734,8 +699,7 @@ function takegems()
         end
         
     else -- Tie
-        
-	SendPacket(2, "action|input\n|text|`0[TIE] Kiri (gems) `0".. data[2] .." `b/ `0".. data[1] .." `0(gems) Kanan [TIE]");
+        SendPacket(2, "action|input\n|text|Ya Sama `2: " .. data[2] .. "(wink) `0[ `bTie `0] Ya Sama `w: " .. data[1] .. "(wink)");
         ProxyOverlay("`9Nothing Winner `4TIE!")
     end
     
@@ -995,42 +959,6 @@ check_autospam|0]])
         SendPacket(2, "action|input\n|text|`9Emoji chat: "..status)
         return true
     end
-	if str:find("/reme") or str:find("buttonClicked|reme") then 
-        if HostCsn ~= "Reme" then 
-            HostCsn = "Reme" 
-			SendPacket(2, "action|input\n|text| `9REME `2ON!")
-        else 
-            HostCsn = "" 
-            SendPacket(2, "action|input\n|text| `9REME `4OFF!")
-        end 
-        return true 
-    end 
-	if str:lower():find("/leme") or str:find("buttonClicked|leme") then 
-    if HostCsn ~= "Leme" then 
-        HostCsn = "Leme" 
-        SendPacket(2, "action|input\n|text|`9LEME `2ON!")
-    else 
-        HostCsn = "" 
-        SendPacket(2, "action|input\n|text|`9LEME Mode `4OFF!")
-    end 
-    return true 
-	end 
-    if str:find("/qeme") or str:find("buttonClicked|qeme") then 
-        if HostCsn ~= "Qeme" then 
-            HostCsn = "Qeme" 
-            SendPacket(2, "action|input\n|text| `9QEME `2ON!") 
-        else 
-            HostCsn = "" 
-            SendPacket(2, "action|input\n|text| `9QEME `4OFF!") 
-        end 
-        return true 
-    end 
-    
-    if str:find("/lw") or str:find("buttonClicked|lw") then 
-        SpinLog() 
-        return true 
-    end 
-    
     if str:find("dialog_name|WorldSpin\nbuttonClicked|(%d+)") then 
         NetID = tonumber(str:match("dialog_name|WorldSpin\nbuttonClicked|(%d+)")) 
         FilterSpin(NetID) 
@@ -1050,10 +978,6 @@ check_autospam|0]])
     end
 	if str:find("buttonClicked|pt") then
 	    btkw()
-		return true
-	end
-    if str:find("buttonClicked|csn") then
-	    casino()
 		return true
 	end
 	if str:find("buttonClicked|tel") then
@@ -1100,7 +1024,7 @@ if str:find("/tb") or str:find("buttonClicked|dw") then
 end
 
 -- Command handler remains the same
-if str:find("/betlog") then
+if str:find("/betlog") or str:find("buttonClicked|logbet") then
     ShowBetLog()
     return true
 end
@@ -1306,115 +1230,6 @@ function var(var)
 	if var[0]:find("OnDialogRequest") and var[1]:find("Wow, that's fast delivery.") then
 		return true
 	end
-	if var[0] == "OnTalkBubble" and var[3] ~= -1 and var[2]:find("spun the wheel and got") then
-        if var[2]:find("``6>``") then
-            p = {}
-            p[0] = "OnTalkBubble"
-            p[1] = var[1]
-            p[2] = "`0[`4FAKE`0] " .. var[2]
-            p[3] = -1
-            SendVariantList(p) 
-            table.insert(LogSpin, {spin = "\nadd_label_with_icon_button|small|`0[`4FAKE`0] " .. var[2].."|left|758|"..var[1].."|\n", netid = var[1], spins = "`0[`4FAKE`0] " .. var[2]})
-        elseif var[2]:find("``!]``") then
-            s2 = var[2]:find("`` spun") - 1
-            s1 = var[2]:sub(4, s2)
-            jml1 = var[2]:find("got ") + 6
-            jml2 = var[2]:find("``!") - 1
-            jml = var[2]:sub(jml1, jml2)
-            if HostCsn == "Qeme" then
-                Qeme = jml % 10 
-                if Qeme >= 10 then 
-                    Qeme = "`20"
-                elseif Qeme == 0 then 
-                    Qeme = "`2"..Qeme.."" -- Color green for Qeme when 0
-                elseif Qeme <= 3 then 
-                    Qeme = "`4"..Qeme.."" -- Color red for Qeme between 1 and 3
-                elseif Qeme <= 6 then 
-                    Qeme = "`8"..Qeme.."" -- Color yellow for Qeme between 4 and 6
-                elseif Qeme <= 9 then 
-                    Qeme = "`^"..Qeme.."" -- Color purple for Qeme between 7 and 9
-                end
-            p = {}
-            p[0] = "OnTalkBubble"
-            p[1] = var[1]
-            p[2] = "`0[`2REAL`0] " .. var[2].." `w[`2QEME: "..Qeme.."`w] "
-            p[3] = -1
-            SendVariantList(p) 
-            table.insert(LogSpin, {spin = "\nadd_label_with_icon_button|small|`0[`2REAL`0] " .. var[2].." `w[`2Qeme: "..Qeme.."`w]|left|758|"..var[1].."|\n", netid = var[1], spins = "`0[`2REAL`0] " .. var[2].." `w[`2Qeme: "..Qeme.."`w]"})
-            elseif HostCsn == "Reme" then
-                Num1 = math.floor(jml / 10)
-                Num2 = jml % 10
-                Reme = Num1 + Num2
-                if Reme > 10 then
-                    Reme = Reme % 10
-                elseif Reme == 10 then
-                    Reme = "`20"
-                elseif Reme == 0 then
-                    Reme = "`20"
-                end
-                if tonumber(Reme) and Reme >= 7 and Reme <= 9 then
-                    Reme = "`^" .. Reme
-                elseif tonumber(Reme) and Reme >= 5 and Reme <= 8 then
-                    Reme = "`9" .. Reme
-                elseif tonumber(Reme) and Reme >= 2 and Reme <= 4 then
-                    Reme = "`8" .. Reme
-                elseif tonumber(Reme) and Reme == 1 then
-                    Reme = "`4" .. Reme
-                end
-            p = {}
-            p[0] = "OnTalkBubble"
-            p[1] = var[1]
-            p[2] = "`0[`2REAL`0] " .. var[2].." `w[`2REME: "..Reme.."`w] "
-            p[3] = -1
-            SendVariantList(p) 
-            table.insert(LogSpin, {spin = "\nadd_label_with_icon_button|small|`0[`2REAL`0] " .. var[2].." `w[`2Reme: "..Reme.."`w]|left|758|"..var[1].."|\n", netid = var[1], spins = "`0[`2REAL`0] " .. var[2].." `w[`2Reme: "..Reme.."`w]"})
-            elseif HostCsn == "Leme" then
-                Num1 = math.floor(jml / 10)
-                Num2 = jml % 10
-                Leme = Num1 + Num2
-                if Leme > 10 then
-                    Leme = Leme % 10
-                elseif Leme == 10 then
-                    Leme = "`20"
-                elseif Leme == 0 then
-                    Leme = "`20"
-                end
-                if tonumber(Leme) and Leme >= 7 and Leme <= 9 then
-                    Leme = "`^" .. Leme
-                elseif tonumber(Leme) and Leme >= 5 and Leme <= 8 then
-                    Leme = "`9" .. Leme
-                elseif tonumber(Leme) and Leme >= 2 and Leme <= 4 then
-                    Leme = "`8" .. Leme
-                elseif tonumber(Leme) and Leme == 1 then
-                    Leme = "`4" .. Leme
-                end
-            p = {}
-            p[0] = "OnTalkBubble"
-            p[1] = var[1]
-            p[2] = "`0[`2REAL`0] " .. var[2].." `w[`2LEME: "..Leme.."`w] "
-            p[3] = -1
-            SendVariantList(p) 
-            table.insert(LogSpin, {spin = "\nadd_label_with_icon_button|small|`0[`2REAL`0] " .. var[2].." `w[`2Leme: "..Leme.."`w]|left|758|"..var[1].."|\n", netid = var[1], spins = "`0[`2REAL`0] " .. var[2].." `w[`2Leme: "..Leme.."`w]"})
-            else
-            p = {}
-            p[0] = "OnTalkBubble"
-            p[1] = var[1]
-            p[2] = "`0[`2REAL`0] " .. var[2]
-            p[3] = -1
-            SendVariantList(p) 
-            table.insert(LogSpin, {spin = "\nadd_label_with_icon_button|small|`0[`2REAL`0] " .. var[2].."|left|758|"..var[1].."|\n", netid = var[1], spins = "`0[`2REAL`0] " .. var[2]})
-            end
-        else
-            p = {}
-            p[0] = "OnTalkBubble"
-            p[1] = var[1]
-            p[2] = "`0[`4FAKE`0] " .. var[2]
-            p[3] = -1
-            SendVariantList(p) 
-            table.insert(LogSpin, {spin = "\nadd_label_with_icon_button|small|`0[`4FAKE`0] " .. var[2].."|left|758|"..var[1].."|\n", netid = var[1], spins = "`0[`4FAKE`0] " .. var[2]})
-        end
-        return true
-    end
 	if var[0]:find("OnDialogRequest") and var[1]:find("`wTelephone") then
 		if cbgl == true then
 			x = var[1]:match("embed_data|x|(%d+)")
