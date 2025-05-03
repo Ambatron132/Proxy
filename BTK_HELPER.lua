@@ -402,8 +402,7 @@ function ProxyLog(str)
 end
 
 LogToConsole("`9Script Will Run In `25 `9Seconds")
-ProxyOverlay("`9MAMA GIGIT DULU NIH, AWWW")
----SendPacket(2, "action|input\n|text|`0Proxy `#BTK `0By `#@Petal `2ON!")
+SendPacket(2, "action|input\n|text|`0Proxy `#BTK `0By `#@Petal `2ON!")
 Sleep(1000)
 open()
 
