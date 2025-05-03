@@ -184,7 +184,7 @@ local CurrentTotalAfterTax = 0 -- Stores current session total
 
 ----REMOVE PARTICLE
 function removeparticle(packet)
-    if packet.type == 17 or packet.type == 36 then
+    if packet.type == 17 or packet.type == 36 or packet.type == 3 or packet.type == 8 then
         return true
     end
 return false
@@ -402,7 +402,8 @@ function ProxyLog(str)
 end
 
 LogToConsole("`9Script Will Run In `25 `9Seconds")
-SendPacket(2, "action|input\n|text|`0Proxy `#BTK `0By `#@Petal `2ON!")
+ProxyOverlay("`9MAMA GIGIT DULU NIH, AWWW")
+---SendPacket(2, "action|input\n|text|`0Proxy `#BTK `0By `#@Petal `2ON!")
 Sleep(1000)
 open()
 
