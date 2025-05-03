@@ -184,7 +184,7 @@ local CurrentTotalAfterTax = 0 -- Stores current session total
 
 ----REMOVE PARTICLE
 function removeparticle(packet)
-    if packet.type == 17 or packet.type == 36 or packet.type == 8 then
+    if packet.type == 17 or packet.type == 36 then
         return true
     end
 return false
