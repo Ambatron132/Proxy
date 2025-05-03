@@ -126,12 +126,6 @@ function command()
 "\nadd_textbox|`w/pm `w[`9Enabled/disabled wrench mode pull`w]|"..
 "\nadd_textbox|`w/log `w[`9Winner Gems Logs`w]|"..
 "\nadd_spacer|small|"..
-"\nadd_label_with_icon|small|`wCasino Command|left|758|"..
-"\nadd_textbox|`w/reme `w[`9Reme Mode`w]|"..
-"\nadd_textbox|`w/leme `w[`9Leme Mode`w]|"..
-"\nadd_textbox|`w/qeme `w[`9Qeme Mode`w]|"..
-"\nadd_textbox|`w/lw `w[`9Log Wheel`w]|"..
-"\nadd_spacer|small|"..
 "\nadd_label_with_icon|small|`wBank Command|left|340|"..
 "\nadd_textbox|`w/wd `w[`9Withdraw blue gem lock from bank`w]|"..
 "\nadd_textbox|`w/depo `wor `w/dp `w[`9Deposit blue gem lock to bank`w]|"..
