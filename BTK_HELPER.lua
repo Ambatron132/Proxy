@@ -181,6 +181,16 @@ local LogSpin = {} -- For tracking spin logs
 local BetHistory = {} -- Stores all bet logs with timestamps
 local CurrentTotalAfterTax = 0 -- Stores current session total
 
+
+----REMOVE PARTICLE
+function removeparticle(packet)
+    if packet.type == 17 or packet.type == 36 then
+        return true
+    end
+return false
+end
+AddHook("onprocesstankupdatepacket", "Hook99", removeparticle)
+
 -- Add this function with other utility functions
 function ShowBetLog()
     local dialogContent = "\nadd_label_with_icon|big|`9Bet Log History|left|7188|"..
