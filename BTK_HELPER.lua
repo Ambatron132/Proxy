@@ -181,6 +181,18 @@ local LogSpin = {} -- For tracking spin logs
 local BetHistory = {} -- Stores all bet logs with timestamps
 local CurrentTotalAfterTax = 0 -- Stores current session total
 
+function ProxyOverlay(str)
+	SendVariantList({
+		[0] = "OnTextOverlay",
+		[1] = str
+	})
+end
+
+ProxyOverlay("`9BTK Helper `2Activated!.")
+Sleep(3000)
+ProxyOverlay("`wLoading Script!.")
+Sleep(2000)
+ProxyOverlay("`2Successfully Loaded!.")
 
 ----REMOVE PARTICLE
 function removeparticle(packet)
@@ -401,8 +413,7 @@ function ProxyLog(str)
 	LogToConsole("`w[`2BTK Helper`w] `0" .. str)
 end
 
-LogToConsole("`9Script Will Run In `25 `9Seconds")
-SendPacket(2, "action|input\n|text|`0Proxy `#BTK `0By `#@Petal `2ON!")
+
 Sleep(1000)
 open()
 
@@ -527,12 +538,6 @@ AddHook("onvariant", "variabel", function(var)
     return false
 end)
 
-function ProxyOverlay(str)
-	SendVariantList({
-		[0] = "OnTextOverlay",
-		[1] = str
-	})
-end
 
 function dropright(x, y)
 	if math.abs(GetLocal().pos.x // 32 - x) > 8 or math.abs(GetLocal().pos.y // 32 - y) > 8 then
