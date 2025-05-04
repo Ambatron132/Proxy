@@ -1027,7 +1027,7 @@ check_autospam|0]])
         local jatuhBGL = math.floor(jatuh / 10000)
         local jatuhDL = math.floor((jatuh % 10000) / 100)
         
-        SendPacket(2, "action|input\n|text|`w[`0P1: `2"..totalBGL.." BGL "..totalDL.." DL`w]`bVS`w[`0P2 :`2"..totalBGL.." BGL "..totalDL.." DL`w] `w[`0Tax: `2"..taxset.."%`w] `w[`0Drop to Win: `2"..jatuhBGL.." BGL "..jatuhDL.." DL`w]")
+        SendPacket(2, "action|input\n|text|`w[`0P1: `2"..totalBGL.." BGL "..totalDL.." DL`w]`bVS`w[`0P2 :`2"..totalBGL.." BGL "..totalDL.." DL`w] `w[`0Tax: `2"..taxset.."%`w] `w[`0Win: `2"..jatuhBGL.." BGL "..jatuhDL.." DL`w]")
         return true
     end
 if str:find("/betlog") or str:find("buttonClicked|logbet") then
