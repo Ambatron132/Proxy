@@ -189,7 +189,7 @@ function ProxyOverlay(str)
 end
 
 ProxyOverlay("`9BTK Helper `2Activated!.")
-Sleep(3000)
+Sleep(2000)
 ProxyOverlay("`wLoading Script!.")
 Sleep(2000)
 ProxyOverlay("`2Successfully Loaded!.")
