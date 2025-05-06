@@ -1,4 +1,3 @@
-RemoveHooks()
 function open()
 	opening = "\nadd_label_with_icon|big|`9BTK`w-`9HELPER|left|2480|"..
 "\nadd_textbox|`0Hi, "..GetLocal().name.." `0Thanks for Using this script!|"..
