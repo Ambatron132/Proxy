@@ -412,7 +412,8 @@ function ProxyLog(str)
 	LogToConsole("`w[`2BTK Helper`w] `0" .. str)
 end
 
-
+LogToConsole("`9Script Will Run In `25 `9Seconds")
+SendPacket(2, "action|input\n|text|`0Proxy `6BTK `0By `#@Vermin `2ON!")
 Sleep(1000)
 open()
 
