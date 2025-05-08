@@ -246,7 +246,6 @@ AddHook("onvariant", "handle_betlog", function(var)
     return false
 end)
 
-local emojiChatEnabled = true
 local emoji = {
     "sigh", "mad", "smile", "tongue", "wow", "no", "shy", "wink", "music", "lol",
     "yes", "love", "megaphone", "heart", "cool", "kiss", "agree", "see-no-evil",
@@ -1671,10 +1670,12 @@ while true do
 	if DropMode then
 		if ireng > 0 then
 			SendPacket(2, "action|dialog_return\ndialog_name|drop\nitem_drop|11550|\nitem_count|" .. ireng)
+			SendPacket(2, "action|input\n|text|"..GetLocal().name.." `0Dropped `2" .. ireng .. " `bBlack Gem Lock")
 			Sleep(500)
 		end
 		if bgl > 0 then
 			SendPacket(2, "action|dialog_return\ndialog_name|drop\nitem_drop|7188|\nitem_count|" .. bgl)
+			SendPacket(2, "action|input\n|text|"..GetLocal().name.." `0Dropped `2" .. bgl .. " `eBlue Gem Lock")
 			Sleep(500)
 		end
 		if dl > 0 then
