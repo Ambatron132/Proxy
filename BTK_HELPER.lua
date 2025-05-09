@@ -180,7 +180,7 @@ local HostCsn = "" -- For tracking wheel spin mode
 local LogSpin = {} -- For tracking spin logs
 local BetHistory = {} -- Stores all bet logs with timestamps
 local CurrentTotalAfterTax = 0 -- Stores current session total
-local blockSlaveChat = false
+local blockSlaveChat = true
 
 function ProxyOverlay(str)
 	SendVariantList({
