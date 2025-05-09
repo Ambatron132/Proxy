@@ -190,14 +190,6 @@ function ProxyOverlay(str)
 	})
 end
 
-AddHook("onvariant", "block_slave_avatar", function(var)
-    if blockSlaveAvatar then
-        if var[0] == "OnSpawn" and (var[1]:find("userID|0") or var[1]:find("Spawning...")) then
-            return true -- Block the spawn packet
-        end
-    end
-    return false
-end)
 
 ----REMOVE PARTICLE
 function removeparticle(packet)
@@ -1008,22 +1000,19 @@ check_autospam|0]])
 		wset()
 		return true
 	end
-	    if str:find("/slaveavatar") then
+    if str:find("/slave") then
+        blockSlaveChat = not blockSlaveChat
+        local status = blockSlaveChat and "`2Enabled" or "`4Disabled"
+        SendPacket(2, "action|input\n|text|`9Spammer slave chat blocking: "..status)
+        return true
+    end
+
+    if str:find("/slaveav") then
         blockSlaveAvatar = not blockSlaveAvatar
         local status = blockSlaveAvatar and "`2Enabled" or "`4Disabled"
         SendPacket(2, "action|input\n|text|`9Spammer slave avatar blocking: "..status)
         return true
     end
-	if str:find("/slave") then
-    blockSlaveChat = not blockSlaveChat
-    local status = blockSlaveChat and "`2Enabled" or "`4Disabled"
-    SendPacket(2, "action|input\n|text|`9Spammer slave chat blocking: "..status)
-    return true
-	end
-	if str:find("/cg") or str:find("buttonClicked|ck") then
-	    checkGems()
-		return true
-	end
 	if str:find("/tb") or str:find("buttonClicked|dw") then
         take()
         tax = math.floor(Amount * taxset / 100)
@@ -1687,10 +1676,18 @@ function checkGems()
     end
 end
 
-AddHook("onvariant", "block_slave_chat", function(var)
-    if var[0] == "OnConsoleMessage" and blockSlaveChat then
+AddHook("onvariant", "block_slave", function(var)
+    -- Block spammer slave chat messages
+    if blockSlaveChat and var[0] == "OnConsoleMessage" then
         if var[1]:find("'s Spammer Slave. ") then
             return true -- Block the message
+        end
+    end
+    
+    -- Block spammer slave avatars
+    if blockSlaveAvatar and var[0] == "OnSpawn" then
+        if var[1]:find("userID|0") or var[1]:find("Spawning...") then
+            return true -- Block the avatar spawn
         end
     end
     return false
