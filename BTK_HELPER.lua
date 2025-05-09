@@ -179,6 +179,7 @@ local HostCsn = "" -- For tracking wheel spin mode
 local LogSpin = {} -- For tracking spin logs
 local BetHistory = {} -- Stores all bet logs with timestamps
 local CurrentTotalAfterTax = 0 -- Stores current session total
+local blockSlaveChat = false
 
 function ProxyOverlay(str)
 	SendVariantList({
@@ -998,6 +999,12 @@ check_autospam|0]])
 		wset()
 		return true
 	end
+	if str:find("/slave") then
+    blockSlaveChat = not blockSlaveChat
+    local status = blockSlaveChat and "`2Enabled" or "`4Disabled"
+    SendPacket(2, "action|input\n|text|`9Spammer slave chat blocking: "..status)
+    return true
+end
 	if str:find("/cg") or str:find("buttonClicked|ck") then
 	    checkGems()
 		return true
@@ -1664,6 +1671,15 @@ function checkGems()
         SendPacket(2, "action|input\n|text|`w[`2Win`w]Kiri `2"..Count2.." `b/ `4"..Count1.." `w Kanan[`4Lose`w]")
     end
 end
+
+AddHook("onvariant", "block_slave_chat", function(var)
+    if var[0] == "OnConsoleMessage" and blockSlaveChat then
+        if var[1]:find("'s Spammer Slave. ") then
+            return true -- Block the message
+        end
+    end
+    return false
+end)
 
 while true do
 	Sleep(1000)
