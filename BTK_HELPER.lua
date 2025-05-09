@@ -1005,7 +1005,7 @@ check_autospam|0]])
     local status = blockSlaveChat and "`2Enabled" or "`4Disabled"
     SendPacket(2, "action|input\n|text|`9Spammer slave chat blocking: "..status)
     return true
-end
+	end
 	if str:find("/cg") or str:find("buttonClicked|ck") then
 	    checkGems()
 		return true
