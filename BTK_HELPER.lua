@@ -15,6 +15,7 @@ function open()
 "\nadd_textbox|`w[`2+`w] `0Added `w/log `w[`9Winner Gems Logs`w]|"..
 "\nadd_textbox|`w[`2+`w] `0Added `w/emoji `w[`9Chat with Emoji`w]|"..
 "\nadd_textbox|`w[`2+`w] `0Added `w/betlog `w[`9Bet log after tax`w]|"..
+"\nadd_textbox|`w[`2+`w] `0Added `w/slave `w[`9Block spammer slave chat`w]|"..
 "\nadd_spacer|small|"..
 "\nadd_label_with_icon|small|`^Information|left|5956|"..
 "\nadd_textbox|`w/cmd `w[`9Shows all proxy commands`w]|"..
