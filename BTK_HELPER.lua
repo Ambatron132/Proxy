@@ -181,6 +181,7 @@ local LogSpin = {} -- For tracking spin logs
 local BetHistory = {} -- Stores all bet logs with timestamps
 local CurrentTotalAfterTax = 0 -- Stores current session total
 local blockSlaveChat = true
+local blockSlaveAvatar = true
 
 function ProxyOverlay(str)
 	SendVariantList({
@@ -189,7 +190,14 @@ function ProxyOverlay(str)
 	})
 end
 
-
+AddHook("onvariant", "block_slave_avatar", function(var)
+    if blockSlaveAvatar then
+        if var[0] == "OnSpawn" and (var[1]:find("userID|0") or var[1]:find("Spawning...")) then
+            return true -- Block the spawn packet
+        end
+    end
+    return false
+end)
 
 ----REMOVE PARTICLE
 function removeparticle(packet)
