@@ -1008,6 +1008,12 @@ check_autospam|0]])
 		wset()
 		return true
 	end
+	    if str:find("/slaveavatar") then
+        blockSlaveAvatar = not blockSlaveAvatar
+        local status = blockSlaveAvatar and "`2Enabled" or "`4Disabled"
+        SendPacket(2, "action|input\n|text|`9Spammer slave avatar blocking: "..status)
+        return true
+    end
 	if str:find("/slave") then
     blockSlaveChat = not blockSlaveChat
     local status = blockSlaveChat and "`2Enabled" or "`4Disabled"
