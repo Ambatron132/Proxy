@@ -5,15 +5,15 @@ AddHook("OnDraw", "BTK", function()
 
             if ImGui.BeginTabItem("BTK") then
                 ImGui.Text("MAIN BTK FUNCTION.")
-                if ImGui.Button("TAKE BET", ImVec2(100, 100)) then
+                if ImGui.Button("TAKE BET", ImVec2(125, 100)) then
                     hook(2, "action|input\n|text|/tb")
                 end
                 ImGui.SameLine()
-                if ImGui.Button("CHECK GEMS", ImVec2(100, 100)) then
+                if ImGui.Button("CHECK GEMS", ImVec2(125, 100)) then
                     hook(2, "action|input\n|text|/cg")
                 end
                 ImGui.SameLine()
-                if ImGui.Button("WIN", ImVec2(100, 100)) then
+                if ImGui.Button("WIN", ImVec2(125, 100)) then
                     hook(2, "action|input\n|text|/tg")
                 end
                 ImGui.Spacing()
@@ -26,11 +26,11 @@ AddHook("OnDraw", "BTK", function()
 
 
             if ImGui.BeginTabItem("WRENCH MODE") then
-                if ImGui.Button("PULL MODE", ImVec2(100, 100)) then
+                if ImGui.Button("PULL MODE", ImVec2(150, 100)) then
                     hook(2, "action|input\n|text|/pm")
                 end
                 ImGui.SameLine()
-                if ImGui.Button("CHANGE BGL", ImVec2(100, 100)) then
+                if ImGui.Button("CHANGE BGL", ImVec2(150, 100)) then
                     hook(2, "action|input\n|text|/mm")
                 end
                 ImGui.EndTabItem()
