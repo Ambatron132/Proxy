@@ -1,55 +1,93 @@
-function open()
-	opening = "\nadd_label_with_icon|big|`9BTK`w-`9HELPER|left|2480|"..
-"\nadd_textbox|`0Hi, "..GetLocal().name.." `0Thanks for Using this script!|"..
-"\nadd_spacer|small|"..
-"\nadd_label_with_icon|small|`^Change Log|left|2480|"..
-"\nadd_textbox|`2Version : `93.2|"..
-"\nadd_textbox|`w[`2+`w] `0Added `w/win `w[`9Auto drop to winners`w]|"..
-"\nadd_textbox|`w[`2+`w] `0Added `w/tg `w[`9Take Gems Drop to Winner`w]|"..
-"\nadd_textbox|`w[`2+`w] `0Added `w/cg `w[`9Check Gems`w]|"..
-"\nadd_textbox|`w[`2+`w] `0Added `w/fps `w[`9Fast Setup`w]|"..
-"\nadd_textbox|`w[`2+`w] `0Added `w/ar `w[`9Drop Arroz`w]|"..
-"\nadd_textbox|`w[`2+`w] `0Added `w/cl `w[`9Drop Clover`w]|"..
-"\nadd_textbox|`w[`2+`w] `0Added `w/top `w[`9Set Chand On Top`w]|"..
-"\nadd_textbox|`w[`2+`w] `0Added `w/down `w[`9Set Chand On Down`w]|"..
-"\nadd_textbox|`w[`2+`w] `0Added `w/wlog `w[`9Winner Gems Logs`w]|"..
-"\nadd_textbox|`w[`2+`w] `0Added `w/emoji `w[`9Chat with Emoji`w]|"..
-"\nadd_textbox|`w[`2+`w] `0Added `w/betlog `w[`9Bet log after tax`w]|"..
-"\nadd_textbox|`w[`2+`w] `0Added `w/log `w[`9Drop/pickup logs`w]|"..
-"\nadd_spacer|small|"..
-"\nadd_label_with_icon|small|`^Information|left|5956|"..
-"\nadd_textbox|`w/cmd `w[`9Shows all proxy commands`w]|"..
-"\nadd_spacer|small|"..
-"\nadd_quick_exit||"..
-"\nend_dialog|cl|Enjoy|"
-	SendVariantList({
-		[0] = "OnDialogRequest",
-		[1] = opening
-	})
-end
+AddHook("OnDraw", "BTK", function()
+    local open = ImGui.Begin("BTK HELPER", true)
+    if open then
+        if ImGui.BeginTabBar("MAIN MENU") then
+
+            if ImGui.BeginTabItem("BTK") then
+                if ImGui.Button("TAKE BET", ImVec2(100, 50)) then
+                    hook(2, "action|input\n|text|/tb")
+                end
+                ImGui.SameLine()
+                if ImGui.Button("CHECK GEMS", ImVec2(100, 50)) then
+                    hook(2, "action|input\n|text|/cg")
+                end
+                ImGui.SameLine()
+                if ImGui.Button("WIN", ImVec2(100, 50)) then
+                    hook(2, "action|input\n|text|/tg")
+                end
+                ImGui.SameLine()
+                if ImGui.Button("SET POS", ImVec2(100, 50)) then
+                    autoDetectPositions()
+                end
+                ImGui.EndTabItem()
+            end
+
+
+            if ImGui.BeginTabItem("WRENCH MODE") then
+                if ImGui.Button("PULL MODE", ImVec2(100, 50)) then
+                    hook(2, "action|input\n|text|/pm")
+                end
+                ImGui.SameLine()
+                if ImGui.Button("CHANGE BGL", ImVec2(100, 50)) then
+                    hook(2, "action|input\n|text|/mm")
+                end
+                ImGui.EndTabItem()
+            end
+
+            if ImGui.BeginTabItem("LOGS") then
+                if ImGui.BeginTabBar("Logs_store") then
+                    if ImGui.BeginTabItem("Drop & Collect") then
+                        ImGui.BeginChild("LogScrollRegion", ImVec2(0, 300), true)
+
+                        -- Print logs in reverse (newest first)
+                        for i = #dropTakeList, 1, -1 do
+                            ImGui.TextWrapped(dropTakeList[i]:gsub("add_smalltext|", ""):gsub("|\n", ""))
+                        end
+                    
+                        ImGui.EndChild()
+                        ImGui.EndTabItem()
+                    end
+                    if ImGui.BeginTabItem("BET LOG") then
+                        ImGui.BeginChild("LogScrollRegion", ImVec2(0, 300), true)
+                        if #BetHistory == 0 then
+                            ImGui.Text("No bet history recorded.")
+                        else
+                            for i = #BetHistory, 1, -1 do
+                                local entry = BetHistory[i]
+                                local bgl = math.floor(entry.amount / 10000)
+                                local remaining = entry.amount % 10000
+                                local dl = math.floor(remaining / 100)
+                                local wl = remaining % 100
+                    
+                                ImGui.TextWrapped(string.format("%02d:%02d:%02d - %d BGL %d DL %d WL",
+                                    tonumber(os.date("%H", os.time())),
+                                    tonumber(os.date("%M", os.time())),
+                                    tonumber(os.date("%S", os.time())),
+                                    bgl, dl, wl))
+                            end
+                        end
+                    end
+                end
+
+            end
+            -- Close the tab bar
+            ImGui.EndTabBar()
+        end
+    end
+    ImGui.End()
+end)
+
+
+
+
+
+
+
+
+
 
 local taxset = 5
-function xxx()
-    dialog = "\nadd_label_with_icon|big|BTK HELPER|left|340|"..
-    "\nadd_spacer|small|"..
-    "\nadd_label_with_icon|small|`0Hi, "..GetLocal().name.."|left|15746|"..
-    "\nadd_label_with_icon|small|`0World: `2"..GetWorld().name.."|left|3802|"..
-    "\nadd_label_with_icon|small|`0Current Tax: `2"..taxset.."`9%|left|15580|"..
-	"\nadd_label_with_icon|small|`0Current Position `2X:`0"..math.floor(GetLocal().pos.x / 32).." `2Y:`0"..math.floor(GetLocal().pos.y / 32).."|left|15476|"..
-    "\nadd_spacer|small|"..
-    "\nadd_button_with_icon|pt|   `wBTK Setup   |staticYellowFrame|340|"..
-	"\nadd_button_with_icon|tel|   `wTelephone   |staticYellowFrame|3898||"..
-    "\nadd_button_with_icon|wrench|   `wWrench Setting   |staticYellowFrame|32||"..
-    "\nadd_button_with_icon|logbet|   `wBet History   |staticYellowFrame|7188|"..
-    "\nadd_button_with_icon|cmd|   `wSHOW COMMANDS     |staticYellowFrame|3524|"..
-    "\nadd_button_with_icon||END_LIST|noflags|0||"..
-    "\nadd_quick_exit||".. 
-    "\nend_dialog|xxx|Close||"   
-    SendVariantList({
-        [0] = "OnDialogRequest",
-        [1] = dialog
-    })
-end
+
 
 
 
@@ -179,12 +217,13 @@ local WinnerLog = {}
 local emojiChatEnabled = false
 local HostCsn = "" -- For tracking wheel spin mode
 local LogSpin = {} -- For tracking spin logs
-local BetHistory = {} -- Stores all bet logs with timestamps
+BetHistory = {} -- Stores all bet logs with timestamps
 local CurrentTotalAfterTax = 0 -- Stores current session total
 local blockSlaveChat = false
-local dropTakeList = {} -- Stores drop/pickup logs
+dropTakeList = {} -- Stores drop/pickup logs
 local blockSlaveChat = true
 local blockSlaveAvatar = true
+
 
 
 function ProxyOverlay(str)
@@ -459,7 +498,7 @@ end
 LogToConsole("`9Script Will Run In `25 `9Seconds")
 SendPacket(2, "action|input\n|text|`0Proxy `6BTK `0By `#@Vermin `2ON!")
 Sleep(1000)
-open()
+
 
 function take()
     tiles = {
@@ -851,10 +890,7 @@ function hook(type, str)
 	elseif str:find("/setup") or str:find("buttonClicked|cui") then
 		btk()
 		return true
-	elseif str:find("friends") then
-	    xxx()
-		return true
-	end
+    end
 	if str:find("/sdb") or str:find("buttonClicked|sdb") then
 		if sdbb == false then
 			sdbb = true
@@ -1168,9 +1204,45 @@ end
 end
 AddHook("onsendpacket", "any", hook)
 
+function autoDetectPositions()
+    local xhost = math.floor(GetLocal().pos.x / 32)
+    local yhost = math.floor(GetLocal().pos.y / 32)
+    local detectedTop = false
+    local detectedBottom = false
+
+    -- Scan nearby tiles for chands (5640) or gems (112)
+    for _, tile in pairs(GetTiles()) do
+        if (tile.x >= xhost - 5 and tile.x <= xhost + 5) and (tile.y >= yhost - 5 and tile.y <= yhost + 5) then
+            if tile.fg == 340   then -- Chandelier
+                if tile.y < yhost then
+                    detectedTop = true
+                elseif tile.y > yhost then
+                    detectedBottom = true
+                end
+            end
+        end
+    end
+
+    -- Decide setup based on detection
+    if detectedTop and not detectedBottom then
+        setupTopPositions()
+    elseif detectedBottom and not detectedTop then
+        setupDownPositions()
+    else
+        -- Fallback: Guess based on player's Y-position (common BTK layouts)
+        if yhost < 50 then -- Arbitrary threshold (adjust based on world height)
+            setupTopPositions()
+        else
+            setupDownPositions()
+        end
+        SendPacket(2, "action|input\n|text|`9No chands detected. Guessing setup based on position.")
+    end
+end
+
+-- Modify the existing functions to include auto-detection
 function setupTopPositions()
-    local xhost = math.floor(GetLocal().pos.x / 32)  -- Ensure integer
-    local yhost = math.floor(GetLocal().pos.y / 32)  -- Ensure integer
+    local xhost = math.floor(GetLocal().pos.x / 32)
+    local yhost = math.floor(GetLocal().pos.y / 32)
     
     -- Take positions (display)
     takeleftx = xhost - 3
@@ -1197,26 +1269,26 @@ function setupTopPositions()
     gemsleftx4 = xhost
     gemslefty4 = yhost
     
-    -- Update tile table (ensure integers here too)
+    -- Update tile table
     tile = {
         pos1 = {
-            {x = math.floor(gemsrightx1), y = math.floor(gemsrighty1)},
-            {x = math.floor(gemsrightx2), y = math.floor(gemsrighty2)},
-            {x = math.floor(gemsrightx3), y = math.floor(gemsrighty3)}
+            {x = gemsrightx1, y = gemsrighty1},
+            {x = gemsrightx2, y = gemsrighty2},
+            {x = gemsrightx3, y = gemsrighty3}
         },
         pos2 = {
-            {x = math.floor(gemsleftx1), y = math.floor(gemslefty1)},
-            {x = math.floor(gemsleftx2), y = math.floor(gemslefty2)},
-            {x = math.floor(gemsleftx3), y = math.floor(gemslefty3)}
+            {x = gemsleftx1, y = gemslefty1},
+            {x = gemsleftx2, y = gemslefty2},
+            {x = gemsleftx3, y = gemslefty3}
         }
     }
     
-    SendPacket(2, "action|input\n|text|`9SETUP CHAND ATAS `2ON")
+    SendPacket(2, "action|input\n|text|`9Auto-detected `2TOP `9setup!")
 end
 
 function setupDownPositions()
-    local xhost = math.floor(GetLocal().pos.x / 32)  -- Ensure integer
-    local yhost = math.floor(GetLocal().pos.y / 32)  -- Ensure integer
+    local xhost = math.floor(GetLocal().pos.x / 32)
+    local yhost = math.floor(GetLocal().pos.y / 32)
     
     -- Take positions (display)
     takeleftx = xhost - 3
@@ -1226,7 +1298,7 @@ function setupDownPositions()
     
     -- Gem positions (bottom)
     gemsleftx1 = xhost - 3
-    gemslefty1 = yhost +1
+    gemslefty1 = yhost + 1
     gemsleftx2 = gemsleftx1 - 1
     gemslefty2 = gemslefty1
     gemsleftx3 = gemsleftx1 - 2
@@ -1246,18 +1318,18 @@ function setupDownPositions()
     -- Update tile table
     tile = {
         pos1 = {
-            {x = math.floor(gemsrightx1), y = math.floor(gemsrighty1)},
-            {x = math.floor(gemsrightx2), y = math.floor(gemsrighty2)},
-            {x = math.floor(gemsrightx3), y = math.floor(gemsrighty3)}
+            {x = gemsrightx1, y = gemsrighty1},
+            {x = gemsrightx2, y = gemsrighty2},
+            {x = gemsrightx3, y = gemsrighty3}
         },
         pos2 = {
-            {x = math.floor(gemsleftx1), y = math.floor(gemslefty1)},
-            {x = math.floor(gemsleftx2), y = math.floor(gemslefty2)},
-            {x = math.floor(gemsleftx3), y = math.floor(gemslefty3)}
+            {x = gemsleftx1, y = gemslefty1},
+            {x = gemsleftx2, y = gemslefty2},
+            {x = gemsleftx3, y = gemslefty3}
         }
     }
     
-    SendPacket(2, "action|input\n|text|`9SETUP CHAND BAWAH `2ON")
+    SendPacket(2, "action|input\n|text|`9Auto-detected `2DOWN `9setup!")
 end
 
 function var(var)
