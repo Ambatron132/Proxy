@@ -300,8 +300,8 @@ text_scaling_string|9999999999
     end
     
     dropTakeDialog = dropTakeDialog..
-		"add_spacer|small|"..
 		"add_quick_exit||"..
+		"add_spacer|small|"..
 		"\nend_dialog||Close|"
 
     SendVariantList({
