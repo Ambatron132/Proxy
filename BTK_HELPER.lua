@@ -4,19 +4,19 @@ AddHook("OnDraw", "BTK", function()
         if ImGui.BeginTabBar("MAIN MENU") then
 
             if ImGui.BeginTabItem("BTK") then
-                if ImGui.Button("TAKE BET", ImVec2(100, 50)) then
+                if ImGui.Button("TAKE BET", ImVec2(200, 100)) then
                     hook(2, "action|input\n|text|/tb")
                 end
                 ImGui.SameLine()
-                if ImGui.Button("CHECK GEMS", ImVec2(100, 50)) then
+                if ImGui.Button("CHECK GEMS", ImVec2(200, 100)) then
                     hook(2, "action|input\n|text|/cg")
                 end
                 ImGui.SameLine()
-                if ImGui.Button("WIN", ImVec2(100, 50)) then
+                if ImGui.Button("WIN", ImVec2(200, 100)) then
                     hook(2, "action|input\n|text|/tg")
                 end
                 ImGui.SameLine()
-                if ImGui.Button("SET POS", ImVec2(100, 50)) then
+                if ImGui.Button("SET POS", ImVec2(200, 100)) then
                     autoDetectPositions()
                 end
                 ImGui.EndTabItem()
@@ -24,11 +24,11 @@ AddHook("OnDraw", "BTK", function()
 
 
             if ImGui.BeginTabItem("WRENCH MODE") then
-                if ImGui.Button("PULL MODE", ImVec2(100, 50)) then
+                if ImGui.Button("PULL MODE", ImVec2(200, 100)) then
                     hook(2, "action|input\n|text|/pm")
                 end
                 ImGui.SameLine()
-                if ImGui.Button("CHANGE BGL", ImVec2(100, 50)) then
+                if ImGui.Button("CHANGE BGL", ImVec2(200, 100)) then
                     hook(2, "action|input\n|text|/mm")
                 end
                 ImGui.EndTabItem()
@@ -91,54 +91,9 @@ local taxset = 5
 
 
 
-function wset()
-	dialog = "\nadd_label_with_icon|big|Wrench Mode|left|32|"..
-"\nadd_spacer|small|"..
-"\nadd_button_with_icon|wp|   `wWrench Autopull   |staticYellowFrame|32||"..
-"\nadd_button_with_icon|wk|   `wWrench Kick   |staticYellowFrame|32||"..
-"\nadd_button_with_icon|wb|   `wWrench Ban   |staticYellowFrame|32||"..
-"\nadd_button_with_icon||END_LIST|noflags|0||"..
-"\nadd_button|back|`wBack|noflags|0|0|"..
-"\nend_quick_exit||"
-	SendVariantList({
-		[0] = "OnDialogRequest",
-		[1] = dialog
-	})
-end
 
-function tele()
-	dialog = "\nadd_label_with_icon|small|Wrench Mode|left|3898|"..
-	"\nadd_spacer|small|"..
-	"\nadd_button_with_icon|cbgl|   `0Convert BGL   |staticYellowFrame|3898||"..
-	"\nadd_button_with_icon|cbl|   `0BGL to Black   |staticYellowFrame|3898||"..
-	"\nadd_button_with_icon|cbb|   `0Black to BGL   |staticYellowFrame|3898||"..
-	"\nadd_button_with_icon||END_LIST|noflags|0||"..
-	"\nadd_button|back|`wBack|noflags|0|0|"..
-	"\nend_quick_exit||"
-	SendVariantList({
-		[0] = "OnDialogRequest",
-		[1] = dialog
-	})
-end
 
-function btkw()
-    dialog = "\nadd_label_with_icon|big|BTK SETUP|left|2480|"..
-"\nadd_spacer|small|"..
-"\nadd_button_with_icon|tk|   `cTake Gems   |staticYellowFrame|6140||"..
-"\nadd_button_with_icon|ck|   `cCheck Gems   |staticYellowFrame|9438||"..
-"\nadd_button_with_icon|dw|   `cTake Bet   |staticYellowFrame|7188||"..
-"\nadd_button_with_icon||END_LIST|noflags|0||"..
-"\nadd_button_with_icon|V1|   `cChand Atas   |staticYellowFrame|340|"..
-"\nadd_button_with_icon|V2|   `cChand Bawah   |staticYellowFrame|340|"..
-"\nadd_button_with_icon|cui|   `cManual Setup   |staticYellowFrame|12854||"..
-"\nadd_button_with_icon||END_LIST|noflags|0||"..
-"\nadd_button|back|`wBack|noflags|0|0|"..
-"\nend_quick_exit||"
-	SendVariantList({
-		[0] = "OnDialogRequest",
-		[1] = dialog
-	})
-end
+
 
 function command()
 	cmd = "\nadd_label_with_icon|big|`wAll BTK Command                                                             |left|2480|"..
