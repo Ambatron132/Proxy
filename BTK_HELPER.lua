@@ -1013,6 +1013,10 @@ check_autospam|0]])
         SendPacket(2, "action|input\n|text|`9Spammer slave avatar blocking: "..status)
         return true
     end
+	if str:find("/cg") or str:find("buttonClicked|ck") then
+	    checkGems()
+		return true
+	end
 	if str:find("/tb") or str:find("buttonClicked|dw") then
         take()
         tax = math.floor(Amount * taxset / 100)
