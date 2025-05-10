@@ -299,8 +299,11 @@ text_scaling_string|9999999999
         dropTakeDialog = dropTakeDialog..dropTakeList[i]
     end
     
-    dropTakeDialog = dropTakeDialog.."add_quick_exit||"
-    
+    dropTakeDialog = dropTakeDialog..
+		"add_spacer|small|"..
+		"add_quick_exit||"..
+		"\nend_dialog||Close|"
+
     SendVariantList({
         [0] = "OnDialogRequest",
         [1] = dropTakeDialog
