@@ -12,10 +12,10 @@ function open()
 "\nadd_textbox|`w[`2+`w] `0Added `w/cl `w[`9Drop Clover`w]|"..
 "\nadd_textbox|`w[`2+`w] `0Added `w/top `w[`9Set Chand On Top`w]|"..
 "\nadd_textbox|`w[`2+`w] `0Added `w/down `w[`9Set Chand On Down`w]|"..
-"\nadd_textbox|`w[`2+`w] `0Added `w/log `w[`9Winner Gems Logs`w]|"..
+"\nadd_textbox|`w[`2+`w] `0Added `w/wlog `w[`9Winner Gems Logs`w]|"..
 "\nadd_textbox|`w[`2+`w] `0Added `w/emoji `w[`9Chat with Emoji`w]|"..
 "\nadd_textbox|`w[`2+`w] `0Added `w/betlog `w[`9Bet log after tax`w]|"..
-"\nadd_textbox|`w[`2+`w] `0Added `w/slave `w[`9Block spammer slave chat`w]|"..
+"\nadd_textbox|`w[`2+`w] `0Added `w/log `w[`9Drop/pickup logs`w]|"..
 "\nadd_spacer|small|"..
 "\nadd_label_with_icon|small|`^Information|left|5956|"..
 "\nadd_textbox|`w/cmd `w[`9Shows all proxy commands`w]|"..
@@ -124,7 +124,8 @@ function command()
 "\nadd_textbox|`w/tg `w[`9Shows Gems and Auto Drop to Winner`w]|"..
 "\nadd_textbox|`w/win `w[`9Auto drop to winners`w]|"..
 "\nadd_textbox|`w/pm `w[`9Enabled/disabled wrench mode pull`w]|"..
-"\nadd_textbox|`w/log `w[`9Winner Gems Logs`w]|"..
+"\nadd_textbox|`w/wlog `w[`9Winner Gems Logs`w]|"..
+"\nadd_textbox|`w/dlog `w[`9Show drop/pickup logs`w]|"..
 "\nadd_spacer|small|"..
 "\nadd_label_with_icon|small|`wBank Command|left|340|"..
 "\nadd_textbox|`w/wd `w[`9Withdraw blue gem lock from bank`w]|"..
@@ -180,8 +181,9 @@ local HostCsn = "" -- For tracking wheel spin mode
 local LogSpin = {} -- For tracking spin logs
 local BetHistory = {} -- Stores all bet logs with timestamps
 local CurrentTotalAfterTax = 0 -- Stores current session total
-local blockSlaveChat = true
-local blockSlaveAvatar = true
+local blockSlaveChat = false
+local dropTakeList = {} -- Stores drop/pickup logs
+
 
 function ProxyOverlay(str)
 	SendVariantList({
@@ -248,6 +250,7 @@ AddHook("onvariant", "handle_betlog", function(var)
     return false
 end)
 
+
 local emoji = {
     "sigh", "mad", "smile", "tongue", "wow", "no", "shy", "wink", "music", "lol",
     "yes", "love", "megaphone", "heart", "cool", "kiss", "agree", "see-no-evil",
@@ -262,6 +265,26 @@ local emoji = {
 local function randomOutput(list)
     local randomIndex = math.random(1, #list)
     return list[randomIndex]
+end
+
+function dropTakeLogs()
+    local dropTakeDialog = [[
+add_label_with_icon|big| `9Drop/Pickup Logs``|left|3524|
+add_spacer|small|
+text_scaling_string|9999999999
+]]
+    
+    -- Add log entries in reverse order (newest first)
+    for i = #dropTakeList, 1, -1 do
+        dropTakeDialog = dropTakeDialog..dropTakeList[i]
+    end
+    
+    dropTakeDialog = dropTakeDialog.."add_quick_exit||"
+    
+    SendVariantList({
+        [0] = "OnDialogRequest",
+        [1] = dropTakeDialog
+    })
 end
 
 -- Add this hook to modify chat messages with emojis
@@ -338,13 +361,13 @@ end
 
 
 function pos(px, py)
-	local hasil
-	if not px and not py then
-		hasil = "`2Click This To Set``"
-	else
-		hasil = "`b[`2X: `9" .. px .. "`w,`2Y: `9" .. py .. "`b]"
-	end
-	return hasil
+    local hasil
+    if not px and not py then
+        hasil = "`2Click This To Set``"
+    else
+        hasil = "`b[`2X: `9" .. math.floor(px) .. "`w,`2Y: `9" .. math.floor(py) .. "`b]"
+    end
+    return hasil
 end
 
 function bubble(str)
@@ -408,6 +431,7 @@ end
 function ProxyLog(str)
 	LogToConsole("`w[`2BTK Helper`w] `0" .. str)
 end
+
 
 LogToConsole("`9Script Will Run In `25 `9Seconds")
 SendPacket(2, "action|input\n|text|`0Proxy `6BTK `0By `#@Vermin `2ON!")
@@ -511,25 +535,28 @@ AddHook("onvariant", "variabel", function(var)
     if var[0] == "OnConsoleMessage" and var[1]:find("Collected  `w(%d+) World Lock") then
         local AmountCollectWL = tonumber(var[1]:match("Collected  `w(%d+) World Lock"))
         SendPacket(2, "action|input\ntext|"..Growid.." `0Collected `2"..AmountCollectWL.." `9World Lock")
-        return true
+        return false
     end
 
     if var[0] == "OnConsoleMessage" and var[1]:find("Collected  `w(%d+) Diamond Lock") then
         local AmountCollectDL = tonumber(var[1]:match("Collected  `w(%d+) Diamond Lock"))
         SendPacket(2, "action|input\ntext|"..Growid.." `0Collected `2"..AmountCollectDL.." `1Diamond Lock")
-        return true
+		table.insert(dropTakeList, "add_smalltext|`w"..os.date("%X").." `2Collected `w".. AmountCollectDL .." `1Diamond Lock `9in `2"..GetWorld().name.."|\n")
+        return false
     end
 
     if var[0] == "OnConsoleMessage" and var[1]:find("Collected  `w(%d+) Blue Gem Lock") then
         local AmountCollectBGL = tonumber(var[1]:match("Collected  `w(%d+) Blue Gem Lock"))
         SendPacket(2, "action|input\ntext|"..Growid.." `0Collected `2"..AmountCollectBGL.." `eBlue Gem Lock")
-        return true
+		table.insert(dropTakeList, "add_smalltext|`w"..os.date("%X").." `2Collected `w".. AmountCollectBGL .." `eBlue Gem Lock `9in `2"..GetWorld().name.."|\n")
+        return false
     end
 
     if var[0] == "OnConsoleMessage" and var[1]:find("Collected  `w(%d+) Black Gem Lock") then
         local AmountCollectBBGL = tonumber(var[1]:match("Collected  `w(%d+) Black Gem Lock"))
         SendPacket(2, "action|input\ntext|"..Growid.." `0Collected `2"..AmountCollectBBGL.." `bBlack Gem Lock")
-        return true
+		table.insert(dropTakeList, "add_smalltext|`w"..os.date("%X").." `2Collected `w".. AmountCollectBBGL .." `bBlack Gem Lock `9in `2"..GetWorld().name.."|\n")
+        return false
     end
 
     return false
@@ -931,18 +958,21 @@ check_autospam|0]])
 		end
 		SendPacket(2, "action|dialog_return\ndialog_name|drop\nitem_drop|1796|\nitem_count|" .. count)
 		SendPacket(2, "action|input\n|text|`c"..Growid.." `0Dropped `2" .. count .. " `cDiamond Lock")
+		table.insert(dropTakeList, "add_smalltext|`w"..os.date("%X").." `4Dropped `w".. count .." `cDiamond Lock `9in `2"..GetWorld().name.."|\n")
 		return true
 	end
 	if str:find("/b (%d+)") then
 		count = str:match("/b (%d+)")
 		SendPacket(2, "action|dialog_return\ndialog_name|drop\nitem_drop|7188|\nitem_count|" .. count)
 		SendPacket(2, "action|input\n|text|`c"..Growid.." `0Dropped `2" .. count .. " `eBlue Gem Lock")
+		table.insert(dropTakeList, "add_smalltext|`w"..os.date("%X").." `4Dropped `w".. count .." `eBlue Gem Lock `9in `2"..GetWorld().name.."|\n")
 		return true
 	end
 	if str:find("/bb (%d+)") then
 		count = str:match("/bb (%d+)")
 		SendPacket(2, "action|dialog_return\ndialog_name|drop\nitem_drop|11550|\nitem_count|" .. count)
 		SendPacket(2, "action|input\n|text|`c"..Growid.." `0Dropped `2" .. count .. " `bBlack Gem Lock")
+		table.insert(dropTakeList, "add_smalltext|`w"..os.date("%X").." `4Dropped `w".. count .." `bBlack Gem Lock `9in `2"..GetWorld().name.."|\n")
 		return true
 	end
 	if str:find("/ar (%d+)") then
@@ -972,7 +1002,7 @@ check_autospam|0]])
         FilterSpin(NetID) 
         return true 
     end
-	if str:find("/log") then
+	if str:find("/wlog") then
         ShowWinnerLog()
         return true
     end
@@ -1000,19 +1030,16 @@ check_autospam|0]])
 		wset()
 		return true
 	end
-    if str:find("/slave") then
-        blockSlaveChat = not blockSlaveChat
-        local status = blockSlaveChat and "`2Enabled" or "`4Disabled"
-        SendPacket(2, "action|input\n|text|`9Spammer slave chat blocking: "..status)
-        return true
-    end
-
-    if str:find("/slaveav") then
-        blockSlaveAvatar = not blockSlaveAvatar
-        local status = blockSlaveAvatar and "`2Enabled" or "`4Disabled"
-        SendPacket(2, "action|input\n|text|`9Spammer slave avatar blocking: "..status)
-        return true
-    end
+	if str:find("/slave") then
+    blockSlaveChat = not blockSlaveChat
+    local status = blockSlaveChat and "`2Enabled" or "`4Disabled"
+    SendPacket(2, "action|input\n|text|`9Spammer slave chat blocking: "..status)
+    return true
+	end
+	if str:find("/log") then
+    dropTakeLogs()
+    return true
+	end
 	if str:find("/cg") or str:find("buttonClicked|ck") then
 	    checkGems()
 		return true
@@ -1036,7 +1063,6 @@ check_autospam|0]])
         local totalDL = math.floor((Amount % 10000) / 100)
         local jatuhBGL = math.floor(jatuh / 10000)
         local jatuhDL = math.floor((jatuh % 10000) / 100)
-        
         SendPacket(2, "action|input\n|text|`w[`0P1: `2"..totalBGL.." BGL "..totalDL.." DL`w]`bVS`w[`0P2 :`2"..totalBGL.." BGL "..totalDL.." DL`w] `w[`0Tax: `2"..taxset.."%`w] `w[`0Win: `2"..jatuhBGL.." BGL "..jatuhDL.." DL`w]")
         return true
     end
@@ -1107,8 +1133,8 @@ end
 AddHook("onsendpacket", "any", hook)
 
 function setupTopPositions()
-    local xhost = GetLocal().pos.x // 32
-    local yhost = GetLocal().pos.y // 32
+    local xhost = math.floor(GetLocal().pos.x / 32)  -- Ensure integer
+    local yhost = math.floor(GetLocal().pos.y / 32)  -- Ensure integer
     
     -- Take positions (display)
     takeleftx = xhost - 3
@@ -1135,17 +1161,17 @@ function setupTopPositions()
     gemsleftx4 = xhost
     gemslefty4 = yhost
     
-    -- Update tile table
+    -- Update tile table (ensure integers here too)
     tile = {
         pos1 = {
-            {x = gemsrightx1, y = gemsrighty1},
-            {x = gemsrightx2, y = gemsrighty2},
-            {x = gemsrightx3, y = gemsrighty3}
+            {x = math.floor(gemsrightx1), y = math.floor(gemsrighty1)},
+            {x = math.floor(gemsrightx2), y = math.floor(gemsrighty2)},
+            {x = math.floor(gemsrightx3), y = math.floor(gemsrighty3)}
         },
         pos2 = {
-            {x = gemsleftx1, y = gemslefty1},
-            {x = gemsleftx2, y = gemslefty2},
-            {x = gemsleftx3, y = gemslefty3}
+            {x = math.floor(gemsleftx1), y = math.floor(gemslefty1)},
+            {x = math.floor(gemsleftx2), y = math.floor(gemslefty2)},
+            {x = math.floor(gemsleftx3), y = math.floor(gemslefty3)}
         }
     }
     
@@ -1153,8 +1179,8 @@ function setupTopPositions()
 end
 
 function setupDownPositions()
-    local xhost = GetLocal().pos.x // 32
-    local yhost = GetLocal().pos.y // 32
+    local xhost = math.floor(GetLocal().pos.x / 32)  -- Ensure integer
+    local yhost = math.floor(GetLocal().pos.y / 32)  -- Ensure integer
     
     -- Take positions (display)
     takeleftx = xhost - 3
@@ -1184,14 +1210,14 @@ function setupDownPositions()
     -- Update tile table
     tile = {
         pos1 = {
-            {x = gemsrightx1, y = gemsrighty1},
-            {x = gemsrightx2, y = gemsrighty2},
-            {x = gemsrightx3, y = gemsrighty3}
+            {x = math.floor(gemsrightx1), y = math.floor(gemsrighty1)},
+            {x = math.floor(gemsrightx2), y = math.floor(gemsrighty2)},
+            {x = math.floor(gemsrightx3), y = math.floor(gemsrighty3)}
         },
         pos2 = {
-            {x = gemsleftx1, y = gemslefty1},
-            {x = gemsleftx2, y = gemslefty2},
-            {x = gemsleftx3, y = gemslefty3}
+            {x = math.floor(gemsleftx1), y = math.floor(gemslefty1)},
+            {x = math.floor(gemsleftx2), y = math.floor(gemslefty2)},
+            {x = math.floor(gemsleftx3), y = math.floor(gemslefty3)}
         }
     }
     
@@ -1680,18 +1706,10 @@ function checkGems()
     end
 end
 
-AddHook("onvariant", "block_slave", function(var)
-    -- Block spammer slave chat messages
-    if blockSlaveChat and var[0] == "OnConsoleMessage" then
+AddHook("onvariant", "block_slave_chat", function(var)
+    if var[0] == "OnConsoleMessage" and blockSlaveChat then
         if var[1]:find("'s Spammer Slave. ") then
             return true -- Block the message
-        end
-    end
-    
-    -- Block spammer slave avatars
-    if blockSlaveAvatar and var[0] == "OnSpawn" then
-        if var[1]:find("userID|0") or var[1]:find("Spawning...") then
-            return true -- Block the avatar spawn
         end
     end
     return false
@@ -1703,16 +1721,19 @@ while true do
 		if ireng > 0 then
 			SendPacket(2, "action|dialog_return\ndialog_name|drop\nitem_drop|11550|\nitem_count|" .. ireng)
 			SendPacket(2, "action|input\n|text|"..GetLocal().name.." `0Dropped `2" .. ireng .. " `bBlack Gem Lock")
-			Sleep(500)
+			table.insert(dropTakeList, "add_smalltext|`w"..os.date("%X").." `4Dropped `w".. ireng .." `bBlack Gem Lock `9in `2"..GetWorld().name.."|\n")
+			Sleep(400)
 		end
 		if bgl > 0 then
 			SendPacket(2, "action|dialog_return\ndialog_name|drop\nitem_drop|7188|\nitem_count|" .. bgl)
 			SendPacket(2, "action|input\n|text|"..GetLocal().name.." `0Dropped `2" .. bgl .. " `eBlue Gem Lock")
-			Sleep(500)
+			table.insert(dropTakeList, "add_smalltext|`w"..os.date("%X").." `4Dropped `w".. bgl .." `eBlue Gem Lock `9in `2"..GetWorld().name.."|\n")
+			Sleep(400)
 		end
 		if dl > 0 then
 			SendPacket(2, "action|dialog_return\ndialog_name|drop\nitem_drop|1796|\nitem_count|" .. dl)
-			Sleep(500)
+			table.insert(dropTakeList, "add_smalltext|`w"..os.date("%X").." `4Dropped `w".. dl .." `cDiamond Lock `9in `2"..GetWorld().name.."|\n")
+			Sleep(400)
 		end
 		if wl > 0 then
 			SendPacket(2, "action|dialog_return\ndialog_name|drop\nitem_drop|242|\nitem_count|" .. wl)
