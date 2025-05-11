@@ -4,6 +4,7 @@ AddHook("OnDraw", "BTK", function()
         if ImGui.BeginTabBar("MAIN MENU") then
 
             if ImGui.BeginTabItem("BTK") then
+				ImGui.Text("MAIN MENU")
                 if ImGui.Button("TAKE BET", ImVec2(100, 50)) then
                     hook(2, "action|input\n|text|/tb")
                 end
@@ -15,7 +16,8 @@ AddHook("OnDraw", "BTK", function()
                 if ImGui.Button("WIN", ImVec2(100, 50)) then
                     hook(2, "action|input\n|text|/tg")
                 end
-                ImGui.SameLine()
+                ImGui.Spacing()
+				ImGui.Text("HOSTER POSITION")
                 if ImGui.Button("SET POS", ImVec2(100, 50)) then
                     autoDetectPositions()
                 end
@@ -1245,7 +1247,7 @@ function setupTopPositions()
         }
     }
     
-    SendPacket(2, "action|input\n|text|`9Auto-detected `2TOP `9setup!")
+    SendPacket(2, "action|input\n|text|`9Set to `2TOP `9setup!")
 end
 
 function setupDownPositions()
@@ -1291,7 +1293,7 @@ function setupDownPositions()
         }
     }
     
-    SendPacket(2, "action|input\n|text|`9Auto-detected `2DOWN `9setup!")
+    SendPacket(2, "action|input\n|text|`9Set to `2DOWN `9setup!")
 end
 
 function var(var)
