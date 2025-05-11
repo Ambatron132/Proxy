@@ -5,7 +5,7 @@ AddHook("OnDraw", "BTK", function()
 
             if ImGui.BeginTabItem("BTK") then
 				ImGui.Text("MAIN MENU")
-				if ImGui.Button("BET", ImVec2(100, 70)) then
+				if ImGui.Button("BET", ImVec2(100, 100)) then
 					if arePositionsSet() then
 						hook(2, "action|input\n|text|/tb")
 					else
@@ -13,16 +13,16 @@ AddHook("OnDraw", "BTK", function()
 					end
 				end
                 ImGui.SameLine()
-                if ImGui.Button("CHECK", ImVec2(100, 70)) then
+                if ImGui.Button("CHECK", ImVec2(100, 100)) then
                     hook(2, "action|input\n|text|/cg")
                 end
                 ImGui.SameLine()
-                if ImGui.Button("WIN", ImVec2(100, 70)) then
+                if ImGui.Button("WIN", ImVec2(100, 100)) then
                     hook(2, "action|input\n|text|/tg")
                 end
                 ImGui.Spacing()
 				ImGui.Text("HOSTER POSITION")
-                if ImGui.Button("SET POS", ImVec2(100, 70)) then
+                if ImGui.Button("SET POS", ImVec2(100, 100)) then
                     autoDetectPositions()
                 end
                 ImGui.EndTabItem()
@@ -31,11 +31,11 @@ AddHook("OnDraw", "BTK", function()
 
             if ImGui.BeginTabItem("WRENCH MODE") then
 				ImGui.Text("PULL & CBGL")
-                if ImGui.Button("PULL MODE", ImVec2(100, 70)) then
+                if ImGui.Button("PULL MODE", ImVec2(100, 100)) then
                     hook(2, "action|input\n|text|/pm")
                 end
                 ImGui.SameLine()
-                if ImGui.Button("CHANGE BGL", ImVec2(100, 70)) then
+                if ImGui.Button("CHANGE BGL", ImVec2(100, 100)) then
                     hook(2, "action|input\n|text|/mm")
                 end
                 ImGui.EndTabItem()
@@ -121,7 +121,6 @@ AddHook("OnDraw", "BTK", function()
 		end
 		ImGui.End()
 	end)
-
 
 
 
