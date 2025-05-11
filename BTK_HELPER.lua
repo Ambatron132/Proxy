@@ -1237,7 +1237,7 @@ function autoDetectPositions()
         local worldHeight = GetWorld().height or 100
         if yhost < worldHeight / 2 then
             setupTopPositions()
-            SendPacket(2, "action|input\n|text|`9Fallback TOP (equal chands: "..chandsAbove.." above, "..chandsBelow.." below)")
+            ---SendPacket(2, "action|input\n|text|`9Fallback TOP (equal chands: "..chandsAbove.." above, "..chandsBelow.." below)")
         else
             setupDownPositions()
            --- SendPacket(2, "action|input\n|text|`9Fallback DOWN (equal chands: "..chandsAbove.." above, "..chandsBelow.." below)")
