@@ -142,7 +142,7 @@ function command()
 "\nadd_textbox|`w/w `7{amount} `w[`9Drop world lock`w]|"..
 "\nadd_textbox|`w/dd `7{amount} `w[`9Drop diamond lock`w]|"..
 "\nadd_textbox|`w/b `7{amount} `w[`9Drop blue gem lock`w]|"..
-"\nadd_textbox|`w/bb `7{amount} `w[`9Drop black gem lock`w]|"..
+"\nadd_textbox|`w/bl `7{amount} `w[`9Drop black gem lock`w]|"..
 "\nadd_textbox|`w/setup `w[`9Manual Setup`w]"..
 "\nadd_textbox|`w/tax `7{amount} `w[`9Set tax`w]|"..
 "\nadd_textbox|`w/tb `w[`9Take Bet`w]|"..
@@ -1019,8 +1019,8 @@ check_autospam|0]])
 		table.insert(dropTakeList, "add_smalltext|`w"..os.date("%X").." `4Dropped `w".. count .." `eBlue Gem Lock `9in `2"..GetWorld().name.."|\n")
 		return true
 	end
-	if str:find("/bb (%d+)") then
-		count = str:match("/bb (%d+)")
+	if str:find("/bl (%d+)") then
+		count = str:match("/bl (%d+)")
 		SendPacket(2, "action|dialog_return\ndialog_name|drop\nitem_drop|11550|\nitem_count|" .. count)
 		SendPacket(2, "action|input\n|text|`c"..Growid.." `0Dropped `2" .. count .. " `bBlack Gem Lock")
 		table.insert(dropTakeList, "add_smalltext|`w"..os.date("%X").." `4Dropped `w".. count .." `bBlack Gem Lock `9in `2"..GetWorld().name.."|\n")
