@@ -1228,7 +1228,7 @@ function autoDetectPositions()
     -- New improved decision logic
     if chandsAbove > chandsBelow and chandsAbove >= 3 then
         setupTopPositions()
-        SendPacket(2, "action|input\n|text|`9Detected TOP setup ("..chandsAbove.." above vs "..chandsBelow.." below)")
+        ---SendPacket(2, "action|input\n|text|`9Detected TOP setup ("..chandsAbove.." above vs "..chandsBelow.." below)")
     elseif chandsBelow > chandsAbove and chandsBelow >= 3 then
         setupDownPositions()
         ---SendPacket(2, "action|input\n|text|`9Detected DOWN setup ("..chandsBelow.." below vs "..chandsAbove.." above)")
