@@ -5,20 +5,24 @@ AddHook("OnDraw", "BTK", function()
 
             if ImGui.BeginTabItem("BTK") then
 				ImGui.Text("MAIN MENU")
-                if ImGui.Button("BET", ImVec2(100, 50)) then
-                    hook(2, "action|input\n|text|/tb")
-                end
+				if ImGui.Button("BET", ImVec2(100, 70)) then
+					if arePositionsSet() then
+						hook(2, "action|input\n|text|/tb")
+					else
+						ProxyOverlay("`4SET POS FIRST!")
+					end
+				end
                 ImGui.SameLine()
-                if ImGui.Button("CHECK", ImVec2(100, 50)) then
+                if ImGui.Button("CHECK", ImVec2(100, 70)) then
                     hook(2, "action|input\n|text|/cg")
                 end
                 ImGui.SameLine()
-                if ImGui.Button("WIN", ImVec2(100, 50)) then
+                if ImGui.Button("WIN", ImVec2(100, 70)) then
                     hook(2, "action|input\n|text|/tg")
                 end
                 ImGui.Spacing()
 				ImGui.Text("HOSTER POSITION")
-                if ImGui.Button("SET POS", ImVec2(100, 50)) then
+                if ImGui.Button("SET POS", ImVec2(100, 70)) then
                     autoDetectPositions()
                 end
                 ImGui.EndTabItem()
@@ -26,11 +30,12 @@ AddHook("OnDraw", "BTK", function()
 
 
             if ImGui.BeginTabItem("WRENCH MODE") then
-                if ImGui.Button("PULL MODE", ImVec2(100, 50)) then
+				ImGui.Text("PULL & CBGL")
+                if ImGui.Button("PULL MODE", ImVec2(100, 70)) then
                     hook(2, "action|input\n|text|/pm")
                 end
                 ImGui.SameLine()
-                if ImGui.Button("CHANGE BGL", ImVec2(100, 50)) then
+                if ImGui.Button("CHANGE BGL", ImVec2(100, 70)) then
                     hook(2, "action|input\n|text|/mm")
                 end
                 ImGui.EndTabItem()
@@ -121,24 +126,7 @@ AddHook("OnDraw", "BTK", function()
 
 
 
-function btkw()
-    dialog = "\nadd_label_with_icon|big|BTK SETUP|left|2480|"..
-"\nadd_spacer|small|"..
-"\nadd_button_with_icon|tk|   `cTake Gems   |staticYellowFrame|6140||"..
-"\nadd_button_with_icon|ck|   `cCheck Gems   |staticYellowFrame|9438||"..
-"\nadd_button_with_icon|dw|   `cTake Bet   |staticYellowFrame|7188||"..
-"\nadd_button_with_icon||END_LIST|noflags|0||"..
-"\nadd_button_with_icon|V1|   `cChand Atas   |staticYellowFrame|340|"..
-"\nadd_button_with_icon|V2|   `cChand Bawah   |staticYellowFrame|340|"..
-"\nadd_button_with_icon|cui|   `cManual Setup   |staticYellowFrame|12854||"..
-"\nadd_button_with_icon||END_LIST|noflags|0||"..
-"\nadd_button|back|`wBack|noflags|0|0|"..
-"\nend_quick_exit||"
-	SendVariantList({
-		[0] = "OnDialogRequest",
-		[1] = dialog
-	})
-end
+
 
 function command()
 	cmd = "\nadd_label_with_icon|big|`wAll BTK Command                                                             |left|2480|"..
@@ -226,7 +214,10 @@ local blockSlaveAvatar = true
 local taxset = 5
 
 
-
+function arePositionsSet()
+    return takeleftx and takelefty and takerightx and takerighty and
+           gemsleftx1 and gemslefty1 and gemsrightx1 and gemsrighty1
+end
 
 function ProxyOverlay(str)
 	SendVariantList({
