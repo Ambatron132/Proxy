@@ -1231,7 +1231,7 @@ function autoDetectPositions()
         SendPacket(2, "action|input\n|text|`9Detected TOP setup ("..chandsAbove.." above vs "..chandsBelow.." below)")
     elseif chandsBelow > chandsAbove and chandsBelow >= 3 then
         setupDownPositions()
-        SendPacket(2, "action|input\n|text|`9Detected DOWN setup ("..chandsBelow.." below vs "..chandsAbove.." above)")
+        ---SendPacket(2, "action|input\n|text|`9Detected DOWN setup ("..chandsBelow.." below vs "..chandsAbove.." above)")
     else
         -- Fallback to world position if counts are equal or unclear
         local worldHeight = GetWorld().height or 100
@@ -1240,7 +1240,7 @@ function autoDetectPositions()
             SendPacket(2, "action|input\n|text|`9Fallback TOP (equal chands: "..chandsAbove.." above, "..chandsBelow.." below)")
         else
             setupDownPositions()
-            SendPacket(2, "action|input\n|text|`9Fallback DOWN (equal chands: "..chandsAbove.." above, "..chandsBelow.." below)")
+           --- SendPacket(2, "action|input\n|text|`9Fallback DOWN (equal chands: "..chandsAbove.." above, "..chandsBelow.." below)")
         end
     end
 end
@@ -1289,7 +1289,8 @@ function setupTopPositions()
         }
     }
     
-    SendPacket(2, "action|input\n|text|`9Auto-detected `2TOP `9setup!")
+    ProxyOverlay("`9Setup `2Done!")
+
 end
 
 function setupDownPositions()
@@ -1335,7 +1336,7 @@ function setupDownPositions()
         }
     }
     
-    SendPacket(2, "action|input\n|text|`9Auto-detected `2DOWN `9setup!")
+    ProxyOverlay("`9Setup `2Done!")
 end
 
 function var(var)
