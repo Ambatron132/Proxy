@@ -1829,18 +1829,18 @@ while true do
 			SendPacket(2, "action|dialog_return\ndialog_name|drop\nitem_drop|11550|\nitem_count|" .. ireng)
 			SendPacket(2, "action|input\n|text|"..GetLocal().name.." `0Dropped `2" .. ireng .. " `bBlack Gem Lock")
 			table.insert(dropTakeList, "add_smalltext|`w"..os.date("%X").." `4Dropped `w".. ireng .." `bBlack Gem Lock `9in `2"..GetWorld().name.."|\n")
-			Sleep(400)
+			Sleep(500)
 		end
 		if bgl > 0 then
 			SendPacket(2, "action|dialog_return\ndialog_name|drop\nitem_drop|7188|\nitem_count|" .. bgl)
 			SendPacket(2, "action|input\n|text|"..GetLocal().name.." `0Dropped `2" .. bgl .. " `eBlue Gem Lock")
 			table.insert(dropTakeList, "add_smalltext|`w"..os.date("%X").." `4Dropped `w".. bgl .." `eBlue Gem Lock `9in `2"..GetWorld().name.."|\n")
-			Sleep(400)
+			Sleep(500)
 		end
 		if dl > 0 then
 			SendPacket(2, "action|dialog_return\ndialog_name|drop\nitem_drop|1796|\nitem_count|" .. dl)
 			table.insert(dropTakeList, "add_smalltext|`w"..os.date("%X").." `4Dropped `w".. dl .." `cDiamond Lock `9in `2"..GetWorld().name.."|\n")
-			Sleep(400)
+			Sleep(500)
 		end
 		if wl > 0 then
 			SendPacket(2, "action|dialog_return\ndialog_name|drop\nitem_drop|242|\nitem_count|" .. wl)
