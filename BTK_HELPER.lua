@@ -1077,16 +1077,6 @@ check_autospam|0]])
 	 xxx()  -- Return to main menu
 	 return true
     end
-	if str:find("buttonClicked|wrench") then
-		wset()
-		return true
-	end
-	if str:find("/slave") then
-    blockSlaveChat = not blockSlaveChat
-    local status = blockSlaveChat and "`2Enabled" or "`4Disabled"
-    SendPacket(2, "action|input\n|text|`9Spammer slave chat blocking: "..status)
-    return true
-	end
 	if str:find("/log") then
     dropTakeLogs()
     return true
