@@ -1214,7 +1214,7 @@ function autoDetectPositions()
 
     -- Count chand objects above and below player
     for _, obj in pairs(GetObjectList()) do
-        if obj.id == 5640 then -- Chand object ID
+        if obj.id == 340 then -- Chand object ID
             if obj.pos.y < GetLocal().pos.y then -- Above player
                 chandCountAbove = chandCountAbove + 1
             elseif obj.pos.y > GetLocal().pos.y then -- Below player
