@@ -4,21 +4,19 @@ AddHook("OnDraw", "BTK", function()
         if ImGui.BeginTabBar("MAIN MENU") then
 
             if ImGui.BeginTabItem("BTK") then
-                ImGui.Text("MAIN BTK FUNCTION.")
-                if ImGui.Button("TAKE BET", ImVec2(150, 100)) then
+                if ImGui.Button("TAKE BET", ImVec2(100, 50)) then
                     hook(2, "action|input\n|text|/tb")
                 end
                 ImGui.SameLine()
-                if ImGui.Button("CHECK GEMS", ImVec2(150, 100)) then
+                if ImGui.Button("CHECK GEMS", ImVec2(100, 50)) then
                     hook(2, "action|input\n|text|/cg")
                 end
                 ImGui.SameLine()
-                if ImGui.Button("WIN", ImVec2(150, 100)) then
+                if ImGui.Button("WIN", ImVec2(100, 50)) then
                     hook(2, "action|input\n|text|/tg")
                 end
-                ImGui.Spacing()
-                ImGui.Text("HOSTER POSITION.")
-                if ImGui.Button("SET POS", ImVec2(200, 60)) then
+                ImGui.SameLine()
+                if ImGui.Button("SET POS", ImVec2(100, 50)) then
                     autoDetectPositions()
                 end
                 ImGui.EndTabItem()
@@ -26,11 +24,11 @@ AddHook("OnDraw", "BTK", function()
 
 
             if ImGui.BeginTabItem("WRENCH MODE") then
-                if ImGui.Button("PULL MODE", ImVec2(150, 100)) then
+                if ImGui.Button("PULL MODE", ImVec2(100, 50)) then
                     hook(2, "action|input\n|text|/pm")
                 end
                 ImGui.SameLine()
-                if ImGui.Button("CHANGE BGL", ImVec2(150, 100)) then
+                if ImGui.Button("CHANGE BGL", ImVec2(100, 50)) then
                     hook(2, "action|input\n|text|/mm")
                 end
                 ImGui.EndTabItem()
@@ -83,19 +81,24 @@ end)
 
 
 
-
-
-
-
-
-local taxset = 5
-
-
-
-
-
-
-
+function btkw()
+    dialog = "\nadd_label_with_icon|big|BTK SETUP|left|2480|"..
+"\nadd_spacer|small|"..
+"\nadd_button_with_icon|tk|   `cTake Gems   |staticYellowFrame|6140||"..
+"\nadd_button_with_icon|ck|   `cCheck Gems   |staticYellowFrame|9438||"..
+"\nadd_button_with_icon|dw|   `cTake Bet   |staticYellowFrame|7188||"..
+"\nadd_button_with_icon||END_LIST|noflags|0||"..
+"\nadd_button_with_icon|V1|   `cChand Atas   |staticYellowFrame|340|"..
+"\nadd_button_with_icon|V2|   `cChand Bawah   |staticYellowFrame|340|"..
+"\nadd_button_with_icon|cui|   `cManual Setup   |staticYellowFrame|12854||"..
+"\nadd_button_with_icon||END_LIST|noflags|0||"..
+"\nadd_button|back|`wBack|noflags|0|0|"..
+"\nend_quick_exit||"
+	SendVariantList({
+		[0] = "OnDialogRequest",
+		[1] = dialog
+	})
+end
 
 function command()
 	cmd = "\nadd_label_with_icon|big|`wAll BTK Command                                                             |left|2480|"..
@@ -180,6 +183,8 @@ local blockSlaveChat = false
 dropTakeList = {} -- Stores drop/pickup logs
 local blockSlaveChat = true
 local blockSlaveAvatar = true
+local taxset = 5
+
 
 
 
@@ -560,21 +565,21 @@ AddHook("onvariant", "variabel", function(var)
     if var[0] == "OnConsoleMessage" and var[1]:find("Collected  `w(%d+) Diamond Lock") then
         local AmountCollectDL = tonumber(var[1]:match("Collected  `w(%d+) Diamond Lock"))
         SendPacket(2, "action|input\ntext|"..Growid.." `0Collected `2"..AmountCollectDL.." `1Diamond Lock")
-		table.insert(dropTakeList, "add_smalltext|`w"..os.date("%X").." `2Collected `w".. AmountCollectDL .." `1Diamond Lock `9in `2"..GetWorld().name.."|\n")
+		table.insert(dropTakeList, "add_smalltext|"..os.date("%X").." Collected ".. AmountCollectDL .." Diamond Lock in "..GetWorld().name.."|\n")
         return false
     end
 
     if var[0] == "OnConsoleMessage" and var[1]:find("Collected  `w(%d+) Blue Gem Lock") then
         local AmountCollectBGL = tonumber(var[1]:match("Collected  `w(%d+) Blue Gem Lock"))
         SendPacket(2, "action|input\ntext|"..Growid.." `0Collected `2"..AmountCollectBGL.." `eBlue Gem Lock")
-		table.insert(dropTakeList, "add_smalltext|`w"..os.date("%X").." `2Collected `w".. AmountCollectBGL .." `eBlue Gem Lock `9in `2"..GetWorld().name.."|\n")
+		table.insert(dropTakeList, "add_smalltext|"..os.date("%X").." Collected ".. AmountCollectBGL .." Blue Gem Lock in "..GetWorld().name.."|\n")
         return false
     end
 
     if var[0] == "OnConsoleMessage" and var[1]:find("Collected  `w(%d+) Black Gem Lock") then
         local AmountCollectBBGL = tonumber(var[1]:match("Collected  `w(%d+) Black Gem Lock"))
         SendPacket(2, "action|input\ntext|"..Growid.." `0Collected `2"..AmountCollectBBGL.." `bBlack Gem Lock")
-		table.insert(dropTakeList, "add_smalltext|`w"..os.date("%X").." `2Collected `w".. AmountCollectBBGL .." `bBlack Gem Lock `9in `2"..GetWorld().name.."|\n")
+		table.insert(dropTakeList, "add_smalltext|"..os.date("%X").." Collected ".. AmountCollectBBGL .." `Black Gem Lock in "..GetWorld().name.."|\n")
         return false
     end
 
@@ -974,21 +979,21 @@ check_autospam|0]])
 		end
 		SendPacket(2, "action|dialog_return\ndialog_name|drop\nitem_drop|1796|\nitem_count|" .. count)
 		SendPacket(2, "action|input\n|text|`c"..Growid.." `0Dropped `2" .. count .. " `cDiamond Lock")
-		table.insert(dropTakeList, "add_smalltext|`w"..os.date("%X").." `4Dropped `w".. count .." `cDiamond Lock `9in `2"..GetWorld().name.."|\n")
+		table.insert(dropTakeList, "add_smalltext|"..os.date("%X").." Dropped ".. count .." Diamond Lock in "..GetWorld().name.."|\n")
 		return true
 	end
 	if str:find("/b (%d+)") then
 		count = str:match("/b (%d+)")
 		SendPacket(2, "action|dialog_return\ndialog_name|drop\nitem_drop|7188|\nitem_count|" .. count)
 		SendPacket(2, "action|input\n|text|`c"..Growid.." `0Dropped `2" .. count .. " `eBlue Gem Lock")
-		table.insert(dropTakeList, "add_smalltext|`w"..os.date("%X").." `4Dropped `w".. count .." `eBlue Gem Lock `9in `2"..GetWorld().name.."|\n")
+		table.insert(dropTakeList, "add_smalltext|"..os.date("%X").." Dropped ".. count .." Blue Gem Lock in "..GetWorld().name.."|\n")
 		return true
 	end
 	if str:find("/bb (%d+)") then
 		count = str:match("/bb (%d+)")
 		SendPacket(2, "action|dialog_return\ndialog_name|drop\nitem_drop|11550|\nitem_count|" .. count)
 		SendPacket(2, "action|input\n|text|`c"..Growid.." `0Dropped `2" .. count .. " `bBlack Gem Lock")
-		table.insert(dropTakeList, "add_smalltext|`w"..os.date("%X").." `4Dropped `w".. count .." `bBlack Gem Lock `9in `2"..GetWorld().name.."|\n")
+		table.insert(dropTakeList, "add_smalltext|"..os.date("%X").." Dropped ".. count .." `bBlack Gem Lock in "..GetWorld().name.."|\n")
 		return true
 	end
 	if str:find("/ar (%d+)") then
@@ -1786,18 +1791,18 @@ while true do
 		if ireng > 0 then
 			SendPacket(2, "action|dialog_return\ndialog_name|drop\nitem_drop|11550|\nitem_count|" .. ireng)
 			SendPacket(2, "action|input\n|text|"..GetLocal().name.." `0Dropped `2" .. ireng .. " `bBlack Gem Lock")
-			table.insert(dropTakeList, "add_smalltext|`w"..os.date("%X").." `4Dropped `w".. ireng .." `bBlack Gem Lock `9in `2"..GetWorld().name.."|\n")
+			table.insert(dropTakeList, "add_smalltext|"..os.date("%X").." Dropped ".. ireng .." Black Gem Lock in "..GetWorld().name.."|\n")
 			Sleep(400)
 		end
 		if bgl > 0 then
 			SendPacket(2, "action|dialog_return\ndialog_name|drop\nitem_drop|7188|\nitem_count|" .. bgl)
 			SendPacket(2, "action|input\n|text|"..GetLocal().name.." `0Dropped `2" .. bgl .. " `eBlue Gem Lock")
-			table.insert(dropTakeList, "add_smalltext|`w"..os.date("%X").." `4Dropped `w".. bgl .." `eBlue Gem Lock `9in `2"..GetWorld().name.."|\n")
+			table.insert(dropTakeList, "add_smalltext|"..os.date("%X").." Dropped ".. bgl .." Blue Gem Lock in "..GetWorld().name.."|\n")
 			Sleep(400)
 		end
 		if dl > 0 then
 			SendPacket(2, "action|dialog_return\ndialog_name|drop\nitem_drop|1796|\nitem_count|" .. dl)
-			table.insert(dropTakeList, "add_smalltext|`w"..os.date("%X").." `4Dropped `w".. dl .." `cDiamond Lock `9in `2"..GetWorld().name.."|\n")
+			table.insert(dropTakeList, "add_smalltext|"..os.date("%X").." Dropped ".. dl .." Diamond Lock in "..GetWorld().name.."|\n")
 			Sleep(400)
 		end
 		if wl > 0 then
