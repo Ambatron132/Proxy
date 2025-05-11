@@ -5,32 +5,36 @@ AddHook("OnDraw", "BTK", function()
 
             if ImGui.BeginTabItem("BTK") then
 				ImGui.Text("MAIN MENU")
-                if ImGui.Button("TAKE BET", ImVec2(150, 50)) then
+                if ImGui.Button("BET", ImVec2(100, 50)) then
                     hook(2, "action|input\n|text|/tb")
                 end
                 ImGui.SameLine()
-                if ImGui.Button("CHECK GEMS", ImVec2(150, 50)) then
+                if ImGui.Button("CHECK", ImVec2(100, 50)) then
                     hook(2, "action|input\n|text|/cg")
                 end
                 ImGui.SameLine()
-                if ImGui.Button("WIN", ImVec2(150, 50)) then
+                if ImGui.Button("WIN", ImVec2(100, 50)) then
                     hook(2, "action|input\n|text|/tg")
                 end
                 ImGui.Spacing()
 				ImGui.Text("HOSTER POSITION")
-                if ImGui.Button("SET POS", ImVec2(150, 50)) then
-                    autoDetectPositions()
+                if ImGui.Button("TOP", ImVec2(100, 50)) then
+                    setupTopPositions()
+                end
+				ImGui.SameLine()
+				if ImGui.Button("DOWN", ImVec2(100, 50)) then
+                    setupDownPositions()
                 end
                 ImGui.EndTabItem()
             end
 
 
             if ImGui.BeginTabItem("WRENCH MODE") then
-                if ImGui.Button("PULL MODE", ImVec2(150, 50)) then
+                if ImGui.Button("PULL MODE", ImVec2(100, 50)) then
                     hook(2, "action|input\n|text|/pm")
                 end
                 ImGui.SameLine()
-                if ImGui.Button("CHANGE BGL", ImVec2(150, 50)) then
+                if ImGui.Button("CHANGE BGL", ImVec2(100, 50)) then
                     hook(2, "action|input\n|text|/mm")
                 end
                 ImGui.EndTabItem()
@@ -66,18 +70,51 @@ AddHook("OnDraw", "BTK", function()
                                     tonumber(os.date("%M", os.time())),
                                     tonumber(os.date("%S", os.time())),
                                     bgl, dl, wl))
-                            end
-                        end
-                    end
-                end
-
-            end
-            -- Close the tab bar
-            ImGui.EndTabBar()
-        end
-    end
-    ImGui.End()
-end)
+								end
+							end
+							ImGui.EndChild()
+							ImGui.EndTabItem()
+						end
+						ImGui.EndTabBar()
+					end
+					ImGui.EndTabItem()
+				end
+	
+				-- Dedicated Auto Spam Tab (separate from logs)
+				if ImGui.BeginTabItem("AUTO SPAM") then
+					ImGui.Text("SPAM CONFIGURATION")
+					ImGui.Separator()
+					
+					-- Spam message input
+					local changed
+					changed, spam_message = ImGui.InputText("Message", spam_message, 100)
+					
+					-- Control buttons
+					if ImGui.Button("START", ImVec2(120, 40)) then
+						if spam_message ~= "" then
+							hook(2, "action|input\n|text|/spam " .. spam_message)
+							hook(2, "action|input\n|text|/os")
+							ProxyOverlay("Started spamming: " .. spam_message)
+						else
+							ProxyOverlay("Please enter a message first!")
+						end
+					end
+					
+					ImGui.SameLine()
+					
+					if ImGui.Button("STOP", ImVec2(120, 40)) then
+						hook(2, "action|input\n|text|/ofs")
+						ProxyOverlay("Stopped spamming")
+					end
+					
+					ImGui.EndTabItem()
+				end
+	
+				ImGui.EndTabBar()
+			end
+		end
+		ImGui.End()
+	end)
 
 
 
@@ -1168,45 +1205,9 @@ end
 end
 AddHook("onsendpacket", "any", hook)
 
-function autoDetectPositions()
-    local xhost = math.floor(GetLocal().pos.x / 32)
-    local yhost = math.floor(GetLocal().pos.y / 32)
-    local detectedTop = false
-    local detectedBottom = false
-
-    -- Scan nearby tiles for chands (5640) or gems (112)
-    for _, tile in pairs(GetTiles()) do
-        if (tile.x >= xhost - 5 and tile.x <= xhost + 5) and (tile.y >= yhost - 5 and tile.y <= yhost + 5) then
-            if tile.fg == 340   then -- Chandelier
-                if tile.y < yhost then
-                    detectedTop = true
-                elseif tile.y > yhost then
-                    detectedBottom = true
-                end
-            end
-        end
-    end
-
-    -- Decide setup based on detection
-    if detectedTop and not detectedBottom then
-        setupTopPositions()
-    elseif detectedBottom and not detectedTop then
-        setupDownPositions()
-    else
-        -- Fallback: Guess based on player's Y-position (common BTK layouts)
-        if yhost < 50 then -- Arbitrary threshold (adjust based on world height)
-            setupTopPositions()
-        else
-            setupDownPositions()
-        end
-        SendPacket(2, "action|input\n|text|`9No chands detected. Guessing setup based on position.")
-    end
-end
-
--- Modify the existing functions to include auto-detection
 function setupTopPositions()
-    local xhost = math.floor(GetLocal().pos.x / 32)
-    local yhost = math.floor(GetLocal().pos.y / 32)
+    local xhost = math.floor(GetLocal().pos.x / 32)  -- Ensure integer
+    local yhost = math.floor(GetLocal().pos.y / 32)  -- Ensure integer
     
     -- Take positions (display)
     takeleftx = xhost - 3
@@ -1233,26 +1234,26 @@ function setupTopPositions()
     gemsleftx4 = xhost
     gemslefty4 = yhost
     
-    -- Update tile table
+    -- Update tile table (ensure integers here too)
     tile = {
         pos1 = {
-            {x = gemsrightx1, y = gemsrighty1},
-            {x = gemsrightx2, y = gemsrighty2},
-            {x = gemsrightx3, y = gemsrighty3}
+            {x = math.floor(gemsrightx1), y = math.floor(gemsrighty1)},
+            {x = math.floor(gemsrightx2), y = math.floor(gemsrighty2)},
+            {x = math.floor(gemsrightx3), y = math.floor(gemsrighty3)}
         },
         pos2 = {
-            {x = gemsleftx1, y = gemslefty1},
-            {x = gemsleftx2, y = gemslefty2},
-            {x = gemsleftx3, y = gemslefty3}
+            {x = math.floor(gemsleftx1), y = math.floor(gemslefty1)},
+            {x = math.floor(gemsleftx2), y = math.floor(gemslefty2)},
+            {x = math.floor(gemsleftx3), y = math.floor(gemslefty3)}
         }
     }
     
-    SendPacket(2, "action|input\n|text|`9Set to `2TOP `9setup!")
+    SendPacket(2, "action|input\n|text|`9SETUP CHAND ATAS `2ON")
 end
 
 function setupDownPositions()
-    local xhost = math.floor(GetLocal().pos.x / 32)
-    local yhost = math.floor(GetLocal().pos.y / 32)
+    local xhost = math.floor(GetLocal().pos.x / 32)  -- Ensure integer
+    local yhost = math.floor(GetLocal().pos.y / 32)  -- Ensure integer
     
     -- Take positions (display)
     takeleftx = xhost - 3
@@ -1262,7 +1263,7 @@ function setupDownPositions()
     
     -- Gem positions (bottom)
     gemsleftx1 = xhost - 3
-    gemslefty1 = yhost + 1
+    gemslefty1 = yhost +1
     gemsleftx2 = gemsleftx1 - 1
     gemslefty2 = gemslefty1
     gemsleftx3 = gemsleftx1 - 2
@@ -1282,18 +1283,18 @@ function setupDownPositions()
     -- Update tile table
     tile = {
         pos1 = {
-            {x = gemsrightx1, y = gemsrighty1},
-            {x = gemsrightx2, y = gemsrighty2},
-            {x = gemsrightx3, y = gemsrighty3}
+            {x = math.floor(gemsrightx1), y = math.floor(gemsrighty1)},
+            {x = math.floor(gemsrightx2), y = math.floor(gemsrighty2)},
+            {x = math.floor(gemsrightx3), y = math.floor(gemsrighty3)}
         },
         pos2 = {
-            {x = gemsleftx1, y = gemslefty1},
-            {x = gemsleftx2, y = gemslefty2},
-            {x = gemsleftx3, y = gemslefty3}
+            {x = math.floor(gemsleftx1), y = math.floor(gemslefty1)},
+            {x = math.floor(gemsleftx2), y = math.floor(gemslefty2)},
+            {x = math.floor(gemsleftx3), y = math.floor(gemslefty3)}
         }
     }
     
-    SendPacket(2, "action|input\n|text|`9Set to `2DOWN `9setup!")
+    SendPacket(2, "action|input\n|text|`9SETUP CHAND BAWAH `2ON")
 end
 
 function var(var)
