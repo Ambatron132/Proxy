@@ -1209,36 +1209,38 @@ AddHook("onsendpacket", "any", hook)
 function autoDetectPositions()
     local xhost = math.floor(GetLocal().pos.x / 32)
     local yhost = math.floor(GetLocal().pos.y / 32)
-    local chandCountAbove = 0
-    local chandCountBelow = 0
+    local chandsAbove = 0
+    local chandsBelow = 0
 
-    -- Count chand objects above and below player
-    for _, obj in pairs(GetObjectList()) do
-        if obj.id == 340 then -- Chand object ID
-            if obj.pos.y < GetLocal().pos.y then -- Above player
-                chandCountAbove = chandCountAbove + 1
-            elseif obj.pos.y > GetLocal().pos.y then -- Below player
-                chandCountBelow = chandCountBelow + 1
+    -- Count chandeliers
+    for _, tile in pairs(GetTiles()) do
+        if math.abs(tile.x - xhost) <= 5 and math.abs(tile.y - yhost) <= 5 then
+            if tile.fg == 340 then -- Chandelier ID
+                if tile.y < yhost then
+                    chandsAbove = chandsAbove + 1
+                elseif tile.y > yhost then
+                    chandsBelow = chandsBelow + 1
+                end
             end
         end
     end
 
-    -- Determine setup based on chand distribution
-    if chandCountAbove >= 3 and chandCountBelow < 3 then
+    -- New improved decision logic
+    if chandsAbove > chandsBelow and chandsAbove >= 3 then
         setupTopPositions()
-        
-    elseif chandCountBelow >= 3 and chandCountAbove < 3 then
+        SendPacket(2, "action|input\n|text|`9Detected TOP setup ("..chandsAbove.." above vs "..chandsBelow.." below)")
+    elseif chandsBelow > chandsAbove and chandsBelow >= 3 then
         setupDownPositions()
-        
+        SendPacket(2, "action|input\n|text|`9Detected DOWN setup ("..chandsBelow.." below vs "..chandsAbove.." above)")
     else
-        -- Fallback to position-based detection if chand count is ambiguous
-        local worldHeight = GetWorld().height or 60
+        -- Fallback to world position if counts are equal or unclear
+        local worldHeight = GetWorld().height or 100
         if yhost < worldHeight / 2 then
             setupTopPositions()
-            SendPacket(2, "action|input\n|text|`9Used fallback TOP setup (world position)")
+            SendPacket(2, "action|input\n|text|`9Fallback TOP (equal chands: "..chandsAbove.." above, "..chandsBelow.." below)")
         else
             setupDownPositions()
-            SendPacket(2, "action|input\n|text|`9Used fallback DOWN setup (world position)")
+            SendPacket(2, "action|input\n|text|`9Fallback DOWN (equal chands: "..chandsAbove.." above, "..chandsBelow.." below)")
         end
     end
 end
