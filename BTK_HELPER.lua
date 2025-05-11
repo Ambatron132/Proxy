@@ -18,12 +18,8 @@ AddHook("OnDraw", "BTK", function()
                 end
                 ImGui.Spacing()
 				ImGui.Text("HOSTER POSITION")
-                if ImGui.Button("TOP", ImVec2(100, 50)) then
-                    setupTopPositions()
-                end
-				ImGui.SameLine()
-				if ImGui.Button("DOWN", ImVec2(100, 50)) then
-                    setupDownPositions()
+                if ImGui.Button("SET POS", ImVec2(100, 50)) then
+                    autoDetectPositions()
                 end
                 ImGui.EndTabItem()
             end
@@ -47,7 +43,12 @@ AddHook("OnDraw", "BTK", function()
 
                         -- Print logs in reverse (newest first)
                         for i = #dropTakeList, 1, -1 do
-                            ImGui.TextWrapped(dropTakeList[i]:gsub("add_smalltext|", ""):gsub("|\n", ""))
+							ImGui.TextWrapped(
+								dropTakeList[i]
+								:gsub("add_smalltext|", "")  -- Remove the dialog prefix
+								:gsub("|\n", "")            -- Remove the trailing pipe and newline
+								:gsub("`[%w%p]", "")        -- Remove all color codes (` followed by any letter/number/punctuation)
+							)
                         end
                     
                         ImGui.EndChild()
@@ -604,21 +605,21 @@ AddHook("onvariant", "variabel", function(var)
     if var[0] == "OnConsoleMessage" and var[1]:find("Collected  `w(%d+) Diamond Lock") then
         local AmountCollectDL = tonumber(var[1]:match("Collected  `w(%d+) Diamond Lock"))
         SendPacket(2, "action|input\ntext|"..Growid.." `0Collected `2"..AmountCollectDL.." `1Diamond Lock")
-		table.insert(dropTakeList, "add_smalltext|"..os.date("%X").." Collected ".. AmountCollectDL .." Diamond Lock in "..GetWorld().name.."|\n")
+		table.insert(dropTakeList, "add_smalltext|`w"..os.date("%X").." `2Collected `w".. AmountCollectDL .." `1Diamond Lock `9in `2"..GetWorld().name.."|\n")
         return false
     end
 
     if var[0] == "OnConsoleMessage" and var[1]:find("Collected  `w(%d+) Blue Gem Lock") then
         local AmountCollectBGL = tonumber(var[1]:match("Collected  `w(%d+) Blue Gem Lock"))
         SendPacket(2, "action|input\ntext|"..Growid.." `0Collected `2"..AmountCollectBGL.." `eBlue Gem Lock")
-		table.insert(dropTakeList, "add_smalltext|"..os.date("%X").." Collected ".. AmountCollectBGL .." Blue Gem Lock in "..GetWorld().name.."|\n")
+		table.insert(dropTakeList, "add_smalltext|`w"..os.date("%X").." `2Collected `w".. AmountCollectBGL .." `eBlue Gem Lock `9in `2"..GetWorld().name.."|\n")
         return false
     end
 
     if var[0] == "OnConsoleMessage" and var[1]:find("Collected  `w(%d+) Black Gem Lock") then
         local AmountCollectBBGL = tonumber(var[1]:match("Collected  `w(%d+) Black Gem Lock"))
         SendPacket(2, "action|input\ntext|"..Growid.." `0Collected `2"..AmountCollectBBGL.." `bBlack Gem Lock")
-		table.insert(dropTakeList, "add_smalltext|"..os.date("%X").." Collected ".. AmountCollectBBGL .." `Black Gem Lock in "..GetWorld().name.."|\n")
+		table.insert(dropTakeList, "add_smalltext|`w"..os.date("%X").." `2Collected `w".. AmountCollectBBGL .." `bBlack Gem Lock `9in `2"..GetWorld().name.."|\n")
         return false
     end
 
@@ -1018,21 +1019,21 @@ check_autospam|0]])
 		end
 		SendPacket(2, "action|dialog_return\ndialog_name|drop\nitem_drop|1796|\nitem_count|" .. count)
 		SendPacket(2, "action|input\n|text|`c"..Growid.." `0Dropped `2" .. count .. " `cDiamond Lock")
-		table.insert(dropTakeList, "add_smalltext|"..os.date("%X").." Dropped ".. count .." Diamond Lock in "..GetWorld().name.."|\n")
+		table.insert(dropTakeList, "add_smalltext|`w"..os.date("%X").." `4Dropped `w".. count .." `cDiamond Lock `9in `2"..GetWorld().name.."|\n")
 		return true
 	end
 	if str:find("/b (%d+)") then
 		count = str:match("/b (%d+)")
 		SendPacket(2, "action|dialog_return\ndialog_name|drop\nitem_drop|7188|\nitem_count|" .. count)
 		SendPacket(2, "action|input\n|text|`c"..Growid.." `0Dropped `2" .. count .. " `eBlue Gem Lock")
-		table.insert(dropTakeList, "add_smalltext|"..os.date("%X").." Dropped ".. count .." Blue Gem Lock in "..GetWorld().name.."|\n")
+		table.insert(dropTakeList, "add_smalltext|`w"..os.date("%X").." `4Dropped `w".. count .." `eBlue Gem Lock `9in `2"..GetWorld().name.."|\n")
 		return true
 	end
 	if str:find("/bb (%d+)") then
 		count = str:match("/bb (%d+)")
 		SendPacket(2, "action|dialog_return\ndialog_name|drop\nitem_drop|11550|\nitem_count|" .. count)
 		SendPacket(2, "action|input\n|text|`c"..Growid.." `0Dropped `2" .. count .. " `bBlack Gem Lock")
-		table.insert(dropTakeList, "add_smalltext|"..os.date("%X").." Dropped ".. count .." `bBlack Gem Lock in "..GetWorld().name.."|\n")
+		table.insert(dropTakeList, "add_smalltext|`w"..os.date("%X").." `4Dropped `w".. count .." `bBlack Gem Lock `9in `2"..GetWorld().name.."|\n")
 		return true
 	end
 	if str:find("/ar (%d+)") then
@@ -1205,9 +1206,47 @@ end
 end
 AddHook("onsendpacket", "any", hook)
 
+function autoDetectPositions()
+    local xhost = math.floor(GetLocal().pos.x / 32)
+    local yhost = math.floor(GetLocal().pos.y / 32)
+    local chandCountAbove = 0
+    local chandCountBelow = 0
+
+    -- Count chand objects above and below player
+    for _, obj in pairs(GetObjectList()) do
+        if obj.id == 5640 then -- Chand object ID
+            if obj.pos.y < GetLocal().pos.y then -- Above player
+                chandCountAbove = chandCountAbove + 1
+            elseif obj.pos.y > GetLocal().pos.y then -- Below player
+                chandCountBelow = chandCountBelow + 1
+            end
+        end
+    end
+
+    -- Determine setup based on chand distribution
+    if chandCountAbove >= 3 and chandCountBelow < 3 then
+        setupTopPositions()
+        
+    elseif chandCountBelow >= 3 and chandCountAbove < 3 then
+        setupDownPositions()
+        
+    else
+        -- Fallback to position-based detection if chand count is ambiguous
+        local worldHeight = GetWorld().height or 60
+        if yhost < worldHeight / 2 then
+            setupTopPositions()
+            SendPacket(2, "action|input\n|text|`9Used fallback TOP setup (world position)")
+        else
+            setupDownPositions()
+            SendPacket(2, "action|input\n|text|`9Used fallback DOWN setup (world position)")
+        end
+    end
+end
+
+-- Modify the existing functions to include auto-detection
 function setupTopPositions()
-    local xhost = math.floor(GetLocal().pos.x / 32)  -- Ensure integer
-    local yhost = math.floor(GetLocal().pos.y / 32)  -- Ensure integer
+    local xhost = math.floor(GetLocal().pos.x / 32)
+    local yhost = math.floor(GetLocal().pos.y / 32)
     
     -- Take positions (display)
     takeleftx = xhost - 3
@@ -1234,26 +1273,26 @@ function setupTopPositions()
     gemsleftx4 = xhost
     gemslefty4 = yhost
     
-    -- Update tile table (ensure integers here too)
+    -- Update tile table
     tile = {
         pos1 = {
-            {x = math.floor(gemsrightx1), y = math.floor(gemsrighty1)},
-            {x = math.floor(gemsrightx2), y = math.floor(gemsrighty2)},
-            {x = math.floor(gemsrightx3), y = math.floor(gemsrighty3)}
+            {x = gemsrightx1, y = gemsrighty1},
+            {x = gemsrightx2, y = gemsrighty2},
+            {x = gemsrightx3, y = gemsrighty3}
         },
         pos2 = {
-            {x = math.floor(gemsleftx1), y = math.floor(gemslefty1)},
-            {x = math.floor(gemsleftx2), y = math.floor(gemslefty2)},
-            {x = math.floor(gemsleftx3), y = math.floor(gemslefty3)}
+            {x = gemsleftx1, y = gemslefty1},
+            {x = gemsleftx2, y = gemslefty2},
+            {x = gemsleftx3, y = gemslefty3}
         }
     }
     
-    SendPacket(2, "action|input\n|text|`9SETUP CHAND ATAS `2ON")
+    SendPacket(2, "action|input\n|text|`9Auto-detected `2TOP `9setup!")
 end
 
 function setupDownPositions()
-    local xhost = math.floor(GetLocal().pos.x / 32)  -- Ensure integer
-    local yhost = math.floor(GetLocal().pos.y / 32)  -- Ensure integer
+    local xhost = math.floor(GetLocal().pos.x / 32)
+    local yhost = math.floor(GetLocal().pos.y / 32)
     
     -- Take positions (display)
     takeleftx = xhost - 3
@@ -1263,7 +1302,7 @@ function setupDownPositions()
     
     -- Gem positions (bottom)
     gemsleftx1 = xhost - 3
-    gemslefty1 = yhost +1
+    gemslefty1 = yhost + 1
     gemsleftx2 = gemsleftx1 - 1
     gemslefty2 = gemslefty1
     gemsleftx3 = gemsleftx1 - 2
@@ -1283,18 +1322,18 @@ function setupDownPositions()
     -- Update tile table
     tile = {
         pos1 = {
-            {x = math.floor(gemsrightx1), y = math.floor(gemsrighty1)},
-            {x = math.floor(gemsrightx2), y = math.floor(gemsrighty2)},
-            {x = math.floor(gemsrightx3), y = math.floor(gemsrighty3)}
+            {x = gemsrightx1, y = gemsrighty1},
+            {x = gemsrightx2, y = gemsrighty2},
+            {x = gemsrightx3, y = gemsrighty3}
         },
         pos2 = {
-            {x = math.floor(gemsleftx1), y = math.floor(gemslefty1)},
-            {x = math.floor(gemsleftx2), y = math.floor(gemslefty2)},
-            {x = math.floor(gemsleftx3), y = math.floor(gemslefty3)}
+            {x = gemsleftx1, y = gemslefty1},
+            {x = gemsleftx2, y = gemslefty2},
+            {x = gemsleftx3, y = gemslefty3}
         }
     }
     
-    SendPacket(2, "action|input\n|text|`9SETUP CHAND BAWAH `2ON")
+    SendPacket(2, "action|input\n|text|`9Auto-detected `2DOWN `9setup!")
 end
 
 function var(var)
@@ -1779,14 +1818,6 @@ function checkGems()
     end
 end
 
-AddHook("onvariant", "block_slave_chat", function(var)
-    if var[0] == "OnConsoleMessage" and blockSlaveChat then
-        if var[1]:find("'s Spammer Slave. ") then
-            return true -- Block the message
-        end
-    end
-    return false
-end)
 
 while true do
 	Sleep(1000)
@@ -1794,18 +1825,18 @@ while true do
 		if ireng > 0 then
 			SendPacket(2, "action|dialog_return\ndialog_name|drop\nitem_drop|11550|\nitem_count|" .. ireng)
 			SendPacket(2, "action|input\n|text|"..GetLocal().name.." `0Dropped `2" .. ireng .. " `bBlack Gem Lock")
-			table.insert(dropTakeList, "add_smalltext|"..os.date("%X").." Dropped ".. ireng .." Black Gem Lock in "..GetWorld().name.."|\n")
+			table.insert(dropTakeList, "add_smalltext|`w"..os.date("%X").." `4Dropped `w".. ireng .." `bBlack Gem Lock `9in `2"..GetWorld().name.."|\n")
 			Sleep(400)
 		end
 		if bgl > 0 then
 			SendPacket(2, "action|dialog_return\ndialog_name|drop\nitem_drop|7188|\nitem_count|" .. bgl)
 			SendPacket(2, "action|input\n|text|"..GetLocal().name.." `0Dropped `2" .. bgl .. " `eBlue Gem Lock")
-			table.insert(dropTakeList, "add_smalltext|"..os.date("%X").." Dropped ".. bgl .." Blue Gem Lock in "..GetWorld().name.."|\n")
+			table.insert(dropTakeList, "add_smalltext|`w"..os.date("%X").." `4Dropped `w".. bgl .." `eBlue Gem Lock `9in `2"..GetWorld().name.."|\n")
 			Sleep(400)
 		end
 		if dl > 0 then
 			SendPacket(2, "action|dialog_return\ndialog_name|drop\nitem_drop|1796|\nitem_count|" .. dl)
-			table.insert(dropTakeList, "add_smalltext|"..os.date("%X").." Dropped ".. dl .." Diamond Lock in "..GetWorld().name.."|\n")
+			table.insert(dropTakeList, "add_smalltext|`w"..os.date("%X").." `4Dropped `w".. dl .." `cDiamond Lock `9in `2"..GetWorld().name.."|\n")
 			Sleep(400)
 		end
 		if wl > 0 then
