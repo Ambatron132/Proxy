@@ -31,11 +31,11 @@ AddHook("OnDraw", "BTK", function()
 
             if ImGui.BeginTabItem("WRENCH MODE") then
 				ImGui.Text("PULL & CBGL")
-                if ImGui.Button("PULL MODE", ImVec2(100, 100)) then
+                if ImGui.Button("PULL", ImVec2(100, 100)) then
                     hook(2, "action|input\n|text|/pm")
                 end
                 ImGui.SameLine()
-                if ImGui.Button("CHANGE BGL", ImVec2(100, 100)) then
+                if ImGui.Button("CBGL", ImVec2(100, 100)) then
                     hook(2, "action|input\n|text|/mm")
                 end
                 ImGui.EndTabItem()
