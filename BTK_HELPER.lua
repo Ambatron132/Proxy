@@ -1010,7 +1010,7 @@ check_autospam|0]])
 
 		return true
 	end
-	if str:find("/dall") then
+	if str:find("/daw") then
 		bgl = inv(7188)
 		dl = inv(1796)
 		wl = inv(242)
