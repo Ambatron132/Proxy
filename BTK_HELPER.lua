@@ -152,6 +152,7 @@ function command()
 "\nadd_textbox|`w/pm `w[`9Enabled/disabled wrench mode pull`w]|"..
 "\nadd_textbox|`w/wlog `w[`9Winner Gems Logs`w]|"..
 "\nadd_textbox|`w/dlog `w[`9Show drop/pickup logs`w]|"..
+"\nadd_textbox|`w/dall`w[`9Drop All Locks`w]|"..
 "\nadd_spacer|small|"..
 "\nadd_label_with_icon|small|`wBank Command|left|340|"..
 "\nadd_textbox|`w/wd `w[`9Withdraw blue gem lock from bank`w]|"..
