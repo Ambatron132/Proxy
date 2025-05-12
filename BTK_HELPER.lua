@@ -31,11 +31,11 @@ AddHook("OnDraw", "BTK", function()
 
             if ImGui.BeginTabItem("WRENCH MODE") then
 				ImGui.Text("PULL & CBGL")
-                if ImGui.Button("PULL", ImVec2(100, 100)) then
+                if ImGui.Button("PULL MODE", ImVec2(100, 100)) then
                     hook(2, "action|input\n|text|/pm")
                 end
                 ImGui.SameLine()
-                if ImGui.Button("CBGL", ImVec2(100, 100)) then
+                if ImGui.Button("CHANGE BGL", ImVec2(100, 100)) then
                     hook(2, "action|input\n|text|/mm")
                 end
                 ImGui.EndTabItem()
@@ -127,6 +127,7 @@ AddHook("OnDraw", "BTK", function()
 
 
 
+
 function command()
 	cmd = "\nadd_label_with_icon|big|`wAll BTK Command                                                             |left|2480|"..
 "\nadd_spacer|small|"..
@@ -142,7 +143,7 @@ function command()
 "\nadd_textbox|`w/w `7{amount} `w[`9Drop world lock`w]|"..
 "\nadd_textbox|`w/dd `7{amount} `w[`9Drop diamond lock`w]|"..
 "\nadd_textbox|`w/b `7{amount} `w[`9Drop blue gem lock`w]|"..
-"\nadd_textbox|`w/bl `7{amount} `w[`9Drop black gem lock`w]|"..
+"\nadd_textbox|`w/bb `7{amount} `w[`9Drop black gem lock`w]|"..
 "\nadd_textbox|`w/setup `w[`9Manual Setup`w]"..
 "\nadd_textbox|`w/tax `7{amount} `w[`9Set tax`w]|"..
 "\nadd_textbox|`w/tb `w[`9Take Bet`w]|"..
@@ -211,6 +212,7 @@ dropTakeList = {} -- Stores drop/pickup logs
 local blockSlaveChat = true
 local blockSlaveAvatar = true
 local taxset = 5
+local dawlock = false
 
 
 function arePositionsSet()
@@ -482,13 +484,11 @@ end
 
 
 
-function ProxyLog(str)
-	LogToConsole("`w[`2BTK Helper`w] `0" .. str)
-end
+
 
 
 LogToConsole("`9Script Will Run In `25 `9Seconds")
-SendPacket(2, "action|input\n|text|`0Proxy `6BTK `2ON!")
+SendPacket(2, "action|input\n|text|`0Proxy `6BTK `0By `#@Vermin `2ON!")
 Sleep(1000)
 
 
@@ -812,6 +812,15 @@ function GetItemCount(id)
 	return 0
 end
 
+function inv(id)
+    for _, item in pairs(GetInventory()) do
+        if item.id == id then
+            return item.amount
+        end 
+    end 
+    return 0
+end
+
 function hook(type, str)
 	if str:find("action|wrench\n|netid|(%d+)") then 
 		local id = str:match("action|wrench\n|netid|(%d+)")
@@ -997,8 +1006,17 @@ check_autospam|0]])
 			wear(1796)
 		end
 		SendPacket(2, "action|dialog_return\ndialog_name|drop\nitem_drop|242|\nitem_count|" .. count)
-		ProxyLog("`9Dropped `2" .. count .. " `9World Lock")
+
 		return true
+	end
+	if str:find("/dall") then
+		bgl = inv(7188)
+		dl = inv(1796)
+		wl = inv(242)
+		ireng = inv(11550)
+		dawlock = true
+		SendPacket(2, "action|input\n|text|"..Growid.." `wDropped `2All Locks")
+		return true 
 	end
 	if str:find("/dd (%d+)") then
 		count = str:match("/dd (%d+)")
@@ -1019,8 +1037,8 @@ check_autospam|0]])
 		table.insert(dropTakeList, "add_smalltext|`w"..os.date("%X").." `4Dropped `w".. count .." `eBlue Gem Lock `9in `2"..GetWorld().name.."|\n")
 		return true
 	end
-	if str:find("/bl (%d+)") then
-		count = str:match("/bl (%d+)")
+	if str:find("/bb (%d+)") then
+		count = str:match("/bb (%d+)")
 		SendPacket(2, "action|dialog_return\ndialog_name|drop\nitem_drop|11550|\nitem_count|" .. count)
 		SendPacket(2, "action|input\n|text|`c"..Growid.." `0Dropped `2" .. count .. " `bBlack Gem Lock")
 		table.insert(dropTakeList, "add_smalltext|`w"..os.date("%X").." `4Dropped `w".. count .." `bBlack Gem Lock `9in `2"..GetWorld().name.."|\n")
@@ -1077,6 +1095,16 @@ check_autospam|0]])
 	 xxx()  -- Return to main menu
 	 return true
     end
+	if str:find("buttonClicked|wrench") then
+		wset()
+		return true
+	end
+	if str:find("/slave") then
+    blockSlaveChat = not blockSlaveChat
+    local status = blockSlaveChat and "`2Enabled" or "`4Disabled"
+    SendPacket(2, "action|input\n|text|`9Spammer slave chat blocking: "..status)
+    return true
+	end
 	if str:find("/log") then
     dropTakeLogs()
     return true
@@ -1137,49 +1165,49 @@ end
 	end
 	if str:find("buttonClicked|gemsright1") then
 		gemsright1 = true
-		ProxyLog("`9Please Punch Chand")
+		
 		ProxyOverlay("`9Please Punch Chand")
 		return true
 	elseif str:find("buttonClicked|gemsright2") then
 		gemsright2 = true
-		ProxyLog("`9Please Punch Chand")
+		
 		ProxyOverlay("`9Please Punch Chand")
 		return true
 	elseif str:find("buttonClicked|gemsright3") then
 		gemsright3 = true
-		ProxyLog("`9Please Punch Chand")
+		
 		ProxyOverlay("`9Please Punch Chand")
 		return true
 	end
 	if str:find("buttonClicked|gemsleft1") then
 		gemsleft1 = true
-		ProxyLog("`9Please Punch Chand")
+		
 		ProxyOverlay("`9Please Punch Chand")
 		return true
 	elseif str:find("buttonClicked|gemsleft2") then
 		gemsleft2 = true
-		ProxyLog("`9Please Punch Chand")
+		
 		ProxyOverlay("`9Please Punch Chand")
 		return true
 	elseif str:find("buttonClicked|gemsleft3") then
 		gemsleft3 = true
-		ProxyLog("`9Please Punch Chand")
+		
 		ProxyOverlay("`9Please Punch Chand")
 		return true
 	elseif str:find("buttonClicked|gemsleft4") then
 		gemsleft4 = true
-		ProxyLog("`9Punch Position Back")
+	
 		ProxyOverlay("`9Punch Position Back")
 		return true
 	end
 	if str:find("buttonClicked|takeright") then
 		takerighton = true
-		ProxyLog("`9Please Punch Display")
+
 		ProxyOverlay("`9Please Punch Display")
 		return true
 	elseif str:find("buttonClicked|takeleft") then
 		takelefton = true
-		ProxyLog("`9Please Punch Display")
+
 		ProxyOverlay("`9Please Punch Display")
 		return true
 	end
@@ -1347,15 +1375,12 @@ function var(var)
 			wear(242)
 		end
 	end
-	if var[0]:find("OnConsoleMessage") then
-		ProxyLog(var[1])
-		return true
-	end
+
 	if var[0]:find("OnConsoleMessage") and var[1]:find("Collected") and var[1]:find("(%d+) Black Gems") then
 		jumlah = var[1]:match("(%d+) Black Gems")
 		if bgems == true then
 			SendPacket(2, "action|dialog_return\ndialog_name|givexgems\nitem_id|-484|\nitem_count|" .. jumlah)
-			ProxyLog("`9Auto Eat `2" .. jumlah .. " `9Black Gems")
+
 			return true
 		end
 	end
@@ -1498,7 +1523,7 @@ function raw(a)
 				}
 			}
 			btk()
-			ProxyLog("`9Pos Gems Right 1: `2DONE")
+
 			ProxyOverlay("`9Pos Gems Right 1: `2DONE")
 		end
 	end
@@ -1538,7 +1563,7 @@ function raw(a)
 				}
 			}
 			btk()
-			ProxyLog("`9Pos Gems Right 2: `2DONE")
+
 			ProxyOverlay("`9Pos Gems Right 2: `2DONE")
 		end
 	end
@@ -1578,7 +1603,7 @@ function raw(a)
 				}
 			}
 			btk()
-			ProxyLog("`9Pos Gems Right 3: `2DONE")
+
 			ProxyOverlay("`9Pos Gems Right 3: `2DONE")
 		end
 	end
@@ -1618,7 +1643,7 @@ function raw(a)
 				}
 			}
 			btk()
-			ProxyLog("`9Pos Gems Left 1: `2DONE")
+
 			ProxyOverlay("`9Pos Gems Left 1: `2DONE")
 		end
 	end
@@ -1658,7 +1683,7 @@ function raw(a)
 				}
 			}
 			btk()
-			ProxyLog("`9Pos Gems Left 2: `2DONE")
+
 			ProxyOverlay("`9Pos Gems Left 2: `2DONE")
 		end
 	end
@@ -1698,7 +1723,7 @@ function raw(a)
 				}
 			}
 			btk()
-			ProxyLog("`9Pos Gems Left 3: `2DONE")
+
 			ProxyOverlay("`9Pos Gems Left 3: `2DONE")
 		end
 	end
@@ -1738,7 +1763,7 @@ function raw(a)
 				}
 			}
 			btk()
-			ProxyLog("`9Back Position: `2DONE")
+
 			ProxyOverlay("`9Back Position : `2DONE")
 		end
 	end
@@ -1748,7 +1773,7 @@ function raw(a)
 			takerighty = a.py
 			takerighton = false
 			btk()
-			ProxyLog("`9Pos Take Right: `2DONE")
+
 			ProxyOverlay("`9Pos Take Right: `2DONE")
 		end
 	end
@@ -1758,7 +1783,7 @@ function raw(a)
 			takelefty = a.py
 			takelefton = false
 			btk()
-			ProxyLog("`9Pos Take Left: `2DONE")
+
 			ProxyOverlay("`9Pos Take Left: `2DONE")
 		end
 	end
@@ -1801,8 +1826,30 @@ function checkGems()
     end
 end
 
+function drop(id, amount)
+    SendPacket(2, "action|dialog_return\ndialog_name|drop\nitem_drop|"..id.."|\nitem_count|"..amount)
+end
 
 while true do
+	if dawlock then
+		if ireng then
+			drop(11550,ireng)
+			Sleep(100)
+		end
+		if bgl then
+			drop(7188,bgl)
+			Sleep(100)
+		end
+		if dl then
+			drop(1796,dl)
+			Sleep(100)
+		end
+		if wl then
+			drop(242,wl)
+			Sleep(100)
+		end
+		dawlock = false
+	end
 	Sleep(1000)
 	if DropMode then
 		if ireng > 0 then
