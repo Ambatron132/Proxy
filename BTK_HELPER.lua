@@ -1361,14 +1361,14 @@ function var(var)
 			end
 		end
 	end
-	if var[0]:find("OnConsoleMessage") and var[1]:find("Collected") and var[1]:find("(%d+) Blue Gem Lock") then
+	--[[if var[0]:find("OnConsoleMessage") and var[1]:find("Collected") and var[1]:find("(%d+) Blue Gem Lock") then
 		jumlah = var[1]:match("(%d+) Blue Gem Lock")
 		s = tonumber(jumlah)
 		if GetItemCount(7188) >= 150 or s >= 145 then
 			SendPacket(2, "action|dialog_return\ndialog_name|info_box\nbuttonClicked|make_bgl")
 			ProxyOverlay("`2Successfully `9Change Black Gem Lock")
 		end
-	end
+	end]]
 	if var[0]:find("OnConsoleMessage") and var[1]:find("Collected") and var[1]:find("(%d+) World Lock") then
 		jumlah = var[1]:match("(%d+) World Lock")
 		s = tonumber(jumlah)
