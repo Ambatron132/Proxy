@@ -21,7 +21,7 @@ AddHook("OnDraw", "BTK", function()
                     hook(2, "action|input\n|text|/tg")
                 end
                 ImGui.Spacing()
-				ImGui.Text("HOSTER POSITION")
+				ImGui.Text("HOSTER MENU")
                 if ImGui.Button("SET POS", ImVec2(100, 100)) then
                     autoDetectPositions()
                 end
@@ -59,28 +59,30 @@ AddHook("OnDraw", "BTK", function()
                         ImGui.EndChild()
                         ImGui.EndTabItem()
                     end
-                    if ImGui.BeginTabItem("BET LOG") then
-                        ImGui.BeginChild("LogScrollRegion", ImVec2(0, 300), true)
-                        if #BetHistory == 0 then
-                            ImGui.Text("No bet history recorded.")
-                        else
-                            for i = #BetHistory, 1, -1 do
-                                local entry = BetHistory[i]
-                                local bgl = math.floor(entry.amount / 10000)
-                                local remaining = entry.amount % 10000
-                                local dl = math.floor(remaining / 100)
-                                local wl = remaining % 100
-                    
-                                ImGui.TextWrapped(string.format("%02d:%02d:%02d - %d BGL %d DL %d WL",
-                                    tonumber(os.date("%H", os.time())),
-                                    tonumber(os.date("%M", os.time())),
-                                    tonumber(os.date("%S", os.time())),
-                                    bgl, dl, wl))
-								end
+					if ImGui.BeginTabItem("BET LOG") then
+						ImGui.BeginChild("LogScrollRegion", ImVec2(0, 300), true)
+						if #BetHistory == 0 then
+							ImGui.Text("No bet history recorded.")
+						else
+							for i = #BetHistory, 1, -1 do
+								local entry = BetHistory[i]
+								local bgl = math.floor(entry.amount / 10000)
+								local remaining = entry.amount % 10000
+								local dl = math.floor(remaining / 100)
+								local wl = remaining % 100
+								
+								-- Add numbering here (using #BetHistory - i + 1 to show 1, 2, 3... from newest to oldest)
+								ImGui.TextWrapped(string.format("%d. %02d:%02d:%02d - %d BGL %d DL %d WL",
+									#BetHistory - i + 1,
+									tonumber(os.date("%H", os.time())),
+									tonumber(os.date("%M", os.time())),
+									tonumber(os.date("%S", os.time())),
+									bgl, dl, wl))
 							end
-							ImGui.EndChild()
-							ImGui.EndTabItem()
 						end
+						ImGui.EndChild()
+						ImGui.EndTabItem()
+					end
 						ImGui.EndTabBar()
 					end
 					ImGui.EndTabItem()
