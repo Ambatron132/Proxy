@@ -89,7 +89,7 @@ AddHook("OnDraw", "BTK", function()
 				end
 	
 				-- Dedicated Auto Spam Tab (separate from logs)
-				if ImGui.BeginTabItem("AUTO SPAM") then
+				if ImGui.BeginTabItem("SPAM") then
 					ImGui.Text("SPAM CONFIGURATION")
 					ImGui.Separator()
 					
