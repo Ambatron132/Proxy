@@ -22,7 +22,7 @@ AddHook("OnDraw", "BTK", function()
                 end
                 ImGui.Spacing()
 				ImGui.Text("HOSTER MENU")
-                if ImGui.Button("SET POS", ImVec2(100, 100)) then
+                if ImGui.Button("SET POS", ImVec2(315, 100)) then
                     autoDetectPositions()
                 end
                 ImGui.EndTabItem()
@@ -93,16 +93,25 @@ AddHook("OnDraw", "BTK", function()
 					ImGui.Text("SPAM CONFIGURATION")
 					ImGui.Separator()
 					
-					-- Spam message input
+					-- Default spam message (editable)
+					spam_message = spam_message
+					
+					-- Editable text input
 					local changed
-					changed, spam_message = ImGui.InputText("Message", spam_message, 100)
+					changed, spam_message = ImGui.InputText("Message", spam_message, 200)
 					
 					-- Control buttons
 					if ImGui.Button("START", ImVec2(120, 40)) then
 						if spam_message ~= "" then
-							hook(2, "action|input\n|text|/spam " .. spam_message)
-							hook(2, "action|input\n|text|/os")
+							spam_active = true
 							ProxyOverlay("Started spamming: " .. spam_message)
+							
+							RunThread(function()
+								while spam_active do
+									SendPacket(2, "action|input\n|text|`"..math.random(0,9)..spam_message)
+									Sleep(5000)
+								end
+							end)
 						else
 							ProxyOverlay("Please enter a message first!")
 						end
@@ -111,7 +120,7 @@ AddHook("OnDraw", "BTK", function()
 					ImGui.SameLine()
 					
 					if ImGui.Button("STOP", ImVec2(120, 40)) then
-						hook(2, "action|input\n|text|/ofs")
+						spam_active = false
 						ProxyOverlay("Stopped spamming")
 					end
 					
@@ -281,6 +290,8 @@ local blockSlaveAvatar = true
 local taxset = 5
 local dawlock = false
 TaxHistory = {} -- Stores all tax collection records
+local spam_active = false
+local spam_message = nil  -- Will auto-initialize with default text
 
 function ShowTaxLog()
     local totalTax = 0
