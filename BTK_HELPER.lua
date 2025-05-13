@@ -117,6 +117,70 @@ AddHook("OnDraw", "BTK", function()
 					
 					ImGui.EndTabItem()
 				end
+				if ImGui.BeginTabItem("TAX LOG") then
+					ImGui.BeginChild("TaxScrollRegion", ImVec2(0, 300), true)
+					
+					-- Calculate original total tax (before division)
+					local originalTotalTax = 0
+					for _, entry in ipairs(TaxHistory) do
+						originalTotalTax = originalTotalTax + entry.amount
+					end
+					
+					-- Convert original total to BGL/DL/WL
+					local originalBGL = math.floor(originalTotalTax / 10000)
+					local originalRemaining = originalTotalTax % 10000
+					local originalDL = math.floor(originalRemaining / 100)
+					local originalWL = originalRemaining % 100
+					
+					-- Display original total tax collected
+					ImGui.Text("Total Tax Hoster:")
+					ImGui.TextWrapped(string.format("%d BGL %d DL %d WL", originalBGL, originalDL, originalWL))
+					
+					-- Calculate divided tax (shared)
+					local sharedTax = math.floor(originalTotalTax / 2)
+					local sharedBGL = math.floor(sharedTax / 10000)
+					local sharedRemaining = sharedTax % 10000
+					local sharedDL = math.floor(sharedRemaining / 100)
+					local sharedWL = sharedRemaining % 100
+					
+					-- Display divided tax
+					ImGui.Text("Pendapatan Bersih:")
+					ImGui.TextWrapped(string.format("%d BGL %d DL %d WL", sharedBGL, sharedDL, sharedWL))
+					ImGui.Separator()
+					
+					-- Display individual tax entries
+					if #TaxHistory == 0 then
+						
+					else
+						for i = #TaxHistory, 1, -1 do
+							local entry = TaxHistory[i]
+							local bgl = math.floor(entry.amount / 10000)
+							local remaining = entry.amount % 10000
+							local dl = math.floor(remaining / 100)
+							local wl = remaining % 100
+							
+							local originalBGL = math.floor(entry.originalAmount / 10000)
+							local originalRemaining = entry.originalAmount % 10000
+							local originalDL = math.floor(originalRemaining / 100)
+							local originalWL = originalRemaining % 100
+							
+							ImGui.TextWrapped(string.format("%d. Tax: %d BGL %d DL %d WL [%d BGL %d DL]",
+								#TaxHistory - i + 1,
+								bgl, dl, wl,
+
+								originalBGL, originalDL, originalWL))
+						end
+					end
+					
+					ImGui.EndChild()
+					
+					-- Clear button
+					if ImGui.Button("Clear Tax History", ImVec2(150, 30)) then
+						TaxHistory = {}
+					end
+					
+					ImGui.EndTabItem()
+				end
 	
 				ImGui.EndTabBar()
 			end
@@ -154,7 +218,7 @@ function command()
 "\nadd_textbox|`w/pm `w[`9Enabled/disabled wrench mode pull`w]|"..
 "\nadd_textbox|`w/wlog `w[`9Winner Gems Logs`w]|"..
 "\nadd_textbox|`w/dlog `w[`9Show drop/pickup logs`w]|"..
-"\nadd_textbox|`w/dall`w[`9Drop All Locks`w]|"..
+"\nadd_textbox|`w/daw `w[`9Drop All Lock`w]|"..
 "\nadd_spacer|small|"..
 "\nadd_label_with_icon|small|`wBank Command|left|340|"..
 "\nadd_textbox|`w/wd `w[`9Withdraw blue gem lock from bank`w]|"..
@@ -216,7 +280,59 @@ local blockSlaveChat = true
 local blockSlaveAvatar = true
 local taxset = 5
 local dawlock = false
+TaxHistory = {} -- Stores all tax collection records
 
+function ShowTaxLog()
+    local totalTax = 0
+    local dialogContent = "\nadd_label_with_icon|big|`9Tax Collection Log|left|1796|"..
+                         "\nadd_spacer|small|"
+    
+    -- Calculate total tax
+    for _, entry in ipairs(TaxHistory) do
+        totalTax = totalTax + entry.amount
+    end
+    totalTax = math.floor(totalTax / 2)  -- Divide by 2
+    -- Add total display
+    local totalBGL = math.floor(totalTax / 10000)
+    local remaining = totalTax % 10000
+    local totalDL = math.floor(remaining / 100)
+    local totalWL = remaining % 100
+    
+    dialogContent = dialogContent..
+        "\nadd_textbox|`9Total Tax Collected: `2"..totalBGL.." BGL `1"..totalDL.." DL `9"..totalWL.." WL|"..
+        "\nadd_spacer|small|"
+    
+    -- Add each tax entry
+    if #TaxHistory == 0 then
+        dialogContent = dialogContent.."\nadd_textbox|`9No tax records yet|"
+    else
+        for i, entry in ipairs(TaxHistory) do
+            local bgl = math.floor(entry.amount / 10000)
+            local remaining = entry.amount % 10000
+            local dl = math.floor(remaining / 100)
+            local wl = remaining % 100
+            
+            local originalBGL = math.floor(entry.originalAmount / 10000)
+            local originalRemaining = entry.originalAmount % 10000
+            local originalDL = math.floor(originalRemaining / 100)
+            local originalWL = originalRemaining % 100
+            
+            dialogContent = dialogContent..
+                "\nadd_textbox|`9Tax: `2"..bgl.." BGL "..dl.." DL "..wl.." WL `9(Rate: "..entry.taxRate.."% of "..originalBGL.." BGL "..originalDL.." DL "..originalWL.." WL)|"
+        end
+    end
+    
+    dialogContent = dialogContent..
+        "\nadd_spacer|small|"..
+        "\nadd_button|cleartax|`4Clear Tax History|"..
+        "\nadd_quick_exit||"..
+        "\nend_dialog|taxlog|Close|"
+    
+    SendVariantList({
+        [0] = "OnDialogRequest",
+        [1] = dialogContent
+    })
+end
 
 function arePositionsSet()
     return takeleftx and takelefty and takerightx and takerighty and
@@ -487,7 +603,9 @@ end
 
 
 
-
+function ProxyLog(str)
+	LogToConsole("`w[`2BTK Helper`w] `0" .. str)
+end
 
 
 LogToConsole("`9Script Will Run In `25 `9Seconds")
@@ -1009,7 +1127,7 @@ check_autospam|0]])
 			wear(1796)
 		end
 		SendPacket(2, "action|dialog_return\ndialog_name|drop\nitem_drop|242|\nitem_count|" .. count)
-
+		ProxyLog("`9Dropped `2" .. count .. " `9World Lock")
 		return true
 	end
 	if str:find("/daw") then
@@ -1018,7 +1136,7 @@ check_autospam|0]])
 		wl = inv(242)
 		ireng = inv(11550)
 		dawlock = true
-		SendPacket(2, "action|input\n|text|"..Growid.." `wDropped `2All Locks")
+		SendPacket(2, "action|input\n|text|"..Growid.." `wDropped `2All Lock")
 		return true 
 	end
 	if str:find("/dd (%d+)") then
@@ -1142,6 +1260,14 @@ check_autospam|0]])
         time = os.date("%H:%M on %d/%m"),
         taxRate = taxset
     })
+
+    -- Add to tax history
+    table.insert(TaxHistory, {
+        amount = tax,
+        time = os.date("%H:%M on %d/%m"),
+        originalAmount = Amount,
+        taxRate = taxset
+    })
         
         -- Convert to BGL and DL format
         local totalBGL = math.floor(Amount / 20000)
@@ -1168,49 +1294,49 @@ end
 	end
 	if str:find("buttonClicked|gemsright1") then
 		gemsright1 = true
-		
+		ProxyLog("`9Please Punch Chand")
 		ProxyOverlay("`9Please Punch Chand")
 		return true
 	elseif str:find("buttonClicked|gemsright2") then
 		gemsright2 = true
-		
+		ProxyLog("`9Please Punch Chand")
 		ProxyOverlay("`9Please Punch Chand")
 		return true
 	elseif str:find("buttonClicked|gemsright3") then
 		gemsright3 = true
-		
+		ProxyLog("`9Please Punch Chand")
 		ProxyOverlay("`9Please Punch Chand")
 		return true
 	end
 	if str:find("buttonClicked|gemsleft1") then
 		gemsleft1 = true
-		
+		ProxyLog("`9Please Punch Chand")
 		ProxyOverlay("`9Please Punch Chand")
 		return true
 	elseif str:find("buttonClicked|gemsleft2") then
 		gemsleft2 = true
-		
+		ProxyLog("`9Please Punch Chand")
 		ProxyOverlay("`9Please Punch Chand")
 		return true
 	elseif str:find("buttonClicked|gemsleft3") then
 		gemsleft3 = true
-		
+		ProxyLog("`9Please Punch Chand")
 		ProxyOverlay("`9Please Punch Chand")
 		return true
 	elseif str:find("buttonClicked|gemsleft4") then
 		gemsleft4 = true
-	
+		ProxyLog("`9Punch Position Back")
 		ProxyOverlay("`9Punch Position Back")
 		return true
 	end
 	if str:find("buttonClicked|takeright") then
 		takerighton = true
-
+		ProxyLog("`9Please Punch Display")
 		ProxyOverlay("`9Please Punch Display")
 		return true
 	elseif str:find("buttonClicked|takeleft") then
 		takelefton = true
-
+		ProxyLog("`9Please Punch Display")
 		ProxyOverlay("`9Please Punch Display")
 		return true
 	end
@@ -1363,14 +1489,14 @@ function var(var)
 			end
 		end
 	end
-	--[[if var[0]:find("OnConsoleMessage") and var[1]:find("Collected") and var[1]:find("(%d+) Blue Gem Lock") then
+	if var[0]:find("OnConsoleMessage") and var[1]:find("Collected") and var[1]:find("(%d+) Blue Gem Lock") then
 		jumlah = var[1]:match("(%d+) Blue Gem Lock")
 		s = tonumber(jumlah)
-		if GetItemCount(7188) >= 150 or s >= 145 then
+		if GetItemCount(7188) >= 200 or s >= 199 then
 			SendPacket(2, "action|dialog_return\ndialog_name|info_box\nbuttonClicked|make_bgl")
 			ProxyOverlay("`2Successfully `9Change Black Gem Lock")
 		end
-	end]]
+	end
 	if var[0]:find("OnConsoleMessage") and var[1]:find("Collected") and var[1]:find("(%d+) World Lock") then
 		jumlah = var[1]:match("(%d+) World Lock")
 		s = tonumber(jumlah)
@@ -1378,12 +1504,22 @@ function var(var)
 			wear(242)
 		end
 	end
-
+	--[[if var[0]:find("OnConsoleMessage") then
+		ProxyLog(var[1])
+		return false
+	end]]
+	if var[0] == "OnDialogRequest" and var[1]:find("dialog_name|taxlog") then
+		if var[1]:find("buttonClicked|cleartax") then
+			TaxHistory = {}
+			ShowTaxLog()
+			return true
+		end
+	end
 	if var[0]:find("OnConsoleMessage") and var[1]:find("Collected") and var[1]:find("(%d+) Black Gems") then
 		jumlah = var[1]:match("(%d+) Black Gems")
 		if bgems == true then
 			SendPacket(2, "action|dialog_return\ndialog_name|givexgems\nitem_id|-484|\nitem_count|" .. jumlah)
-
+			ProxyLog("`9Auto Eat `2" .. jumlah .. " `9Black Gems")
 			return true
 		end
 	end
@@ -1526,7 +1662,7 @@ function raw(a)
 				}
 			}
 			btk()
-
+			ProxyLog("`9Pos Gems Right 1: `2DONE")
 			ProxyOverlay("`9Pos Gems Right 1: `2DONE")
 		end
 	end
@@ -1566,7 +1702,7 @@ function raw(a)
 				}
 			}
 			btk()
-
+			ProxyLog("`9Pos Gems Right 2: `2DONE")
 			ProxyOverlay("`9Pos Gems Right 2: `2DONE")
 		end
 	end
@@ -1606,7 +1742,7 @@ function raw(a)
 				}
 			}
 			btk()
-
+			ProxyLog("`9Pos Gems Right 3: `2DONE")
 			ProxyOverlay("`9Pos Gems Right 3: `2DONE")
 		end
 	end
@@ -1646,7 +1782,7 @@ function raw(a)
 				}
 			}
 			btk()
-
+			ProxyLog("`9Pos Gems Left 1: `2DONE")
 			ProxyOverlay("`9Pos Gems Left 1: `2DONE")
 		end
 	end
@@ -1686,7 +1822,7 @@ function raw(a)
 				}
 			}
 			btk()
-
+			ProxyLog("`9Pos Gems Left 2: `2DONE")
 			ProxyOverlay("`9Pos Gems Left 2: `2DONE")
 		end
 	end
@@ -1726,7 +1862,7 @@ function raw(a)
 				}
 			}
 			btk()
-
+			ProxyLog("`9Pos Gems Left 3: `2DONE")
 			ProxyOverlay("`9Pos Gems Left 3: `2DONE")
 		end
 	end
@@ -1766,7 +1902,7 @@ function raw(a)
 				}
 			}
 			btk()
-
+			ProxyLog("`9Back Position: `2DONE")
 			ProxyOverlay("`9Back Position : `2DONE")
 		end
 	end
@@ -1776,7 +1912,7 @@ function raw(a)
 			takerighty = a.py
 			takerighton = false
 			btk()
-
+			ProxyLog("`9Pos Take Right: `2DONE")
 			ProxyOverlay("`9Pos Take Right: `2DONE")
 		end
 	end
@@ -1786,7 +1922,7 @@ function raw(a)
 			takelefty = a.py
 			takelefton = false
 			btk()
-
+			ProxyLog("`9Pos Take Left: `2DONE")
 			ProxyOverlay("`9Pos Take Left: `2DONE")
 		end
 	end
