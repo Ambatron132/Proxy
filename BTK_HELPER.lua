@@ -1060,7 +1060,7 @@ check_autospam|0]])
 	end
 	if str:find("/blue") or str:find("buttonClicked|cbb") then
 		SendPacket(2, "action|dialog_return\ndialog_name|info_box\nbuttonClicked|make_bluegl")
-		bubble("`9You Sharttered `bBlack Gem Lock `9into a `w100 `eBlue Gem Locks`w!")
+		
 		return true
 	elseif str:find("/black") or str:find("buttonClicked|cbl") then
 		SendPacket(2, "action|dialog_return\ndialog_name|info_box\nbuttonClicked|make_bgl")
@@ -1275,6 +1275,7 @@ check_autospam|0]])
         local jatuhBGL = math.floor(jatuh / 10000)
         local jatuhDL = math.floor((jatuh % 10000) / 100)
         SendPacket(2, "action|input\n|text|`w[`0P1: `2"..totalBGL.." BGL "..totalDL.." DL`w]`bVS`w[`0P2 :`2"..totalBGL.." BGL "..totalDL.." DL`w] `w[`0Tax: `2"..taxset.."%`w] `w[`0Win: `2"..jatuhBGL.." BGL "..jatuhDL.." DL`w]")
+		hook(2, "action|input\n|text|/blue")
         return true
     end
 if str:find("/betlog") or str:find("buttonClicked|logbet") then
@@ -1352,7 +1353,7 @@ function autoDetectPositions()
     -- Count chandeliers
     for _, tile in pairs(GetTiles()) do
         if math.abs(tile.x - xhost) <= 5 and math.abs(tile.y - yhost) <= 5 then
-            if tile.fg == 340 then -- Chandelier ID
+            if tile.fg == 340 or tile.fg == 112 then -- Chandelier ID
                 if tile.y < yhost then
                     chandsAbove = chandsAbove + 1
                 elseif tile.y > yhost then
@@ -1492,7 +1493,7 @@ function var(var)
 	if var[0]:find("OnConsoleMessage") and var[1]:find("Collected") and var[1]:find("(%d+) Blue Gem Lock") then
 		jumlah = var[1]:match("(%d+) Blue Gem Lock")
 		s = tonumber(jumlah)
-		if GetItemCount(7188) >= 200 or s >= 199 then
+		if GetItemCount(7188) >= 100 or s >= 99 then
 			SendPacket(2, "action|dialog_return\ndialog_name|info_box\nbuttonClicked|make_bgl")
 			ProxyOverlay("`2Successfully `9Change Black Gem Lock")
 		end
@@ -1992,12 +1993,12 @@ while true do
 	Sleep(1000)
 	if DropMode then
 		if ireng > 0 then
-			SendPacket(2, "action|dialog_return\ndialog_name|drop\nitem_drop|11550|\nitem_count|" .. ireng)
-			SendPacket(2, "action|input\n|text|"..GetLocal().name.." `0Dropped `2" .. ireng .. " `bBlack Gem Lock")
 			table.insert(dropTakeList, "add_smalltext|`w"..os.date("%X").." `4Dropped `w".. ireng .." `bBlack Gem Lock `9in `2"..GetWorld().name.."|\n")
 			Sleep(500)
 		end
 		if bgl > 0 then
+			hook(2, "action|input\n|text|/blue")
+			Sleep(500)
 			SendPacket(2, "action|dialog_return\ndialog_name|drop\nitem_drop|7188|\nitem_count|" .. bgl)
 			SendPacket(2, "action|input\n|text|"..GetLocal().name.." `0Dropped `2" .. bgl .. " `eBlue Gem Lock")
 			table.insert(dropTakeList, "add_smalltext|`w"..os.date("%X").." `4Dropped `w".. bgl .." `eBlue Gem Lock `9in `2"..GetWorld().name.."|\n")
