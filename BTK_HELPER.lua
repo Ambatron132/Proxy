@@ -1535,7 +1535,7 @@ function var(var)
 			x = var[1]:match("embed_data|x|(%d+)")
 			y = var[1]:match("embed_data|y|(%d+)")
 			SendPacket(2, "action|dialog_return\ndialog_name|telephone\nnum|53785|\nx|" .. x .. "|\ny|" .. y .. "|\nbuttonClicked|bglconvert")
-			ProxyOverlay("`2Successfully `9Change Blue Gem Lock")
+			--ProxyOverlay("`2Successfully `9Change Blue Gem Lock")
 			return true
 		end
 		return false
