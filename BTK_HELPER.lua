@@ -241,7 +241,7 @@ data = {}
 local pull = false
 local kick = false
 local ban = false
-local cbgl = false
+local cbgl = true
 local bgems = false
 Count = 0
 local sdbb = true
@@ -270,8 +270,6 @@ local cg2 = 0
 local Growid = GetLocal().name
 local WinnerLog = {}
 local emojiChatEnabled = false
-local HostCsn = "" -- For tracking wheel spin mode
-local LogSpin = {} -- For tracking spin logs
 BetHistory = {} -- Stores all bet logs with timestamps
 local CurrentTotalAfterTax = 0 -- Stores current session total
 local blockSlaveChat = false
@@ -1485,7 +1483,7 @@ function var(var)
 			if tile.fg == 3898 then
 				if GetItemCount(1796) >= 100 or s >= 99 then
 					SendPacket(2, "action|dialog_return\ndialog_name|telephone\nnum|53785|\nx|" .. tile.x .. "|\ny|" .. tile.y .. "|\nbuttonClicked|bglconvert")
-					ProxyOverlay("`2Successfully `9Change Blue Gem Lock")
+					---ProxyOverlay("`2Successfully `9Change Blue Gem Lock")
 				end
 			end
 		end
