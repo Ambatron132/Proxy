@@ -241,7 +241,7 @@ data = {}
 local pull = false
 local kick = false
 local ban = false
-local cbgl = true
+local cbgl = false
 local bgems = false
 Count = 0
 local sdbb = true
@@ -270,6 +270,8 @@ local cg2 = 0
 local Growid = GetLocal().name
 local WinnerLog = {}
 local emojiChatEnabled = false
+local HostCsn = "" -- For tracking wheel spin mode
+local LogSpin = {} -- For tracking spin logs
 BetHistory = {} -- Stores all bet logs with timestamps
 local CurrentTotalAfterTax = 0 -- Stores current session total
 local blockSlaveChat = false
@@ -1342,7 +1344,43 @@ end
 end
 AddHook("onsendpacket", "any", hook)
 
+
 function autoDetectPositions()
+    local xhost = math.floor(GetLocal().pos.x / 32)  -- Your X position in tiles
+    local yhost = math.floor(GetLocal().pos.y / 32)  -- Your Y position in tiles
+    local chandsAbove = 0  -- Counts chandeliers 1 tile ABOVE you
+    local chandsBelow = 0  -- Counts chandeliers 1 tile BELOW you
+
+    -- Scan tiles in a horizontal range (5 left/right of you)
+    for _, tile in pairs(GetTiles()) do
+        -- Check if tile is within 5 blocks horizontally (X-axis)
+        if math.abs(tile.x - xhost) <= 5 then
+            -- Check if tile is a chandelier (IDs 340 or 112)
+            if tile.fg == 340 or tile.fg == 112 then
+                -- Check if chandelier is 1 tile ABOVE you
+                if tile.y == yhost - 1 then
+                    chandsAbove = chandsAbove + 1
+                -- Check if chandelier is 1 tile BELOW you
+                elseif tile.y == yhost + 1 then
+                    chandsBelow = chandsBelow + 1
+                end
+            end
+        end
+    end
+
+    -- Decide setup based on nearby chandeliers
+    if chandsAbove > 0 then
+        setupTopPositions()  -- Chandelier above → TOP setup
+    elseif chandsBelow > 0 then
+        setupDownPositions() -- Chandelier below → DOWN setup
+    else
+        -- Default to TOP setup if no chandeliers found
+        setupTopPositions()
+        -- Optional: Alert the host
+        ProxyOverlay("`4No chandeliers found! Defaulting to TOP setup.")
+    end
+end
+--[[function autoDetectPositions()
     local xhost = math.floor(GetLocal().pos.x / 32)
     local yhost = math.floor(GetLocal().pos.y / 32)
     local chandsAbove = 0
@@ -1370,8 +1408,7 @@ function autoDetectPositions()
         ---SendPacket(2, "action|input\n|text|`9Detected DOWN setup ("..chandsBelow.." below vs "..chandsAbove.." above)")
     else
         -- Fallback to world position if counts are equal or unclear
-        local worldHeight = GetWorld().height or 100
-        if yhost < worldHeight / 2 then
+        if yhost - 1 then
             setupTopPositions()
             ---SendPacket(2, "action|input\n|text|`9Fallback TOP (equal chands: "..chandsAbove.." above, "..chandsBelow.." below)")
         else
@@ -1379,7 +1416,7 @@ function autoDetectPositions()
            --- SendPacket(2, "action|input\n|text|`9Fallback DOWN (equal chands: "..chandsAbove.." above, "..chandsBelow.." below)")
         end
     end
-end
+end]]
 
 -- Modify the existing functions to include auto-detection
 function setupTopPositions()
@@ -1483,7 +1520,7 @@ function var(var)
 			if tile.fg == 3898 then
 				if GetItemCount(1796) >= 100 or s >= 99 then
 					SendPacket(2, "action|dialog_return\ndialog_name|telephone\nnum|53785|\nx|" .. tile.x .. "|\ny|" .. tile.y .. "|\nbuttonClicked|bglconvert")
-					---ProxyOverlay("`2Successfully `9Change Blue Gem Lock")
+					ProxyOverlay("`2Successfully `9Change Blue Gem Lock")
 				end
 			end
 		end
@@ -1535,7 +1572,7 @@ function var(var)
 			x = var[1]:match("embed_data|x|(%d+)")
 			y = var[1]:match("embed_data|y|(%d+)")
 			SendPacket(2, "action|dialog_return\ndialog_name|telephone\nnum|53785|\nx|" .. x .. "|\ny|" .. y .. "|\nbuttonClicked|bglconvert")
-			--ProxyOverlay("`2Successfully `9Change Blue Gem Lock")
+			ProxyOverlay("`2Successfully `9Change Blue Gem Lock")
 			return true
 		end
 		return false
