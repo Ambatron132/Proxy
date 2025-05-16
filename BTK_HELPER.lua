@@ -1345,7 +1345,7 @@ end
 AddHook("onsendpacket", "any", hook)
 
 
-function autoDetectPositions()
+--[[function autoDetectPositions()
     local xhost = math.floor(GetLocal().pos.x / 32)  -- Your X position in tiles
     local yhost = math.floor(GetLocal().pos.y / 32)  -- Your Y position in tiles
     local chandsAbove = 0  -- Counts chandeliers 1 tile ABOVE you
@@ -1379,8 +1379,8 @@ function autoDetectPositions()
         -- Optional: Alert the host
         ProxyOverlay("`4No chandeliers found! Defaulting to TOP setup.")
     end
-end
---[[function autoDetectPositions()
+end]]
+function autoDetectPositions()
     local xhost = math.floor(GetLocal().pos.x / 32)
     local yhost = math.floor(GetLocal().pos.y / 32)
     local chandsAbove = 0
@@ -1416,7 +1416,7 @@ end
            --- SendPacket(2, "action|input\n|text|`9Fallback DOWN (equal chands: "..chandsAbove.." above, "..chandsBelow.." below)")
         end
     end
-end]]
+end
 
 -- Modify the existing functions to include auto-detection
 function setupTopPositions()
