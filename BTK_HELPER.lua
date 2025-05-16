@@ -1345,41 +1345,6 @@ end
 AddHook("onsendpacket", "any", hook)
 
 
---[[function autoDetectPositions()
-    local xhost = math.floor(GetLocal().pos.x / 32)  -- Your X position in tiles
-    local yhost = math.floor(GetLocal().pos.y / 32)  -- Your Y position in tiles
-    local chandsAbove = 0  -- Counts chandeliers 1 tile ABOVE you
-    local chandsBelow = 0  -- Counts chandeliers 1 tile BELOW you
-
-    -- Scan tiles in a horizontal range (5 left/right of you)
-    for _, tile in pairs(GetTiles()) do
-        -- Check if tile is within 5 blocks horizontally (X-axis)
-        if math.abs(tile.x - xhost) <= 5 then
-            -- Check if tile is a chandelier (IDs 340 or 112)
-            if tile.fg == 340 or tile.fg == 112 then
-                -- Check if chandelier is 1 tile ABOVE you
-                if tile.y == yhost - 1 then
-                    chandsAbove = chandsAbove + 1
-                -- Check if chandelier is 1 tile BELOW you
-                elseif tile.y == yhost + 1 then
-                    chandsBelow = chandsBelow + 1
-                end
-            end
-        end
-    end
-
-    -- Decide setup based on nearby chandeliers
-    if chandsAbove > 0 then
-        setupTopPositions()  -- Chandelier above → TOP setup
-    elseif chandsBelow > 0 then
-        setupDownPositions() -- Chandelier below → DOWN setup
-    else
-        -- Default to TOP setup if no chandeliers found
-        setupTopPositions()
-        -- Optional: Alert the host
-        ProxyOverlay("`4No chandeliers found! Defaulting to TOP setup.")
-    end
-end]]
 function autoDetectPositions()
     local xhost = math.floor(GetLocal().pos.x / 32)
     local yhost = math.floor(GetLocal().pos.y / 32)
@@ -1389,31 +1354,25 @@ function autoDetectPositions()
     -- Count chandeliers
     for _, tile in pairs(GetTiles()) do
         if math.abs(tile.x - xhost) <= 5 and math.abs(tile.y - yhost) <= 5 then
-            if tile.fg == 340 or tile.fg == 112 then -- Chandelier ID
-                if tile.y < yhost then
-                    chandsAbove = chandsAbove + 1
-                elseif tile.y > yhost then
-                    chandsBelow = chandsBelow + 1
-                end
-            end
-        end
-    end
-
+            if tile.fg == 340 then
+				if tile.y == yhost - 1 then
+					chandsAbove = chandsAbove + 1
+				elseif tile.y == yhost + 1 then
+					chandsBelow = chandsBelow + 1
+				end
+			end
+		end
+	end
     -- New improved decision logic
     if chandsAbove > chandsBelow and chandsAbove >= 3 then
         setupTopPositions()
-        ---SendPacket(2, "action|input\n|text|`9Detected TOP setup ("..chandsAbove.." above vs "..chandsBelow.." below)")
     elseif chandsBelow > chandsAbove and chandsBelow >= 3 then
         setupDownPositions()
-        ---SendPacket(2, "action|input\n|text|`9Detected DOWN setup ("..chandsBelow.." below vs "..chandsAbove.." above)")
     else
-        -- Fallback to world position if counts are equal or unclear
         if yhost - 1 then
             setupTopPositions()
-            ---SendPacket(2, "action|input\n|text|`9Fallback TOP (equal chands: "..chandsAbove.." above, "..chandsBelow.." below)")
         else
             setupDownPositions()
-           --- SendPacket(2, "action|input\n|text|`9Fallback DOWN (equal chands: "..chandsAbove.." above, "..chandsBelow.." below)")
         end
     end
 end
