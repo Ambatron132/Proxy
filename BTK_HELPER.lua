@@ -5,8 +5,7 @@ AddHook("OnDraw", "BTK", function()
 
             if ImGui.BeginTabItem("BTK") then
 				ImGui.Text("MAIN MENU")
-				ImGui.PushStyleVar(ImGuiStyleVar_ButtonTextAlign, ImVec2(0.5, 0.5))
-				if ImGui.Button("TAKE\nBET", ImVec2(100, 100)) then
+				if ImGui.Button("BET", ImVec2(100, 100)) then
 					if arePositionsSet() then
 						hook(2, "action|input\n|text|/tb")
 					else
@@ -14,8 +13,7 @@ AddHook("OnDraw", "BTK", function()
 					end
 				end
                 ImGui.SameLine()
-				ImGui.PushStyleVar(ImGuiStyleVar_ButtonTextAlign, ImVec2(0.5, 0.5))
-                if ImGui.Button("CHECK\nGEMS", ImVec2(100, 100)) then
+                if ImGui.Button("CHECK", ImVec2(100, 100)) then
                     hook(2, "action|input\n|text|/cg")
                 end
                 ImGui.SameLine()
@@ -24,13 +22,11 @@ AddHook("OnDraw", "BTK", function()
                 end
                 ImGui.Spacing()
 				ImGui.Text("HOSTER MENU")
-				ImGui.PushStyleVar(ImGuiStyleVar_ButtonTextAlign, ImVec2(0.5, 0.5))
                 if ImGui.Button("SET\nPOS", ImVec2(155, 100)) then
                     autoDetectPositions()
                 end
 				ImGui.SameLine()
-				ImGui.PushStyleVar(ImGuiStyleVar_ButtonTextAlign, ImVec2(0.5, 0.5))
-				if ImGui.Button("PUT\nCHAND", ImVec2(155, 100)) then
+				if ImGui.Button(" PUT\nCHAND", ImVec2(155, 100)) then
 					manualPlant()
 				end
                 ImGui.EndTabItem()
@@ -39,13 +35,13 @@ AddHook("OnDraw", "BTK", function()
 
             if ImGui.BeginTabItem("WRENCH MODE") then
 				ImGui.Text("PULL & CBGL")
-				ImGui.PushStyleVar(ImGuiStyleVar_ButtonTextAlign, ImVec2(0.5, 0.5))
-                if ImGui.Button("PULL\nMODE", ImVec2(155, 100)) then
+				
+                if ImGui.Button(" PULL MODE", ImVec2(155, 100)) then
                     hook(2, "action|input\n|text|/pm")
                 end
                 ImGui.SameLine()
-				ImGui.PushStyleVar(ImGuiStyleVar_ButtonTextAlign, ImVec2(0.5, 0.5))
-                if ImGui.Button("CHANGE\nBGL", ImVec2(155, 100)) then
+				
+                if ImGui.Button("CHANGE BGL", ImVec2(155, 100)) then
                     hook(2, "action|input\n|text|/mm")
                 end
                 ImGui.EndTabItem()
@@ -1603,7 +1599,7 @@ function var(var)
 			if tile.fg == 3898 then
 				if GetItemCount(1796) >= 100 or s >= 99 then
 					SendPacket(2, "action|dialog_return\ndialog_name|telephone\nnum|53785|\nx|" .. tile.x .. "|\ny|" .. tile.y .. "|\nbuttonClicked|bglconvert")
-					ProxyOverlay("`2Successfully `9Change Blue Gem Lock")
+					--ProxyOverlay("`2Successfully `9Change Blue Gem Lock")
 				end
 			end
 		end
@@ -1613,7 +1609,7 @@ function var(var)
 		s = tonumber(jumlah)
 		if GetItemCount(7188) >= 100 or s >= 99 then
 			SendPacket(2, "action|dialog_return\ndialog_name|info_box\nbuttonClicked|make_bgl")
-			ProxyOverlay("`2Successfully `9Change Black Gem Lock")
+			ProxyOverlay("`9Auto Change Black Gem Lock")
 		end
 	end
 	if var[0]:find("OnConsoleMessage") and var[1]:find("Collected") and var[1]:find("(%d+) World Lock") then
@@ -1655,7 +1651,7 @@ function var(var)
 			x = var[1]:match("embed_data|x|(%d+)")
 			y = var[1]:match("embed_data|y|(%d+)")
 			SendPacket(2, "action|dialog_return\ndialog_name|telephone\nnum|53785|\nx|" .. x .. "|\ny|" .. y .. "|\nbuttonClicked|bglconvert")
-			ProxyOverlay("`2Successfully `9Change Blue Gem Lock")
+			--ProxyOverlay("`2Successfully `9Change Blue Gem Lock")
 			return true
 		end
 		return false
