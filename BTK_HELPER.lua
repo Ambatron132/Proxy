@@ -22,20 +22,24 @@ AddHook("OnDraw", "BTK", function()
                 end
                 ImGui.Spacing()
 				ImGui.Text("HOSTER MENU")
-                if ImGui.Button("SET POS", ImVec2(315, 100)) then
+                if ImGui.Button("SET POS", ImVec2(155, 100)) then
                     autoDetectPositions()
                 end
+				ImGui.SameLine()
+				if ImGui.Button("CHAND", ImVec2(155, 100)) then
+					manualPlant()
+				end
                 ImGui.EndTabItem()
             end
 
 
             if ImGui.BeginTabItem("WRENCH MODE") then
 				ImGui.Text("PULL & CBGL")
-                if ImGui.Button("PULL MODE", ImVec2(100, 100)) then
+                if ImGui.Button("PULL MODE", ImVec2(155, 100)) then
                     hook(2, "action|input\n|text|/pm")
                 end
                 ImGui.SameLine()
-                if ImGui.Button("CHANGE BGL", ImVec2(100, 100)) then
+                if ImGui.Button("CHANGE BGL", ImVec2(155, 100)) then
                     hook(2, "action|input\n|text|/mm")
                 end
                 ImGui.EndTabItem()
@@ -609,7 +613,7 @@ end
 
 
 LogToConsole("`9Script Will Run In `25 `9Seconds")
-SendPacket(2, "action|input\n|text|`0Proxy `6BTK `0By `#@Vermin `2ON!")
+SendPacket(2, "action|input\n|text|`0Free Proxy `9BTK `2ON!")
 Sleep(1000)
 
 
@@ -1344,7 +1348,6 @@ end
 end
 AddHook("onsendpacket", "any", hook)
 
-
 function autoDetectPositions()
     local xhost = math.floor(GetLocal().pos.x / 32)
     local yhost = math.floor(GetLocal().pos.y / 32)
@@ -1375,6 +1378,91 @@ function autoDetectPositions()
             setupDownPositions()
         end
     end
+end
+
+function manualPlant()
+	if not arePositionsSet() then
+        ProxyOverlay("`4SET POS FIRST!")
+        return
+    end
+    RunThread(function()
+        FindPath(gemsrightx2, gemsrighty2, 100)
+        Sleep(150)
+        SendPacketRaw(false, {
+            type = 3,
+            value = 5640,
+            x = GetLocal().pos.x,
+            y = GetLocal().pos.y,
+            px = gemsrightx2,
+            py = gemsrighty2,
+            state = 16
+        })
+		Sleep(150)
+        SendPacketRaw(false, {
+            type = 3,
+            value = 5640,
+            x = GetLocal().pos.x,
+            y = GetLocal().pos.y,
+            px = gemsrightx2 + 1,
+            py = gemsrighty2,
+            state = 16
+        })
+		Sleep(150)
+        SendPacketRaw(false, {
+            type = 3,
+            value = 5640,
+            x = GetLocal().pos.x,
+            y = GetLocal().pos.y,
+            px = gemsrightx2 - 1,
+            py = gemsrighty2,
+            state = 16
+        })
+		Sleep(250)
+        FindPath(gemsleftx2, gemslefty2, 100)
+        SendPacketRaw(false, {
+            type = 3,
+            value = 5640,
+            x = GetLocal().pos.x,
+            y = GetLocal().pos.y,
+            px = gemsleftx2,
+            py = gemslefty2,
+            state = 16
+        })
+		Sleep(150)
+        SendPacketRaw(false, {
+            type = 3,
+            value = 5640,
+            x = GetLocal().pos.x,
+            y = GetLocal().pos.y,
+            px = gemsleftx2 - 1,
+            py = gemslefty2,
+            state = 16
+        })
+		Sleep(150)
+		SendPacketRaw(false, {
+            type = 3,
+            value = 5640,
+            x = GetLocal().pos.x,
+            y = GetLocal().pos.y,
+            px = gemsleftx2 + 1,
+            py = gemslefty2,
+            state = 16
+        })
+        Sleep(100)
+        FindPath(gemsleftx4, gemslefty4, 100)
+        Sleep(150)
+        SendPacketRaw(false, {
+            type = 3,
+            value = 5640,
+            x = GetLocal().pos.x,
+            y = GetLocal().pos.y,
+            px = gemsleftx3,
+            py = gemslefty4,
+            state = 16
+        })
+		SendPacket(2, "action|input\n|text|`2Done `0Put Chand")
+		Sleep(2000)
+    end)
 end
 
 -- Modify the existing functions to include auto-detection
@@ -1471,6 +1559,8 @@ function setupDownPositions()
     ProxyOverlay("`9Setup `2Done!")
 end
 
+
+
 function var(var)
 	if var[0]:find("OnConsoleMessage") and var[1]:find("(%d+) Diamond Lock") then
 		jumlah = var[1]:match("(%d+) Diamond Lock")
@@ -1540,87 +1630,7 @@ end
 AddHook("onvariant", "any", var)
 
 function raw(a)
-    -- FPS Mode Handling
-    if fpsMode and a.type == 3 and a.value == 18 then
-        -- Get all position names that need to be set
-        local positionsToSet = {}
-        if not gemsrightx1 then table.insert(positionsToSet, "gemsright1") end
-        if not gemsrightx2 then table.insert(positionsToSet, "gemsright2") end
-        if not gemsrightx3 then table.insert(positionsToSet, "gemsright3") end
-        if not gemsleftx1 then table.insert(positionsToSet, "gemsleft1") end
-        if not gemsleftx2 then table.insert(positionsToSet, "gemsleft2") end
-        if not gemsleftx3 then table.insert(positionsToSet, "gemsleft3") end
-        if not gemsleftx4 then table.insert(positionsToSet, "gemsleft4") end
-        if not takerightx then table.insert(positionsToSet, "takeright") end
-        if not takeleftx then table.insert(positionsToSet, "takeleft") end
-        
-        if #positionsToSet > 0 then
-            local nextPos = positionsToSet[1]
-            
-            if nextPos == "gemsright1" then
-                gemsrightx1 = a.px
-                gemsrighty1 = a.py
-                --ProxyOverlay("`2Right 1")
-            elseif nextPos == "gemsright2" then
-                gemsrightx2 = a.px
-                gemsrighty2 = a.py
-                --ProxyOverlay("`2Right 2")
-            elseif nextPos == "gemsright3" then
-                gemsrightx3 = a.px
-                gemsrighty3 = a.py
-				--ProxyOverlay("`2Right 3")
-				ProxyOverlay("`9Punch All Left Chand Position")
-            elseif nextPos == "gemsleft1" then
-                gemsleftx1 = a.px
-                gemslefty1 = a.py
-                --ProxyOverlay("`2Left 1")
-            elseif nextPos == "gemsleft2" then
-                gemsleftx2 = a.px
-                gemslefty2 = a.py
-                --ProxyOverlay("`2Left 2")
-            elseif nextPos == "gemsleft3" then
-                gemsleftx3 = a.px
-                gemslefty3 = a.py
-				--ProxyOverlay("`2Left 3\n`9Punch Back Position")
-				ProxyOverlay("`9Punch Back Position")
-            elseif nextPos == "gemsleft4" then
-                gemsleftx4 = a.px
-                gemslefty4 = a.py
-                ProxyOverlay("`9Punch Take Right")
-            elseif nextPos == "takeright" then
-                takerightx = a.px
-                takerighty = a.py
-                ProxyOverlay("`9Punch Take Left")
-            elseif nextPos == "takeleft" then
-                takeleftx = a.px
-                takelefty = a.py
-                ProxyOverlay("`2All positions set!")
-                fpsMode = true -- Automatically turn off when done
-            end
-            
-            -- Update the tile table
-            tile = {
-                pos1 = {
-                    {x = gemsrightx1, y = gemsrighty1},
-                    {x = gemsrightx2, y = gemsrighty2},
-                    {x = gemsrightx3, y = gemsrighty3}
-                },
-                pos2 = {
-                    {x = gemsleftx1, y = gemslefty1},
-                    {x = gemsleftx2, y = gemslefty2},
-                    {x = gemsleftx3, y = gemslefty3}
-                }
-            }
-            
-            return true
-        else
-            fpsMode = false
-            ProxyOverlay("`9All positions already set! Disabling FPS mode.")
-            return true
-        end
-    end
-    
-    -- Original buttonClicked handling
+
 	if gemsright1 == true then
 		if a.type == 3 and a.value == 18 then
 			gemsrightx1 = a.px
