@@ -1385,6 +1385,34 @@ function manualPlant()
         ProxyOverlay("`4SET POS FIRST!")
         return
     end
+	
+    for _, tiles in pairs(tile.pos1) do -- Right side gems
+        for _, obj in pairs(GetObjectList()) do
+            if obj.id == 112 and (obj.pos.x)//32 == tiles.x and (obj.pos.y)//32 == tiles.y then
+                SendPacketRaw(false, {
+                    type = 11,
+                    value = obj.oid,
+                    x = obj.pos.x,
+                    y = obj.pos.y,
+                })
+                
+            end
+        end
+    end
+    
+    for _, tiles in pairs(tile.pos2) do -- Left side gems
+        for _, obj in pairs(GetObjectList()) do
+            if obj.id == 112 and (obj.pos.x)//32 == tiles.x and (obj.pos.y)//32 == tiles.y then
+                SendPacketRaw(false, {
+                    type = 11,
+                    value = obj.oid,
+                    x = obj.pos.x,
+                    y = obj.pos.y,
+                })
+                
+            end
+        end
+    end
     RunThread(function()
         FindPath(gemsrightx2, gemsrighty2, 100)
         Sleep(150)
