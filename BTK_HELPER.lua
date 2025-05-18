@@ -720,21 +720,21 @@ AddHook("onvariant", "variabel", function(var)
     if var[0] == "OnConsoleMessage" and var[1]:find("Collected  `w(%d+) Diamond Lock") then
         local AmountCollectDL = tonumber(var[1]:match("Collected  `w(%d+) Diamond Lock"))
         SendPacket(2, "action|input\ntext|"..Growid.." `0Collected `2"..AmountCollectDL.." `1Diamond Lock")
-		table.insert(dropTakeList, "add_smalltext|`w"..os.date("%X").." `2Collected `w".. AmountCollectDL .." `1Diamond Lock `9in `2"..GetWorld().name.."|\n")
+		table.insert(dropTakeList, "add_smalltext|`w"..os.date("%X").." `2Collected `w".. AmountCollectDL .." `1Diamond Lock|\n")
         return false
     end
 
     if var[0] == "OnConsoleMessage" and var[1]:find("Collected  `w(%d+) Blue Gem Lock") then
         local AmountCollectBGL = tonumber(var[1]:match("Collected  `w(%d+) Blue Gem Lock"))
         SendPacket(2, "action|input\ntext|"..Growid.." `0Collected `2"..AmountCollectBGL.." `eBlue Gem Lock")
-		table.insert(dropTakeList, "add_smalltext|`w"..os.date("%X").." `2Collected `w".. AmountCollectBGL .." `eBlue Gem Lock `9in `2"..GetWorld().name.."|\n")
+		table.insert(dropTakeList, "add_smalltext|`w"..os.date("%X").." `2Collected `w".. AmountCollectBGL .." `eBlue Gem Lock|\n")
         return false
     end
 
     if var[0] == "OnConsoleMessage" and var[1]:find("Collected  `w(%d+) Black Gem Lock") then
         local AmountCollectBBGL = tonumber(var[1]:match("Collected  `w(%d+) Black Gem Lock"))
         SendPacket(2, "action|input\ntext|"..Growid.." `0Collected `2"..AmountCollectBBGL.." `bBlack Gem Lock")
-		table.insert(dropTakeList, "add_smalltext|`w"..os.date("%X").." `2Collected `w".. AmountCollectBBGL .." `bBlack Gem Lock `9in `2"..GetWorld().name.."|\n")
+		table.insert(dropTakeList, "add_smalltext|`w"..os.date("%X").." `2Collected `w".. AmountCollectBBGL .." `bBlack Gem Lock|\n")
         return false
     end
 
@@ -1152,21 +1152,21 @@ check_autospam|0]])
 		end
 		SendPacket(2, "action|dialog_return\ndialog_name|drop\nitem_drop|1796|\nitem_count|" .. count)
 		SendPacket(2, "action|input\n|text|`c"..Growid.." `0Dropped `2" .. count .. " `cDiamond Lock")
-		table.insert(dropTakeList, "add_smalltext|`w"..os.date("%X").." `4Dropped `w".. count .." `cDiamond Lock `9in `2"..GetWorld().name.."|\n")
+		table.insert(dropTakeList, "add_smalltext|`w"..os.date("%X").." `4Dropped `w".. count .." `cDiamond Lock|\n")
 		return true
 	end
 	if str:find("/b (%d+)") then
 		count = str:match("/b (%d+)")
 		SendPacket(2, "action|dialog_return\ndialog_name|drop\nitem_drop|7188|\nitem_count|" .. count)
 		SendPacket(2, "action|input\n|text|`c"..Growid.." `0Dropped `2" .. count .. " `eBlue Gem Lock")
-		table.insert(dropTakeList, "add_smalltext|`w"..os.date("%X").." `4Dropped `w".. count .." `eBlue Gem Lock `9in `2"..GetWorld().name.."|\n")
+		table.insert(dropTakeList, "add_smalltext|`w"..os.date("%X").." `4Dropped `w".. count .." `eBlue Gem Lock|\n")
 		return true
 	end
 	if str:find("/bb (%d+)") then
 		count = str:match("/bb (%d+)")
 		SendPacket(2, "action|dialog_return\ndialog_name|drop\nitem_drop|11550|\nitem_count|" .. count)
 		SendPacket(2, "action|input\n|text|`c"..Growid.." `0Dropped `2" .. count .. " `bBlack Gem Lock")
-		table.insert(dropTakeList, "add_smalltext|`w"..os.date("%X").." `4Dropped `w".. count .." `bBlack Gem Lock `9in `2"..GetWorld().name.."|\n")
+		table.insert(dropTakeList, "add_smalltext|`w"..os.date("%X").." `4Dropped `w".. count .." `bBlack Gem Lock|\n")
 		return true
 	end
 	if str:find("/ar (%d+)") then
@@ -2025,7 +2025,7 @@ while true do
 	Sleep(1000)
 	if DropMode then
 		if ireng > 0 then
-			table.insert(dropTakeList, "add_smalltext|`w"..os.date("%X").." `4Dropped `w".. ireng .." `bBlack Gem Lock `9in `2"..GetWorld().name.."|\n")
+			table.insert(dropTakeList, "add_smalltext|`w"..os.date("%X").." `4Dropped `w".. ireng .." `bBlack Gem Lock|\n")
 			Sleep(500)
 		end
 		if bgl > 0 then
@@ -2033,12 +2033,12 @@ while true do
 			Sleep(500)
 			SendPacket(2, "action|dialog_return\ndialog_name|drop\nitem_drop|7188|\nitem_count|" .. bgl)
 			SendPacket(2, "action|input\n|text|"..GetLocal().name.." `0Dropped `2" .. bgl .. " `eBlue Gem Lock")
-			table.insert(dropTakeList, "add_smalltext|`w"..os.date("%X").." `4Dropped `w".. bgl .." `eBlue Gem Lock `9in `2"..GetWorld().name.."|\n")
+			table.insert(dropTakeList, "add_smalltext|`w"..os.date("%X").." `4Dropped `w".. bgl .." `eBlue Gem Lock|\n")
 			Sleep(500)
 		end
 		if dl > 0 then
 			SendPacket(2, "action|dialog_return\ndialog_name|drop\nitem_drop|1796|\nitem_count|" .. dl)
-			table.insert(dropTakeList, "add_smalltext|`w"..os.date("%X").." `4Dropped `w".. dl .." `cDiamond Lock `9in `2"..GetWorld().name.."|\n")
+			table.insert(dropTakeList, "add_smalltext|`w"..os.date("%X").." `4Dropped `w".. dl .." `cDiamond Lock|\n")
 			Sleep(500)
 		end
 		if wl > 0 then
