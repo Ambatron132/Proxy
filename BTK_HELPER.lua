@@ -5,6 +5,7 @@ AddHook("OnDraw", "BTK", function()
 
             if ImGui.BeginTabItem("BTK") then
 				ImGui.Text("MAIN MENU")
+				ImGui.PushStyleVar(ImGuiStyleVar_ButtonTextAlign, ImVec2(0.5, 0.5))
 				if ImGui.Button("TAKE\nBET", ImVec2(100, 100)) then
 					if arePositionsSet() then
 						hook(2, "action|input\n|text|/tb")
@@ -13,6 +14,7 @@ AddHook("OnDraw", "BTK", function()
 					end
 				end
                 ImGui.SameLine()
+				ImGui.PushStyleVar(ImGuiStyleVar_ButtonTextAlign, ImVec2(0.5, 0.5))
                 if ImGui.Button("CHECK\nGEMS", ImVec2(100, 100)) then
                     hook(2, "action|input\n|text|/cg")
                 end
@@ -22,10 +24,12 @@ AddHook("OnDraw", "BTK", function()
                 end
                 ImGui.Spacing()
 				ImGui.Text("HOSTER MENU")
-                if ImGui.Button("SET POS", ImVec2(155, 100)) then
+				ImGui.PushStyleVar(ImGuiStyleVar_ButtonTextAlign, ImVec2(0.5, 0.5))
+                if ImGui.Button("SET\nPOS", ImVec2(155, 100)) then
                     autoDetectPositions()
                 end
 				ImGui.SameLine()
+				ImGui.PushStyleVar(ImGuiStyleVar_ButtonTextAlign, ImVec2(0.5, 0.5))
 				if ImGui.Button("PUT\nCHAND", ImVec2(155, 100)) then
 					manualPlant()
 				end
@@ -35,10 +39,12 @@ AddHook("OnDraw", "BTK", function()
 
             if ImGui.BeginTabItem("WRENCH MODE") then
 				ImGui.Text("PULL & CBGL")
+				ImGui.PushStyleVar(ImGuiStyleVar_ButtonTextAlign, ImVec2(0.5, 0.5))
                 if ImGui.Button("PULL\nMODE", ImVec2(155, 100)) then
                     hook(2, "action|input\n|text|/pm")
                 end
                 ImGui.SameLine()
+				ImGui.PushStyleVar(ImGuiStyleVar_ButtonTextAlign, ImVec2(0.5, 0.5))
                 if ImGui.Button("CHANGE\nBGL", ImVec2(155, 100)) then
                     hook(2, "action|input\n|text|/mm")
                 end
