@@ -1385,11 +1385,11 @@ end
 
 
 function manualPlant()
-    if not SetPos() then
+	if not SetPos() then
         ProxyOverlay("`4SET POS FIRST!")
         return
     end
-    
+	
     for _, tiles in pairs(tile.pos1) do -- Right side gems
         for _, obj in pairs(GetObjectList()) do
             if obj.id == 112 and (obj.pos.x)//32 == tiles.x and (obj.pos.y)//32 == tiles.y then
@@ -1399,6 +1399,7 @@ function manualPlant()
                     x = obj.pos.x,
                     y = obj.pos.y,
                 })
+                
             end
         end
     end
@@ -1412,97 +1413,98 @@ function manualPlant()
                     x = obj.pos.x,
                     y = obj.pos.y,
                 })
+                
             end
         end
     end
-    
-    local success, err = pcall(function()
-        runThread(function()
-            Sleep(250)
-            FindPath(gemsrightx2, gemsrighty2, 100)
-            Sleep(150)
-			SendPacketRaw(false, {
-                type = 3,
-                value = 5640,
-                x = GetLocal().pos.x,
-                y = GetLocal().pos.y,
-                px = gemsrightx2,
-                py = gemsrighty2,
-                state = 16
-            })
-			Sleep(300)
-            SendPacketRaw(false, {
-                type = 3,
-                value = 5640,
-                x = GetLocal().pos.x,
-                y = GetLocal().pos.y,
-                px = gemsrightx2 + 1,
-                py = gemsrighty2,
-                state = 16
-            })
-            Sleep(300)
-            SendPacketRaw(false, {
-                type = 3,
-                value = 5640,
-                x = GetLocal().pos.x,
-                y = GetLocal().pos.y,
-                px = gemsrightx2 - 1,
-                py = gemsrighty2,
-                state = 16
-            })
-            Sleep(300)
-            FindPath(gemsleftx2, gemslefty2, 100)
-            Sleep(150)
-            SendPacketRaw(false, {
-                type = 3,
-                value = 5640,
-                x = GetLocal().pos.x,
-                y = GetLocal().pos.y,
-                px = gemsleftx2,
-                py = gemslefty2,
-                state = 16
-            })
-            Sleep(300)
-            SendPacketRaw(false, {
-                type = 3,
-                value = 5640,
-                x = GetLocal().pos.x,
-                y = GetLocal().pos.y,
-                px = gemsleftx2 + 1,
-                py = gemslefty2,
-                state = 16
-            })
-			Sleep(300)
-            SendPacketRaw(false, {
-                type = 3,
-                value = 5640,
-                x = GetLocal().pos.x,
-                y = GetLocal().pos.y,
-                px = gemsleftx2 - 1,
-                py = gemslefty2,
-                state = 16
-            })
-            Sleep(250)
-            FindPath(gemsleftx4, gemslefty4, 100)
-            Sleep(150)
-            SendPacketRaw(false, {
-                type = 3,
-                value = 5640,
-                x = GetLocal().pos.x,
-                y = GetLocal().pos.y,
-                px = gemsleftx3,
-                py = gemslefty4,
-                state = 16
-            })
-            SendPacket(2, "action|input\n|text|`2Done `0Put Chand")
-            Sleep(3000)
-        end)
+    RunThread(function()
+		Sleep(250)
+		FindPath(gemsrightx1, gemsrighty1, 100)
+		Sleep(150)
+		SendPacketRaw(false, {
+			type = 3,
+			value = 5640,
+			x = GetLocal().pos.x,
+			y = GetLocal().pos.y,
+			px = gemsrightx1,
+			py = gemsrighty1,
+			state = 16
+		})
+		Sleep(50)
+		FindPath(gemsrightx2, gemsrighty2, 100)
+		Sleep(150)
+		SendPacketRaw(false, {
+			type = 3,
+			value = 5640,
+			x = GetLocal().pos.x,
+			y = GetLocal().pos.y,
+			px = gemsrightx2,
+			py = gemsrighty2,
+			state = 16
+		})
+		Sleep(50)
+		FindPath(gemsrightx3, gemsrighty3, 100)
+		Sleep(150)
+		SendPacketRaw(false, {
+			type = 3,
+			value = 5640,
+			x = GetLocal().pos.x,
+			y = GetLocal().pos.y,
+			px = gemsrightx3,
+			py = gemsrighty3,
+			state = 16
+		})
+		Sleep(50)
+		FindPath(gemsleftx1, gemslefty1, 100)
+		Sleep(150)
+		SendPacketRaw(false, {
+			type = 3,
+			value = 5640,
+			x = GetLocal().pos.x,
+			y = GetLocal().pos.y,
+			px = gemsleftx1,
+			py = gemslefty1,
+			state = 16
+		})
+		Sleep(50)
+		FindPath(gemsleftx2, gemslefty2, 100)
+		Sleep(100)
+		SendPacketRaw(false, {
+			type = 3,
+			value = 5640,
+			x = GetLocal().pos.x,
+			y = GetLocal().pos.y,
+			px = gemsleftx2,
+			py = gemslefty2,
+			state = 16
+		})
+		Sleep(50)
+		FindPath(gemsleftx3, gemslefty3, 100)
+		Sleep(150)
+		SendPacketRaw(false, {
+			type = 3,
+			value = 5640,
+			x = GetLocal().pos.x,
+			y = GetLocal().pos.y,
+			px = gemsleftx3,
+			py = gemslefty3,
+			state = 16
+		})
+		Sleep(50)
+		FindPath(gemsleftx4, gemslefty4, 100)
+		Sleep(150)
+		SendPacketRaw(false, {
+			type = 3,
+			value = 5640,
+			x = GetLocal().pos.x,
+			y = GetLocal().pos.y,
+			px = gemsleftx3,
+			py = gemslefty4,
+			state = 16
+		})
+		SendPacket(2, "action|input\n|text|`2Done `0Put Chand")
+		Sleep(3000)
     end)
-    
-    if not success then
-        ProxyOverlay("`4Error in manualPlant: "..tostring(err))
-        LogToConsole("Error in manualPlant: "..tostring(err))
-    end
 end
 
 -- Modify the existing functions to include auto-detection
