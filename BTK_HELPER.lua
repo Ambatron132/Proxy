@@ -1384,14 +1384,97 @@ function autoDetectPositions()
 end
 
 
+-- Define the planting sequence as a reusable function
+local function plantChands()
+    Sleep(250)
+    FindPath(gemsrightx1, gemsrighty1, 100)
+    Sleep(150)
+    SendPacketRaw(false, {
+        type = 3,
+        value = 5640,
+        x = GetLocal().pos.x,
+        y = GetLocal().pos.y,
+        px = gemsrightx1,
+        py = gemsrighty1,
+        state = 16
+    })
+    Sleep(300)
+    SendPacketRaw(false, {
+        type = 3,
+        value = 5640,
+        x = GetLocal().pos.x,
+        y = GetLocal().pos.y,
+        px = gemsrightx1 + 1,
+        py = gemsrighty1,
+        state = 16
+    })
+    Sleep(300)
+    SendPacketRaw(false, {
+        type = 3,
+        value = 5640,
+        x = GetLocal().pos.x,
+        y = GetLocal().pos.y,
+        px = gemsrightx1 - 1,
+        py = gemsrighty1,
+        state = 16
+    })
+    Sleep(300)
+    FindPath(gemsleftx1, gemslefty1, 100)
+    Sleep(150)
+    SendPacketRaw(false, {
+        type = 3,
+        value = 5640,
+        x = GetLocal().pos.x,
+        y = GetLocal().pos.y,
+        px = gemsleftx1,
+        py = gemslefty1,
+        state = 16
+    })
+    Sleep(300)
+    SendPacketRaw(false, {
+        type = 3,
+        value = 5640,
+        x = GetLocal().pos.x,
+        y = GetLocal().pos.y,
+        px = gemsleftx1 + 1,
+        py = gemslefty1,
+        state = 16
+    })
+    Sleep(300)
+    SendPacketRaw(false, {
+        type = 3,
+        value = 5640,
+        x = GetLocal().pos.x,
+        y = GetLocal().pos.y,
+        px = gemsleftx1 - 1,
+        py = gemslefty1,
+        state = 16
+    })
+    Sleep(250)
+    FindPath(gemsleftx4, gemslefty4, 100)
+    Sleep(150)
+    SendPacketRaw(false, {
+        type = 3,
+        value = 5640,
+        x = GetLocal().pos.x,
+        y = GetLocal().pos.y,
+        px = gemsleftx3,
+        py = gemslefty4,
+        state = 16
+    })
+    SendPacket(2, "action|input\n|text|`2Done `0Put Chand")
+    Sleep(3000)
+end
+
+-- Modified manualPlant() to support both RunThread and coroutine
 function manualPlant()
     if not SetPos() then
         ProxyOverlay("`4SET POS FIRST!")
         return
     end
-    
-    -- First collect gems from both sides
-    for _, tiles in pairs(tile.pos1) do -- Right side gems
+
+    -- Collect existing gems first
+    for _, tiles in pairs(tile.pos1) do -- Right side
         for _, obj in pairs(GetObjectList()) do
             if obj.id == 112 and (obj.pos.x)//32 == tiles.x and (obj.pos.y)//32 == tiles.y then
                 SendPacketRaw(false, {
@@ -1403,8 +1486,8 @@ function manualPlant()
             end
         end
     end
-    
-    for _, tiles in pairs(tile.pos2) do -- Left side gems
+
+    for _, tiles in pairs(tile.pos2) do -- Left side
         for _, obj in pairs(GetObjectList()) do
             if obj.id == 112 and (obj.pos.x)//32 == tiles.x and (obj.pos.y)//32 == tiles.y then
                 SendPacketRaw(false, {
@@ -1416,106 +1499,16 @@ function manualPlant()
             end
         end
     end
-    
-    -- Platform-specific threading implementation
-    local function plantChands()
-        Sleep(250)
-        FindPath(gemsrightx2, gemsrighty2, 100)
-        Sleep(150)
-        SendPacketRaw(false, {
-            type = 3,
-            value = 5640,
-            x = GetLocal().pos.x,
-            y = GetLocal().pos.y,
-            px = gemsrightx2,
-            py = gemsrighty2,
-            state = 16
-        })
-        Sleep(300)
-        SendPacketRaw(false, {
-            type = 3,
-            value = 5640,
-            x = GetLocal().pos.x,
-            y = GetLocal().pos.y,
-            px = gemsrightx2 + 1,
-            py = gemsrighty2,
-            state = 16
-        })
-        Sleep(300)
-        SendPacketRaw(false, {
-            type = 3,
-            value = 5640,
-            x = GetLocal().pos.x,
-            y = GetLocal().pos.y,
-            px = gemsrightx2 - 1,
-            py = gemsrighty2,
-            state = 16
-        })
-        Sleep(300)
-        FindPath(gemsleftx2, gemslefty2, 100)
-        Sleep(150)
-        SendPacketRaw(false, {
-            type = 3,
-            value = 5640,
-            x = GetLocal().pos.x,
-            y = GetLocal().pos.y,
-            px = gemsleftx2,
-            py = gemslefty2,
-            state = 16
-        })
-        Sleep(300)
-        SendPacketRaw(false, {
-            type = 3,
-            value = 5640,
-            x = GetLocal().pos.x,
-            y = GetLocal().pos.y,
-            px = gemsleftx2 + 1,
-            py = gemslefty2,
-            state = 16
-        })
-        Sleep(300)
-        SendPacketRaw(false, {
-            type = 3,
-            value = 5640,
-            x = GetLocal().pos.x,
-            y = GetLocal().pos.y,
-            px = gemsleftx2 - 1,
-            py = gemslefty2,
-            state = 16
-        })
-        Sleep(300)
-        FindPath(gemsleftx4, gemslefty4, 100)
-        Sleep(150)
-        SendPacketRaw(false, {
-            type = 3,
-            value = 5640,
-            x = GetLocal().pos.x,
-            y = GetLocal().pos.y,
-            px = gemsleftx3,
-            py = gemslefty4,
-            state = 16
-        })
-        SendPacket(2, "action|input\n|text|`2Done `0Put Chand")
-        Sleep(3000)
-    end
-    
-    -- Check if we're on Android (where RunThread might not be available)
+
+    -- Check if RunThread is available (PC)
     if RunThread then
-        -- PC version with RunThread
-        local success, err = pcall(function()
-            RunThread(plantChands)
-        end)
-        if not success then
-            ProxyOverlay("`4Error in manualPlant: "..tostring(err))
-            LogToConsole("Error in manualPlant: "..tostring(err))
-        end
+        RunThread(plantChands) -- Runs in a separate thread
     else
-        -- Android version with coroutine
-        local thread = coroutine.create(plantChands)
-        local success, err = coroutine.resume(thread)
+        -- Fallback for Android (using coroutine)
+        local co = coroutine.create(plantChands)
+        local success, err = coroutine.resume(co)
         if not success then
-            ProxyOverlay("`4Coroutine error: "..tostring(err))
-            LogToConsole("Coroutine error: "..tostring(err))
+            ProxyOverlay("`4Error: " .. tostring(err))
         end
     end
 end
