@@ -26,13 +26,16 @@ AddHook("OnDraw", "BTK", function()
                     autoDetectPositions()
                 end
 				ImGui.SameLine()
-				--[[if ImGui.Button(" PUT\nCHAND", ImVec2(155, 100)) then
-					if isAndroid then  -- You need to define how to detect Android
-						PlantAndro()
+				if ImGui.Button(" PUT\nCHAND", ImVec2(155, 100)) then
+					-- Check if we're running in a coroutine environment (Android)
+					if RunThread then
+						manualPlant()  -- Android version using coroutines
 					else
-						manualPlant()
+						if coroutine and coroutine.running then
+							PlantAndro()
+						end
 					end
-				end]]
+				end
                 ImGui.EndTabItem()
             end
 
