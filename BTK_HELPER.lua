@@ -98,18 +98,18 @@ AddHook("OnDraw", "BTK", function()
 						else
 							for i = #BetHistory, 1, -1 do
 								local entry = BetHistory[i]
-								local bgl = math.floor(entry.amount / 10000)
+								local bgl = math.floor(entry.amount / 10000)  -- This now shows original amount
 								local remaining = entry.amount % 10000
 								local dl = math.floor(remaining / 100)
 								local wl = remaining % 100
 								
-								-- Add numbering here (using #BetHistory - i + 1 to show 1, 2, 3... from newest to oldest)
 								ImGui.TextWrapped(string.format("%d. %02d:%02d:%02d - %d BGL %d DL %d WL",
 									#BetHistory - i + 1,
 									tonumber(os.date("%H", os.time())),
 									tonumber(os.date("%M", os.time())),
 									tonumber(os.date("%S", os.time())),
-									bgl, dl, wl))
+									bgl, dl, wl,
+									entry.taxRate))
 							end
 						end
 						ImGui.EndChild()
@@ -418,13 +418,17 @@ function ShowBetLog()
     else
         for i = #BetHistory, 1, -1 do -- Show newest first
             local entry = BetHistory[i]
-            local bgl = math.floor(entry.amount / 10000)
+            local bgl = math.floor(entry.amount / 10000)  -- Original amount
             local remaining = entry.amount % 10000
             local dl = math.floor(remaining / 100)
             local wl = remaining % 100
             
+            local afterTaxBGL = math.floor(entry.afterTaxAmount / 10000)  -- After tax amount
+            local afterTaxRemaining = entry.afterTaxAmount % 10000
+            local afterTaxDL = math.floor(afterTaxRemaining / 100)
+            
             dialogContent = dialogContent..
-                "\nadd_textbox|`e"..bgl.." BGL `c"..dl.." DL `9"..wl.." WL `0- "..entry.time.."|"
+                "\nadd_textbox|`e"..bgl.." BGL `c"..dl.." DL `9"..wl.." WL `0("..entry.taxRate.."% tax -> `2"..afterTaxBGL.." BGL "..afterTaxDL.." DL`0) - "..entry.time.."|"
         end
     end
     
@@ -1284,18 +1288,21 @@ check_autospam|0]])
         return true
     end
 	if str:find("/tb") or str:find("buttonClicked|dw") then
-        take()
-        tax = math.floor(Amount * taxset / 100)
-        jatuh = Amount - tax
-	 -- Update current session total
-		CurrentTotalAfterTax = CurrentTotalAfterTax + jatuh
-    
-    -- Add to permanent history
-    table.insert(BetHistory, {
-        amount = jatuh,
-        time = os.date("%H:%M on %d/%m"),
-        taxRate = taxset
-    })
+		take()
+		tax = math.floor(Amount * taxset / 100)
+		jatuh = Amount - tax
+		
+		-- Update current session total (using original Amount)
+		CurrentTotalAfterTax = CurrentTotalAfterTax + Amount  -- Changed from jatuh to Amount
+		
+		-- Add to permanent history (store both original and after-tax amounts)
+		table.insert(BetHistory, {
+			originalAmount = Amount,  -- Add this line
+			afterTaxAmount = jatuh,   -- Add this line
+			amount = Amount,          -- Changed from jatuh to Amount
+			time = os.date("%H:%M on %d/%m"),
+			taxRate = taxset
+		})
 
     -- Add to tax history
     table.insert(TaxHistory, {
