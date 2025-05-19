@@ -39,7 +39,7 @@ AddHook("OnDraw", "BTK", function()
             end
 
 
-            if ImGui.BeginTabItem("WRENCH MODE") then
+            if ImGui.BeginTabItem("SETTINGS") then
 				ImGui.Text("PULL & CBGL")
 				
                 if ImGui.Button(" PULL MODE", ImVec2(100, 100)) then
