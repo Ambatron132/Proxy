@@ -27,15 +27,15 @@ AddHook("OnDraw", "BTK", function()
                 end
 				ImGui.SameLine()
 				if ImGui.Button(" PUT\nCHAND", ImVec2(155, 100)) then
-					-- Check if we're running in a coroutine environment (Android)
-					if RunThread then
-						manualPlant()  -- Android version using coroutines
-					else
-						if coroutine then
-							PlantAndro()
-						end
+					if useCoroutine then
+						PlantAndro()
+					else 
+						manualPlant()
 					end
+					useCoroutine = useCoroutine -- Toggle for next click
 				end
+				ImGui.SameLine()
+				ImGui.Text(useCoroutine and "Using Coroutine" or "Using RunThread")
                 ImGui.EndTabItem()
             end
 
@@ -294,7 +294,7 @@ local blockSlaveAvatar = true
 local taxset = 5
 local dawlock = false
 TaxHistory = {} -- Stores all tax collection records
-local isAndroid = true  -- Set this to true for Android version
+local useCoroutine = true
 
 function ShowTaxLog()
     local totalTax = 0
@@ -1389,6 +1389,7 @@ function autoDetectPositions()
         end
     end
 end
+
 
 function PlantAndro()
     if not SetPos() then
