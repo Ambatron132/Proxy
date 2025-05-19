@@ -1417,7 +1417,7 @@ function manualPlant()
     end
     
     local success, err = pcall(function()
-        RunThread(function()
+        runThread(function()
             Sleep(250)
             FindPath(gemsrightx2, gemsrighty2, 100)
             Sleep(150)
