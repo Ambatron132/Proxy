@@ -31,7 +31,7 @@ AddHook("OnDraw", "BTK", function()
 					if RunThread then
 						manualPlant()  -- Android version using coroutines
 					else
-						if coroutine and coroutine.running then
+						if coroutine then
 							PlantAndro()
 						end
 					end
