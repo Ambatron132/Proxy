@@ -26,13 +26,13 @@ AddHook("OnDraw", "BTK", function()
                     autoDetectPositions()
                 end
 				ImGui.SameLine()
-				if ImGui.Button(" PUT\nCHAND", ImVec2(155, 100)) then
+				--[[if ImGui.Button(" PUT\nCHAND", ImVec2(155, 100)) then
 					if isAndroid then  -- You need to define how to detect Android
 						PlantAndro()
 					else
 						manualPlant()
 					end
-				end
+				end]]
                 ImGui.EndTabItem()
             end
 
