@@ -6,7 +6,7 @@ AddHook("OnDraw", "BTK", function()
             if ImGui.BeginTabItem("BTK") then
 				ImGui.Text("MAIN MENU")
 				if ImGui.Button("BET", ImVec2(100, 100)) then
-					if arePositionsSet() then
+					if SetPos() then
 						hook(2, "action|input\n|text|/tb")
 					else
 						ProxyOverlay("`4SET POS FIRST!")
@@ -288,6 +288,7 @@ local taxset = 5
 local dawlock = false
 TaxHistory = {} -- Stores all tax collection records
 
+
 function ShowTaxLog()
     local totalTax = 0
     local dialogContent = "\nadd_label_with_icon|big|`9Tax Collection Log|left|1796|"..
@@ -340,7 +341,7 @@ function ShowTaxLog()
     })
 end
 
-function arePositionsSet()
+function SetPos()
     return takeleftx and takelefty and takerightx and takerighty and
            gemsleftx1 and gemslefty1 and gemsrightx1 and gemsrighty1
 end
@@ -1203,11 +1204,11 @@ check_autospam|0]])
         return true
     end
 	if str:find("/top") or str:find("buttonClicked|V1") then
-        setupTopPositions()
+        SetTop()
     return true
     end
     if str:find("/down") or str:find("buttonClicked|V2") then
-        setupDownPositions()
+        SetDown()
     return true
     end
 	if str:find("buttonClicked|pt") then
@@ -1353,41 +1354,42 @@ AddHook("onsendpacket", "any", hook)
 function autoDetectPositions()
     local xhost = math.floor(GetLocal().pos.x / 32)
     local yhost = math.floor(GetLocal().pos.y / 32)
-    local chandsAbove = 0
-    local chandsBelow = 0
+    local ChandTop = 0
+    local ChandDown = 0
 
     -- Count chandeliers
     for _, tile in pairs(GetTiles()) do
         if math.abs(tile.x - xhost) <= 5 and math.abs(tile.y - yhost) <= 5 then
             if tile.fg == 340 then
 				if tile.y == yhost - 1 then
-					chandsAbove = chandsAbove + 1
+					ChandTop = ChandTop + 1
 				elseif tile.y == yhost + 1 then
-					chandsBelow = chandsBelow + 1
+					ChandDown = ChandDown + 1
 				end
 			end
 		end
 	end
     -- New improved decision logic
-    if chandsAbove > chandsBelow and chandsAbove >= 3 then
-        setupTopPositions()
-    elseif chandsBelow > chandsAbove and chandsBelow >= 3 then
-        setupDownPositions()
+    if ChandTop > ChandDown and ChandTop >= 3 then
+        SetTop()
+    elseif ChandDown > ChandTop and ChandDown >= 3 then
+        SetDown()
     else
         if yhost - 1 then
-            setupTopPositions()
+            SetTop()
         else
-            setupDownPositions()
+            SetDown()
         end
     end
 end
 
+
 function manualPlant()
-	if not arePositionsSet() then
+    if not SetPos() then
         ProxyOverlay("`4SET POS FIRST!")
         return
     end
-	
+    
     for _, tiles in pairs(tile.pos1) do -- Right side gems
         for _, obj in pairs(GetObjectList()) do
             if obj.id == 112 and (obj.pos.x)//32 == tiles.x and (obj.pos.y)//32 == tiles.y then
@@ -1397,7 +1399,6 @@ function manualPlant()
                     x = obj.pos.x,
                     y = obj.pos.y,
                 })
-                
             end
         end
     end
@@ -1411,92 +1412,101 @@ function manualPlant()
                     x = obj.pos.x,
                     y = obj.pos.y,
                 })
-                
             end
         end
     end
-    RunThread(function()
-        FindPath(gemsrightx2, gemsrighty2, 100)
-        Sleep(150)
-        SendPacketRaw(false, {
-            type = 3,
-            value = 5640,
-            x = GetLocal().pos.x,
-            y = GetLocal().pos.y,
-            px = gemsrightx2,
-            py = gemsrighty2,
-            state = 16
-        })
-		Sleep(150)
-        SendPacketRaw(false, {
-            type = 3,
-            value = 5640,
-            x = GetLocal().pos.x,
-            y = GetLocal().pos.y,
-            px = gemsrightx2 + 1,
-            py = gemsrighty2,
-            state = 16
-        })
-		Sleep(150)
-        SendPacketRaw(false, {
-            type = 3,
-            value = 5640,
-            x = GetLocal().pos.x,
-            y = GetLocal().pos.y,
-            px = gemsrightx2 - 1,
-            py = gemsrighty2,
-            state = 16
-        })
-		Sleep(250)
-        FindPath(gemsleftx2, gemslefty2, 100)
-        SendPacketRaw(false, {
-            type = 3,
-            value = 5640,
-            x = GetLocal().pos.x,
-            y = GetLocal().pos.y,
-            px = gemsleftx2,
-            py = gemslefty2,
-            state = 16
-        })
-		Sleep(150)
-        SendPacketRaw(false, {
-            type = 3,
-            value = 5640,
-            x = GetLocal().pos.x,
-            y = GetLocal().pos.y,
-            px = gemsleftx2 - 1,
-            py = gemslefty2,
-            state = 16
-        })
-		Sleep(150)
-		SendPacketRaw(false, {
-            type = 3,
-            value = 5640,
-            x = GetLocal().pos.x,
-            y = GetLocal().pos.y,
-            px = gemsleftx2 + 1,
-            py = gemslefty2,
-            state = 16
-        })
-        Sleep(100)
-        FindPath(gemsleftx4, gemslefty4, 100)
-        Sleep(150)
-        SendPacketRaw(false, {
-            type = 3,
-            value = 5640,
-            x = GetLocal().pos.x,
-            y = GetLocal().pos.y,
-            px = gemsleftx3,
-            py = gemslefty4,
-            state = 16
-        })
-		SendPacket(2, "action|input\n|text|`2Done `0Put Chand")
-		Sleep(2000)
+    
+    local success, err = pcall(function()
+        RunThread(function()
+            Sleep(250)
+            FindPath(gemsrightx2, gemsrighty2, 100)
+            Sleep(150)
+			SendPacketRaw(false, {
+                type = 3,
+                value = 5640,
+                x = GetLocal().pos.x,
+                y = GetLocal().pos.y,
+                px = gemsrightx2,
+                py = gemsrighty2,
+                state = 16
+            })
+			Sleep(300)
+            SendPacketRaw(false, {
+                type = 3,
+                value = 5640,
+                x = GetLocal().pos.x,
+                y = GetLocal().pos.y,
+                px = gemsrightx2 + 1,
+                py = gemsrighty2,
+                state = 16
+            })
+            Sleep(300)
+            SendPacketRaw(false, {
+                type = 3,
+                value = 5640,
+                x = GetLocal().pos.x,
+                y = GetLocal().pos.y,
+                px = gemsrightx2 - 1,
+                py = gemsrighty2,
+                state = 16
+            })
+            Sleep(300)
+            FindPath(gemsleftx2, gemslefty2, 100)
+            Sleep(150)
+            SendPacketRaw(false, {
+                type = 3,
+                value = 5640,
+                x = GetLocal().pos.x,
+                y = GetLocal().pos.y,
+                px = gemsleftx2,
+                py = gemslefty2,
+                state = 16
+            })
+            Sleep(300)
+            SendPacketRaw(false, {
+                type = 3,
+                value = 5640,
+                x = GetLocal().pos.x,
+                y = GetLocal().pos.y,
+                px = gemsleftx2 + 1,
+                py = gemslefty2,
+                state = 16
+            })
+			Sleep(300)
+            SendPacketRaw(false, {
+                type = 3,
+                value = 5640,
+                x = GetLocal().pos.x,
+                y = GetLocal().pos.y,
+                px = gemsleftx2 - 1,
+                py = gemslefty2,
+                state = 16
+            })
+            Sleep(250)
+            FindPath(gemsleftx4, gemslefty4, 100)
+            Sleep(150)
+            SendPacketRaw(false, {
+                type = 3,
+                value = 5640,
+                x = GetLocal().pos.x,
+                y = GetLocal().pos.y,
+                px = gemsleftx3,
+                py = gemslefty4,
+                state = 16
+            })
+            SendPacket(2, "action|input\n|text|`2Done `0Put Chand")
+            Sleep(3000)
+        end)
     end)
+    
+    if not success then
+        ProxyOverlay("`4Error in manualPlant: "..tostring(err))
+        LogToConsole("Error in manualPlant: "..tostring(err))
+    end
 end
 
 -- Modify the existing functions to include auto-detection
-function setupTopPositions()
+function SetTop()
     local xhost = math.floor(GetLocal().pos.x / 32)
     local yhost = math.floor(GetLocal().pos.y / 32)
     
@@ -1543,7 +1553,7 @@ function setupTopPositions()
 
 end
 
-function setupDownPositions()
+function SetDown()
     local xhost = math.floor(GetLocal().pos.x / 32)
     local yhost = math.floor(GetLocal().pos.y / 32)
     
