@@ -28,14 +28,13 @@ AddHook("OnDraw", "BTK", function()
 				ImGui.SameLine()
 				if ImGui.Button(" PUT\nCHAND", ImVec2(155, 100)) then
 					if useCoroutine then
-						PlantAndro()
-					else 
-						manualPlant()
+						PlantAndro()      -- Uses coroutine (better for Android)
+					elseif useRunThread then
+						manualPlant()     -- Uses RunThread (better for PC)
+					else
+						ProxyOverlay("`4Please select a mode first!")
 					end
-					useCoroutine = useCoroutine -- Toggle for next click
 				end
-				ImGui.SameLine()
-				ImGui.Text(useCoroutine and "Using Coroutine" or "Using RunThread")
                 ImGui.EndTabItem()
             end
 
@@ -43,14 +42,30 @@ AddHook("OnDraw", "BTK", function()
             if ImGui.BeginTabItem("WRENCH MODE") then
 				ImGui.Text("PULL & CBGL")
 				
-                if ImGui.Button(" PULL MODE", ImVec2(155, 100)) then
+                if ImGui.Button(" PULL MODE", ImVec2(100, 100)) then
                     hook(2, "action|input\n|text|/pm")
                 end
                 ImGui.SameLine()
-				
-                if ImGui.Button("CHANGE BGL", ImVec2(155, 100)) then
+				if ImGui.Button("TRADE MODE", ImVec2(100, 100)) then
+                    hook(2, "action|input\n|text|/wk")
+                end
+				ImGui.SameLine()
+                if ImGui.Button("CHANGE BGL", ImVec2(100, 100)) then
                     hook(2, "action|input\n|text|/mm")
                 end
+				if ImGui.Checkbox("Put Chand (PC)", useRunThread) then
+					useRunThread = not useRunThread
+					if useRunThread then
+						useCoroutine = false  -- Ensure only one is selected
+					end
+				end
+				
+				if ImGui.Checkbox("Put Chand (Android)", useCoroutine) then
+					useCoroutine = not useCoroutine
+					if useCoroutine then
+						useRunThread = false  -- Ensure only one is selected
+					end
+				end
                 ImGui.EndTabItem()
             end
 
@@ -252,7 +267,7 @@ end
 
 data = {}
 local pull = false
-local kick = false
+local tradeMode = false
 local ban = false
 local cbgl = false
 local bgems = false
@@ -966,15 +981,18 @@ function hook(type, str)
 					SendPacket(2,"action|dialog_return\ndialog_name|popup\nnetID|"..id.."|\nbuttonClicked|pull")
 					SendPacket(2, "action|input\n|text|`#Gas Sir?(evil)")
 					return true
-				elseif kick == true then
-					SendPacket(2,"action|dialog_return\ndialog_name|popup\nnetID|"..id.."|\nbuttonClicked|kick")
-					return true
-				elseif ban == true then
-					SendPacket(2,"action|dialog_return\ndialog_name|popup\nnetID|"..id.."|\nbuttonClicked|world_ban")
-					return true 
-				end 
+				end
 			end 
-		end 
+		elseif tradeMode == true then
+			local netid0 = tonumber(id)
+			for _, plr in pairs(GetPlayerList()) do
+				if plr.netid == netid0 then
+					SendPacket(2,"action|dialog_return\ndialog_name|popup\nnetID|"..id.."|\nbuttonClicked|trade")
+					SendPacket(2, "action|input\n|text|`2Accept `wTrade Sir")
+					return true
+				end
+			end
+		end
 	end
 	if str:find("/pm") or str:find("buttonClicked|wp") then
 		if pull == false then
@@ -988,13 +1006,13 @@ function hook(type, str)
 		end
 	end
 	if str:find("/wk") or str:find("buttonClicked|wk") then
-		if kick == false then
-			kick = true
-			SendPacket(2, "action|input\n|text|`2Enabled `9Wrench `9Kick `9Mode")
+		if tradeMode == false then
+			tradeMode = true
+			SendPacket(2, "action|input\n|text|`2Enabled `#Trade `9Mode")
 			return true
 		else
-			kick = false
-			SendPacket(2, "action|input\n|text|`4Disabled `9Wrench `9kick `9Mode")
+			tradeMode = false
+			SendPacket(2, "action|input\n|text|`4Disabled `#Trade `9Mode")
 			return true
 		end
 	end
