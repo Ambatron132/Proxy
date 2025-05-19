@@ -1417,7 +1417,7 @@ function manualPlant()
             end
         end
     end
-    RunThread(function()
+    RunDelayed(function()
 		Sleep(250)
 		FindPath(gemsrightx1, gemsrighty1, 100)
 		Sleep(150)
