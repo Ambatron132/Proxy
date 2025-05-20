@@ -987,7 +987,7 @@ function hook(type, str)
 			for _, plr in pairs(GetPlayerList()) do
 				if plr.netid == netid0 then
 					SendPacket(2,"action|dialog_return\ndialog_name|popup\nnetID|"..id.."|\nbuttonClicked|pull")
-					SendPacket(2, "action|input\n|text|`c"..removeColorAndSymbols(Growid).." `wGas Ga?(evil)")
+					SendPacket(2, "action|input\n|text|`c"..plr.name.." `wGas Ga?(evil)")
 					return true
 				end
 			end 
