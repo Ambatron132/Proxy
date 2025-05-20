@@ -389,7 +389,7 @@ function removeparticle(packet)
         return true
     end
 return false
-end]]
+end
 AddHook("onprocesstankupdatepacket", "Hook99", removeparticle)
 
 -- Add this function with other utility functions
@@ -1331,6 +1331,7 @@ end
 
 
 function PlantAndro()
+
 	local routine = coroutine.wrap(function()
 		local success, err = pcall(function()
 			Sleep(200)
