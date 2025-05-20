@@ -1429,7 +1429,8 @@ end
 
 
 function PlantAndro()
-	Sleep(500)
+	Sleep(500) -- Safety delay before starting coroutine
+
 	local routine = coroutine.wrap(function()
 		local success, err = pcall(function()
 			Sleep(200)
@@ -1444,9 +1445,10 @@ function PlantAndro()
 				py = gemsrighty1,
 				state = 16
 			})
-			Sleep(50)
+			Sleep(200)
+
 			FindPath(gemsrightx2, gemsrighty2, 100)
-			Sleep(150)
+			Sleep(200)
 			SendPacketRaw(false, {
 				type = 3,
 				value = 5640,
@@ -1456,9 +1458,10 @@ function PlantAndro()
 				py = gemsrighty2,
 				state = 16
 			})
-			Sleep(50)
+			Sleep(200)
+
 			FindPath(gemsrightx3, gemsrighty3, 100)
-			Sleep(150)
+			Sleep(250)
 			SendPacketRaw(false, {
 				type = 3,
 				value = 5640,
@@ -1468,9 +1471,10 @@ function PlantAndro()
 				py = gemsrighty3,
 				state = 16
 			})
-			Sleep(50)
+			Sleep(200)
+
 			FindPath(gemsleftx1, gemslefty1, 100)
-			Sleep(150)
+			Sleep(250)
 			SendPacketRaw(false, {
 				type = 3,
 				value = 5640,
@@ -1480,9 +1484,10 @@ function PlantAndro()
 				py = gemslefty1,
 				state = 16
 			})
-			Sleep(50)
+			Sleep(200)
+
 			FindPath(gemsleftx2, gemslefty2, 100)
-			Sleep(100)
+			Sleep(250)
 			SendPacketRaw(false, {
 				type = 3,
 				value = 5640,
@@ -1492,9 +1497,10 @@ function PlantAndro()
 				py = gemslefty2,
 				state = 16
 			})
-			Sleep(50)
+			Sleep(200)
+
 			FindPath(gemsleftx3, gemslefty3, 100)
-			Sleep(150)
+			Sleep(250)
 			SendPacketRaw(false, {
 				type = 3,
 				value = 5640,
@@ -1504,9 +1510,10 @@ function PlantAndro()
 				py = gemslefty3,
 				state = 16
 			})
-			Sleep(50)
+			Sleep(200)
+
 			FindPath(gemsleftx4, gemslefty4, 100)
-			Sleep(150)
+			Sleep(200)
 			SendPacketRaw(false, {
 				type = 3,
 				value = 5640,
@@ -1516,12 +1523,14 @@ function PlantAndro()
 				py = gemslefty4,
 				state = 16
 			})
-			SendPacket(2, "action|input\n|text|`9P`6u`9t `6C`9h`6a`9n`6d `2Done")
+			Sleep(300)
+
+			SendPacket(2, "action|input\n|text|`2Done `0Put Chand")
 			Sleep(300)
 		end)
 
 		if not success then
-			LogToConsole("`4[PlantAndro coroutine ERROR]: " .. tostring(err))
+			LogToConsole("`4[manualPlant coroutine ERROR]: " .. tostring(err))
 		end
 	end)
 
