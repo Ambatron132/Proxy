@@ -384,13 +384,13 @@ end)
 
 
 ----REMOVE PARTICLE
---[[function removeparticle(packet)
+[[function removeparticle(packet)
     if packet.type == 17 or packet.type == 36 then
         return true
     end
 return false
 end]]
---AddHook("onprocesstankupdatepacket", "Hook99", removeparticle)
+AddHook("onprocesstankupdatepacket", "Hook99", removeparticle)
 
 -- Add this function with other utility functions
 function ShowBetLog()
