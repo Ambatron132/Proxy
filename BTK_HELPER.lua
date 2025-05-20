@@ -1,5 +1,5 @@
 AddHook("OnDraw", "BTK", function()
-    local open = ImGui.Begin("BTK HELPER", true)
+	local open = ImGui.Begin("BTK HELPER", true)
     if open then
         if ImGui.BeginTabBar("MAIN MENU") then
 
@@ -151,38 +151,25 @@ AddHook("OnDraw", "BTK", function()
 				end
 				if ImGui.BeginTabItem("TAX LOG") then
 					ImGui.BeginChild("TaxScrollRegion", ImVec2(0, 300), true)
-					
-					-- Calculate original total tax (before division)
 					local originalTotalTax = 0
 					for _, entry in ipairs(TaxHistory) do
 						originalTotalTax = originalTotalTax + entry.amount
 					end
-					
-					-- Convert original total to BGL/DL/WL
 					local originalBGL = math.floor(originalTotalTax / 10000)
 					local originalRemaining = originalTotalTax % 10000
 					local originalDL = math.floor(originalRemaining / 100)
 					local originalWL = originalRemaining % 100
-					
-					-- Display original total tax collected
 					ImGui.Text("Total Tax Hoster:")
 					ImGui.TextWrapped(string.format("%d BGL %d DL %d WL", originalBGL, originalDL, originalWL))
-					
-					-- Calculate divided tax (shared)
 					local sharedTax = math.floor(originalTotalTax / 2)
 					local sharedBGL = math.floor(sharedTax / 10000)
 					local sharedRemaining = sharedTax % 10000
 					local sharedDL = math.floor(sharedRemaining / 100)
 					local sharedWL = sharedRemaining % 100
-					
-					-- Display divided tax
 					ImGui.Text("Pendapatan Bersih:")
 					ImGui.TextWrapped(string.format("%d BGL %d DL %d WL", sharedBGL, sharedDL, sharedWL))
 					ImGui.Separator()
-					
-					-- Display individual tax entries
 					if #TaxHistory == 0 then
-						
 					else
 						for i = #TaxHistory, 1, -1 do
 							local entry = TaxHistory[i]
@@ -301,8 +288,6 @@ local cg1 = 0
 local cg2 = 0
 local Growid = GetLocal().name
 local WinnerLog = {}
-local emojiChatEnabled = false
-local HostCsn = "" -- For tracking wheel spin mode
 local LogSpin = {} -- For tracking spin logs
 BetHistory = {} -- Stores all bet logs with timestamps
 local CurrentTotalAfterTax = 0 -- Stores current session total
@@ -399,13 +384,13 @@ end)
 
 
 ----REMOVE PARTICLE
-function removeparticle(packet)
+--[[function removeparticle(packet)
     if packet.type == 17 or packet.type == 36 then
         return true
     end
 return false
-end
-AddHook("onprocesstankupdatepacket", "Hook99", removeparticle)
+end]]
+--AddHook("onprocesstankupdatepacket", "Hook99", removeparticle)
 
 -- Add this function with other utility functions
 function ShowBetLog()
@@ -460,22 +445,6 @@ AddHook("onvariant", "handle_betlog", function(var)
 end)
 
 
-local emoji = {
-    "sigh", "mad", "smile", "tongue", "wow", "no", "shy", "wink", "music", "lol",
-    "yes", "love", "megaphone", "heart", "cool", "kiss", "agree", "see-no-evil",
-    "dance", "build", "oops", "sleep", "punch", "bheart", "cry", "party", "wl",
-    "grow", "gems", "gtoken", "plead", "vend", "bunny", "cactus", "peace", "terror",
-    "troll", "halo", "nuke", "pine", "football", "fireworks", "song", "ghost", "evil",
-    "pizza", "alien", "clap", "turkey", "gift", "cake", "heartarrow", "shamrock",
-    "grin", "ill", "eyes", "weary", "moyai",
-}
-
--- Add this function with other utility functions
-local function randomOutput(list)
-    local randomIndex = math.random(1, #list)
-    return list[randomIndex]
-end
-
 function dropTakeLogs()
     local dropTakeDialog = [[
 add_label_with_icon|big| `9Drop/Pickup Logs``|left|3524|
@@ -498,69 +467,6 @@ text_scaling_string|9999999999
         [1] = dropTakeDialog
     })
 end
-
--- Add this hook to modify chat messages with emojis
-AddHook("onsendpacket", "emojiChat", function(type, packet)
-    if type == 2 and packet:find("action|input\n|text|") then
-        args = string.gsub(packet, "action|input\n|text|", "")
-        
-        -- Check if it's the toggle command
-        if args:lower() == "/emoji" then
-            emojiChatEnabled = not emojiChatEnabled
-            local status = emojiChatEnabled and "`2Enabled" or "`4Disabled"
-            SendPacket(2, "action|input\n|text|`9Emoji chat is now "..status.."`9!")
-            return true
-        end
-        
-        -- Don't modify commands or if emoji chat is disabled
-        if args:sub(1, 1) == "/" or not emojiChatEnabled then
-            return false
-        end
-        
-        -- Send message with random emoji (without rainbow colors)
-        SendPacket(2, "action|input\ntext|("..randomOutput(emoji)..") ".. args)
-        return true
-    end
-    return false
-end)
-
--- Add this function to log winners
-function LogWinner(side, gemsCount, opponentGems)
-    local timestamp = os.date("%H:%M on %d/%m")
-    local logEntry = {
-        side = side,
-        gems = gemsCount,
-        opponentGems = opponentGems,
-        time = timestamp
-    }
-    table.insert(WinnerLog, logEntry)
-end
-
--- Add this function to display the winner log
-function ShowWinnerLog()
-    local dialogContent = "\nadd_label_with_icon|big|`9Gems Winner Log|left|112|"..
-                         "\nadd_spacer|small|"
-    
-    if #WinnerLog == 0 then
-        dialogContent = dialogContent.."\nadd_textbox|`9No winner logs yet|left|"
-    else
-        for i, log in ipairs(WinnerLog) do
-            dialogContent = dialogContent..
-                "\nadd_label_with_icon|small|`2"..log.side.." `wWin `2"..log.gems.." `wVS `4"..log.opponentGems.." `w("..log.time..")|left|112|"
-        end
-    end
-    
-    dialogContent = dialogContent..
-        "\nadd_spacer|small|"..
-        "\nadd_quick_exit||"..
-        "\nend_dialog|winnerlog|Close|"
-    
-    SendVariantList({
-        [0] = "OnDialogRequest",
-        [1] = dialogContent
-    })
-end
-
 
 function removeColorAndSymbols(str)
     cleanedStr = string.gsub(str, "`(%S)", '')
@@ -645,7 +551,7 @@ function ProxyLog(str)
 end
 
 
-LogToConsole("`9Script Will Run In `25 `9Seconds")
+
 SendPacket(2, "action|input\n|text|`6F`9r`6e`9e `6P`9r`6o`9x`6y `9BTK `2ON!")
 Sleep(1000)
 
@@ -987,7 +893,7 @@ function hook(type, str)
 			for _, plr in pairs(GetPlayerList()) do
 				if plr.netid == netid0 then
 					SendPacket(2,"action|dialog_return\ndialog_name|popup\nnetID|"..id.."|\nbuttonClicked|pull")
-					SendPacket(2, "action|input\n|text|`c"..plr.name.." `wGas Ga?(evil)")
+					SendPacket(2, "action|input\n|text|"..plr.name.." `wGas Ga?(evil)")
 					return true
 				end
 			end 
@@ -1240,10 +1146,6 @@ check_autospam|0]])
         FilterSpin(NetID) 
         return true 
     end
-	if str:find("/wlog") then
-        ShowWinnerLog()
-        return true
-    end
 	if str:find("/top") or str:find("buttonClicked|V1") then
         SetTop()
     return true
@@ -1429,112 +1331,109 @@ end
 
 
 function PlantAndro()
+	Sleep(250)
+	local routine = coroutine.wrap(function()
+		local success, err = pcall(function()
+			Sleep(200)
+			FindPath(gemsrightx1, gemsrighty1, 100)
+			Sleep(150)
+			SendPacketRaw(false, {
+				type = 3,
+				value = 5640,
+				x = GetLocal().pos.x,
+				y = GetLocal().pos.y,
+				px = gemsrightx1,
+				py = gemsrighty1,
+				state = 16
+			})
+			Sleep(50)
+			FindPath(gemsrightx2, gemsrighty2, 100)
+			Sleep(150)
+			SendPacketRaw(false, {
+				type = 3,
+				value = 5640,
+				x = GetLocal().pos.x,
+				y = GetLocal().pos.y,
+				px = gemsrightx2,
+				py = gemsrighty2,
+				state = 16
+			})
+			Sleep(50)
+			FindPath(gemsrightx3, gemsrighty3, 100)
+			Sleep(150)
+			SendPacketRaw(false, {
+				type = 3,
+				value = 5640,
+				x = GetLocal().pos.x,
+				y = GetLocal().pos.y,
+				px = gemsrightx3,
+				py = gemsrighty3,
+				state = 16
+			})
+			Sleep(50)
+			FindPath(gemsleftx1, gemslefty1, 100)
+			Sleep(150)
+			SendPacketRaw(false, {
+				type = 3,
+				value = 5640,
+				x = GetLocal().pos.x,
+				y = GetLocal().pos.y,
+				px = gemsleftx1,
+				py = gemslefty1,
+				state = 16
+			})
+			Sleep(50)
+			FindPath(gemsleftx2, gemslefty2, 100)
+			Sleep(100)
+			SendPacketRaw(false, {
+				type = 3,
+				value = 5640,
+				x = GetLocal().pos.x,
+				y = GetLocal().pos.y,
+				px = gemsleftx2,
+				py = gemslefty2,
+				state = 16
+			})
+			Sleep(50)
+			FindPath(gemsleftx3, gemslefty3, 100)
+			Sleep(150)
+			SendPacketRaw(false, {
+				type = 3,
+				value = 5640,
+				x = GetLocal().pos.x,
+				y = GetLocal().pos.y,
+				px = gemsleftx3,
+				py = gemslefty3,
+				state = 16
+			})
+			Sleep(50)
+			FindPath(gemsleftx4, gemslefty4, 100)
+			Sleep(150)
+			SendPacketRaw(false, {
+				type = 3,
+				value = 5640,
+				x = GetLocal().pos.x,
+				y = GetLocal().pos.y,
+				px = gemsleftx3,
+				py = gemslefty4,
+				state = 16
+			})
+			SendPacket(2, "action|input\n|text|`9P`6u`9t `6C`9h`6a`9n`6d `2Done")
+			Sleep(3000)
+			return false
+		end)
 
-    local thread = coroutine.create(function()
-		Sleep(200)
-		FindPath(gemsrightx1, gemsrighty1, 100)
-		Sleep(150)
-		SendPacketRaw(false, {
-			type = 3,
-			value = 5640,
-			x = GetLocal().pos.x,
-			y = GetLocal().pos.y,
-			px = gemsrightx1,
-			py = gemsrighty1,
-			state = 16
-		})
-		Sleep(100)
+		if not success then
+			LogToConsole("`4[manualPlant coroutine ERROR]: " .. tostring(err))
+		end
+	end)
 
-		FindPath(gemsrightx2, gemsrighty2, 100)
-		Sleep(200)
-		SendPacketRaw(false, {
-			type = 3,
-			value = 5640,
-			x = GetLocal().pos.x,
-			y = GetLocal().pos.y,
-			px = gemsrightx2,
-			py = gemsrighty2,
-			state = 16
-		})
-		Sleep(100)
-
-		FindPath(gemsrightx3, gemsrighty3, 100)
-		Sleep(250)
-		SendPacketRaw(false, {
-			type = 3,
-			value = 5640,
-			x = GetLocal().pos.x,
-			y = GetLocal().pos.y,
-			px = gemsrightx3,
-			py = gemsrighty3,
-			state = 16
-		})
-		Sleep(100)
-
-		FindPath(gemsleftx1, gemslefty1, 100)
-		Sleep(250)
-		SendPacketRaw(false, {
-			type = 3,
-			value = 5640,
-			x = GetLocal().pos.x,
-			y = GetLocal().pos.y,
-			px = gemsleftx1,
-			py = gemslefty1,
-			state = 16
-		})
-		Sleep(100)
-
-		FindPath(gemsleftx2, gemslefty2, 100)
-		Sleep(250)
-		SendPacketRaw(false, {
-			type = 3,
-			value = 5640,
-			x = GetLocal().pos.x,
-			y = GetLocal().pos.y,
-			px = gemsleftx2,
-			py = gemslefty2,
-			state = 16
-		})
-		Sleep(100)
-
-		FindPath(gemsleftx3, gemslefty3, 100)
-		Sleep(250)
-		SendPacketRaw(false, {
-			type = 3,
-			value = 5640,
-			x = GetLocal().pos.x,
-			y = GetLocal().pos.y,
-			px = gemsleftx3,
-			py = gemslefty3,
-			state = 16
-		})
-		Sleep(100)
-
-		FindPath(gemsleftx4, gemslefty4, 100)
-		Sleep(200)
-		SendPacketRaw(false, {
-			type = 3,
-			value = 5640,
-			x = GetLocal().pos.x,
-			y = GetLocal().pos.y,
-			px = gemsleftx3,
-			py = gemslefty4,
-			state = 16
-		})
-		Sleep(300)
-        SendPacket(2, "action|input\n|text|`9P`6u`9t `6C`9h`6a`9n`6d `2Done")
-        Sleep(3000)
-    end)
-
-    local success, err = coroutine.resume(thread)
-    if not success then
-        LogToConsole("`4Coroutine error: " .. tostring(err))
-    end
+	routine()
 end
 
 
 function manualPlant()
-	Sleep(500)
+
 	RunThread(function()
 		local success, err = pcall(function()
 			Sleep(200)
@@ -1622,9 +1521,10 @@ function manualPlant()
 				state = 16
 			})
 			SendPacket(2, "action|input\n|text|`9P`6u`9t `6C`9h`6a`9n`6d `2Done")
-			Sleep(300)
+			Sleep(3000)
+			return false
 		end)
-
+		Sleep(3000)
 		if not success then
 			LogToConsole("`4[manualPlant ERROR]: " .. tostring(err))
 		end
