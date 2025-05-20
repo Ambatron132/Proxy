@@ -805,7 +805,7 @@ function takegems()
     if data[2] > data[1] then -- Left wins
         SendPacket(2, "action|input\n|text|`w[`2WIN`w]Kiri `2"..data[2].." `b/ `4"..data[1].." `wKanan[`4LOSE`w]");
         cg2 = data[2]
-        LogWinner("LEFT", data[2], data[1])
+        
         
         -- Auto drop to left winner
         if jatuh then
@@ -829,7 +829,7 @@ function takegems()
     elseif data[1] > data[2] then -- Right wins
         SendPacket(2, "action|input\n|text|`w[`4LOSE`w]Kiri `4"..data[2].." `b/ `2"..data[1].." `wKanan[`2WIN`w]");
         cg1 = data[1]
-        LogWinner("RIGHT", data[1], data[2])
+        
         
         -- Auto drop to right winner
         if jatuh then
