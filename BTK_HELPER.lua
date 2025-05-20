@@ -1429,7 +1429,6 @@ end
 
 
 function PlantAndro()
-	Sleep(500)
     -- Replace RunThread with coroutine
     local thread = coroutine.create(function()
 		Sleep(200)
