@@ -42,15 +42,15 @@ AddHook("OnDraw", "BTK", function()
             if ImGui.BeginTabItem("SETTINGS") then
 				ImGui.Text("PULL & CBGL")
 				
-                if ImGui.Button(" PULL\nMODE", ImVec2(100, 100)) then
+                if ImGui.Button("PULL\nMODE", ImVec2(100, 100)) then
                     hook(2, "action|input\n|text|/pm")
                 end
                 ImGui.SameLine()
-				if ImGui.Button("TRADE\nMODE", ImVec2(100, 100)) then
+				if ImGui.Button("TRADE\n MODE", ImVec2(100, 100)) then
                     hook(2, "action|input\n|text|/wk")
                 end
 				ImGui.SameLine()
-                if ImGui.Button("CHANGE\nBGL", ImVec2(100, 100)) then
+                if ImGui.Button("CHANGE\n BGL", ImVec2(100, 100)) then
                     hook(2, "action|input\n|text|/mm")
                 end
 				ImGui.Separator()
