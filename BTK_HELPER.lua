@@ -28,7 +28,7 @@ AddHook("OnDraw", "BTK", function()
 				ImGui.SameLine()
 				if ImGui.Button(" PUT\nCHAND", ImVec2(155, 100)) then
 					if useCoroutine then
-						PlantAndro()      -- Uses coroutine (better for Android)
+						coroutine.create(PlantAndro)      -- Uses coroutine (better for Android)
 					elseif useRunThread then
 						RunThread(manualPlant)    -- Uses RunThread (better for PC)
 					else
