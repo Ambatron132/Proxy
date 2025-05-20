@@ -28,9 +28,9 @@ AddHook("OnDraw", "BTK", function()
 				ImGui.SameLine()
 				if ImGui.Button(" PUT\nCHAND", ImVec2(155, 100)) then
 					if useCoroutine then
-						coroutine.create(PlantAndro)      -- Uses coroutine (better for Android)
+						PlantAndro()      -- Uses coroutine (better for Android)
 					elseif useRunThread then
-						RunThread(manualPlant)    -- Uses RunThread (better for PC)
+						manualPlant()     -- Uses RunThread (better for PC)
 					else
 						ProxyOverlay("`4Please select a mode first!")
 					end
@@ -39,24 +39,20 @@ AddHook("OnDraw", "BTK", function()
             end
 
 
-            if ImGui.BeginTabItem("SETTINGS") then
+            if ImGui.BeginTabItem("WRENCH MODE") then
 				ImGui.Text("PULL & CBGL")
 				
-                if ImGui.Button("PULL\nMODE", ImVec2(100, 100)) then
+                if ImGui.Button(" PULL MODE", ImVec2(100, 100)) then
                     hook(2, "action|input\n|text|/pm")
                 end
                 ImGui.SameLine()
-				if ImGui.Button("TRADE\n MODE", ImVec2(100, 100)) then
+				if ImGui.Button("TRADE MODE", ImVec2(100, 100)) then
                     hook(2, "action|input\n|text|/wk")
                 end
 				ImGui.SameLine()
-                if ImGui.Button("CHANGE\n BGL", ImVec2(100, 100)) then
+                if ImGui.Button("CHANGE BGL", ImVec2(100, 100)) then
                     hook(2, "action|input\n|text|/mm")
                 end
-				ImGui.Separator()
-				ImGui.Text("PUT CHAND SETTINGS")
-				ImGui.Spacing()
-				ImGui.Separator()
 				if ImGui.Checkbox("Put Chand (PC) [BETA]", useRunThread) then
 					useRunThread = not useRunThread
 					if useRunThread then
@@ -98,18 +94,18 @@ AddHook("OnDraw", "BTK", function()
 						else
 							for i = #BetHistory, 1, -1 do
 								local entry = BetHistory[i]
-								local bgl = math.floor(entry.amount / 10000)  -- This now shows original amount
+								local bgl = math.floor(entry.amount / 10000)
 								local remaining = entry.amount % 10000
 								local dl = math.floor(remaining / 100)
 								local wl = remaining % 100
 								
+								-- Add numbering here (using #BetHistory - i + 1 to show 1, 2, 3... from newest to oldest)
 								ImGui.TextWrapped(string.format("%d. %02d:%02d:%02d - %d BGL %d DL %d WL",
 									#BetHistory - i + 1,
 									tonumber(os.date("%H", os.time())),
 									tonumber(os.date("%M", os.time())),
 									tonumber(os.date("%S", os.time())),
-									bgl, dl, wl,
-									entry.taxRate))
+									bgl, dl, wl))
 							end
 						end
 						ImGui.EndChild()
@@ -418,17 +414,13 @@ function ShowBetLog()
     else
         for i = #BetHistory, 1, -1 do -- Show newest first
             local entry = BetHistory[i]
-            local bgl = math.floor(entry.amount / 10000)  -- Original amount
+            local bgl = math.floor(entry.amount / 10000)
             local remaining = entry.amount % 10000
             local dl = math.floor(remaining / 100)
             local wl = remaining % 100
             
-            local afterTaxBGL = math.floor(entry.afterTaxAmount / 10000)  -- After tax amount
-            local afterTaxRemaining = entry.afterTaxAmount % 10000
-            local afterTaxDL = math.floor(afterTaxRemaining / 100)
-            
             dialogContent = dialogContent..
-                "\nadd_textbox|`e"..bgl.." BGL `c"..dl.." DL `9"..wl.." WL `0("..entry.taxRate.."% tax -> `2"..afterTaxBGL.." BGL "..afterTaxDL.." DL`0) - "..entry.time.."|"
+                "\nadd_textbox|`e"..bgl.." BGL `c"..dl.." DL `9"..wl.." WL `0- "..entry.time.."|"
         end
     end
     
@@ -1288,21 +1280,18 @@ check_autospam|0]])
         return true
     end
 	if str:find("/tb") or str:find("buttonClicked|dw") then
-		take()
-		tax = math.floor(Amount * taxset / 100)
-		jatuh = Amount - tax
-		
-		-- Update current session total (using original Amount)
-		CurrentTotalAfterTax = CurrentTotalAfterTax + Amount  -- Changed from jatuh to Amount
-		
-		-- Add to permanent history (store both original and after-tax amounts)
-		table.insert(BetHistory, {
-			originalAmount = Amount,  -- Add this line
-			afterTaxAmount = jatuh,   -- Add this line
-			amount = Amount,          -- Changed from jatuh to Amount
-			time = os.date("%H:%M on %d/%m"),
-			taxRate = taxset
-		})
+        take()
+        tax = math.floor(Amount * taxset / 100)
+        jatuh = Amount - tax
+	 -- Update current session total
+		CurrentTotalAfterTax = CurrentTotalAfterTax + jatuh
+    
+    -- Add to permanent history
+    table.insert(BetHistory, {
+        amount = jatuh,
+        time = os.date("%H:%M on %d/%m"),
+        taxRate = taxset
+    })
 
     -- Add to tax history
     table.insert(TaxHistory, {
@@ -1421,192 +1410,259 @@ end
 
 
 function PlantAndro()
-	while true do
-		if putchand then
-			Sleep(250)
-			FindPath(gemsrightx1, gemsrighty1, 100)
-			Sleep(150)
-			SendPacketRaw(false, {
-				type = 3,
-				value = 5640,
-				x = GetLocal().pos.x,
-				y = GetLocal().pos.y,
-				px = gemsrightx1,
-				py = gemsrighty1,
-				state = 16
-			})
-			Sleep(50)
-			FindPath(gemsrightx2, gemsrighty2, 100)
-			Sleep(250)
-			SendPacketRaw(false, {
-				type = 3,
-				value = 5640,
-				x = GetLocal().pos.x,
-				y = GetLocal().pos.y,
-				px = gemsrightx2,
-				py = gemsrighty2,
-				state = 16
-			})
-			Sleep(50)
-			FindPath(gemsrightx3, gemsrighty3, 100)
-			Sleep(250)
-			SendPacketRaw(false, {
-				type = 3,
-				value = 5640,
-				x = GetLocal().pos.x,
-				y = GetLocal().pos.y,
-				px = gemsrightx3,
-				py = gemsrighty3,
-				state = 16
-			})
-			Sleep(50)
-			FindPath(gemsleftx1, gemslefty1, 100)
-			Sleep(250)
-			SendPacketRaw(false, {
-				type = 3,
-				value = 5640,
-				x = GetLocal().pos.x,
-				y = GetLocal().pos.y,
-				px = gemsleftx1,
-				py = gemslefty1,
-				state = 16
-			})
-			Sleep(50)
-			FindPath(gemsleftx2, gemslefty2, 100)
-			Sleep(250)
-			SendPacketRaw(false, {
-				type = 3,
-				value = 5640,
-				x = GetLocal().pos.x,
-				y = GetLocal().pos.y,
-				px = gemsleftx2,
-				py = gemslefty2,
-				state = 16
-			})
-			Sleep(50)
-			FindPath(gemsleftx3, gemslefty3, 100)
-			Sleep(250)
-			SendPacketRaw(false, {
-				type = 3,
-				value = 5640,
-				x = GetLocal().pos.x,
-				y = GetLocal().pos.y,
-				px = gemsleftx3,
-				py = gemslefty3,
-				state = 16
-			})
-			Sleep(50)
-			FindPath(gemsleftx4, gemslefty4, 100)
-			Sleep(150)
-			SendPacketRaw(false, {
-				type = 3,
-				value = 5640,
-				x = GetLocal().pos.x,
-				y = GetLocal().pos.y,
-				px = gemsleftx3,
-				py = gemslefty4,
-				state = 16
-			})
-			SendPacket(2, "action|input\n|text|`2Done `0Put Chand")
-			Sleep(250)
-			return false
-		end
-	end
+    if not SetPos() then
+        ProxyOverlay("`4SET POS FIRST!")
+        return
+    end
+
+    for _, tiles in pairs(tile.pos1) do -- Right side gems
+        for _, obj in pairs(GetObjectList()) do
+            if obj.id == 112 and (obj.pos.x)//32 == tiles.x and (obj.pos.y)//32 == tiles.y then
+                SendPacketRaw(false, {
+                    type = 11,
+                    value = obj.oid,
+                    x = obj.pos.x,
+                    y = obj.pos.y,
+                })
+            end
+        end
+    end
+
+    for _, tiles in pairs(tile.pos2) do -- Left side gems
+        for _, obj in pairs(GetObjectList()) do
+            if obj.id == 112 and (obj.pos.x)//32 == tiles.x and (obj.pos.y)//32 == tiles.y then
+                SendPacketRaw(false, {
+                    type = 11,
+                    value = obj.oid,
+                    x = obj.pos.x,
+                    y = obj.pos.y,
+                })
+            end
+        end
+    end
+
+    -- Replace RunThread with coroutine
+    local thread = coroutine.create(function()
+        Sleep(250)
+        FindPath(gemsrightx1, gemsrighty1, 100)
+        Sleep(150)
+        SendPacketRaw(false, {
+            type = 3,
+            value = 5640,
+            x = GetLocal().pos.x,
+            y = GetLocal().pos.y,
+            px = gemsrightx1,
+            py = gemsrighty1,
+            state = 16
+        })
+
+        Sleep(50)
+        FindPath(gemsrightx2, gemsrighty2, 100)
+        Sleep(150)
+        SendPacketRaw(false, {
+            type = 3,
+            value = 5640,
+            x = GetLocal().pos.x,
+            y = GetLocal().pos.y,
+            px = gemsrightx2,
+            py = gemsrighty2,
+            state = 16
+        })
+
+        Sleep(50)
+        FindPath(gemsrightx3, gemsrighty3, 100)
+        Sleep(150)
+        SendPacketRaw(false, {
+            type = 3,
+            value = 5640,
+            x = GetLocal().pos.x,
+            y = GetLocal().pos.y,
+            px = gemsrightx3,
+            py = gemsrighty3,
+            state = 16
+        })
+
+        Sleep(50)
+        FindPath(gemsleftx1, gemslefty1, 100)
+        Sleep(150)
+        SendPacketRaw(false, {
+            type = 3,
+            value = 5640,
+            x = GetLocal().pos.x,
+            y = GetLocal().pos.y,
+            px = gemsleftx1,
+            py = gemslefty1,
+            state = 16
+        })
+
+        Sleep(50)
+        FindPath(gemsleftx2, gemslefty2, 100)
+        Sleep(100)
+        SendPacketRaw(false, {
+            type = 3,
+            value = 5640,
+            x = GetLocal().pos.x,
+            y = GetLocal().pos.y,
+            px = gemsleftx2,
+            py = gemslefty2,
+            state = 16
+        })
+
+        Sleep(50)
+        FindPath(gemsleftx3, gemslefty3, 100)
+        Sleep(150)
+        SendPacketRaw(false, {
+            type = 3,
+            value = 5640,
+            x = GetLocal().pos.x,
+            y = GetLocal().pos.y,
+            px = gemsleftx3,
+            py = gemslefty3,
+            state = 16
+        })
+
+        Sleep(50)
+        FindPath(gemsleftx4, gemslefty4, 100)
+        Sleep(150)
+        SendPacketRaw(false, {
+            type = 3,
+            value = 5640,
+            x = GetLocal().pos.x,
+            y = GetLocal().pos.y,
+            px = gemsleftx3,
+            py = gemslefty4,
+            state = 16
+        })
+
+        SendPacket(2, "action|input\n|text|`2Done `0Put Chand")
+        Sleep(3000)
+    end)
+
+    local success, err = coroutine.resume(thread)
+    if not success then
+        LogToConsole("`4Coroutine error: " .. tostring(err))
+    end
 end
 
-
 function manualPlant()
-	while true do
-		if putchand then
-			Sleep(250)
-			FindPath(gemsrightx1, gemsrighty1, 100)
-			Sleep(150)
+    if not SetPos() then
+        ProxyOverlay("`4SET POS FIRST!")
+        return
+    end
+    
+    for _, tiles in pairs(tile.pos1) do -- Right side gems
+        for _, obj in pairs(GetObjectList()) do
+            if obj.id == 112 and (obj.pos.x)//32 == tiles.x and (obj.pos.y)//32 == tiles.y then
+                SendPacketRaw(false, {
+                    type = 11,
+                    value = obj.oid,
+                    x = obj.pos.x,
+                    y = obj.pos.y,
+                })
+            end
+        end
+    end
+    
+    for _, tiles in pairs(tile.pos2) do -- Left side gems
+        for _, obj in pairs(GetObjectList()) do
+            if obj.id == 112 and (obj.pos.x)//32 == tiles.x and (obj.pos.y)//32 == tiles.y then
+                SendPacketRaw(false, {
+                    type = 11,
+                    value = obj.oid,
+                    x = obj.pos.x,
+                    y = obj.pos.y,
+                })
+            end
+        end
+    end
+    
+    local success, err = pcall(function()
+        RunThread(function()
+            Sleep(250)
+            FindPath(gemsrightx2, gemsrighty2, 100)
+            Sleep(150)
 			SendPacketRaw(false, {
-				type = 3,
-				value = 5640,
-				x = GetLocal().pos.x,
-				y = GetLocal().pos.y,
-				px = gemsrightx1,
-				py = gemsrighty1,
-				state = 16
-			})
-			Sleep(50)
-			FindPath(gemsrightx2, gemsrighty2, 100)
-			Sleep(250)
-			SendPacketRaw(false, {
-				type = 3,
-				value = 5640,
-				x = GetLocal().pos.x,
-				y = GetLocal().pos.y,
-				px = gemsrightx2,
-				py = gemsrighty2,
-				state = 16
-			})
-			Sleep(50)
-			FindPath(gemsrightx3, gemsrighty3, 100)
-			Sleep(250)
-			SendPacketRaw(false, {
-				type = 3,
-				value = 5640,
-				x = GetLocal().pos.x,
-				y = GetLocal().pos.y,
-				px = gemsrightx3,
-				py = gemsrighty3,
-				state = 16
-			})
-			Sleep(50)
-			FindPath(gemsleftx1, gemslefty1, 100)
-			Sleep(250)
-			SendPacketRaw(false, {
-				type = 3,
-				value = 5640,
-				x = GetLocal().pos.x,
-				y = GetLocal().pos.y,
-				px = gemsleftx1,
-				py = gemslefty1,
-				state = 16
-			})
-			Sleep(50)
-			FindPath(gemsleftx2, gemslefty2, 100)
-			Sleep(250)
-			SendPacketRaw(false, {
-				type = 3,
-				value = 5640,
-				x = GetLocal().pos.x,
-				y = GetLocal().pos.y,
-				px = gemsleftx2,
-				py = gemslefty2,
-				state = 16
-			})
-			Sleep(50)
-			FindPath(gemsleftx3, gemslefty3, 100)
-			Sleep(250)
-			SendPacketRaw(false, {
-				type = 3,
-				value = 5640,
-				x = GetLocal().pos.x,
-				y = GetLocal().pos.y,
-				px = gemsleftx3,
-				py = gemslefty3,
-				state = 16
-			})
-			Sleep(50)
-			FindPath(gemsleftx4, gemslefty4, 100)
-			Sleep(150)
-			SendPacketRaw(false, {
-				type = 3,
-				value = 5640,
-				x = GetLocal().pos.x,
-				y = GetLocal().pos.y,
-				px = gemsleftx3,
-				py = gemslefty4,
-				state = 16
-			})
-			SendPacket(2, "action|input\n|text|`2Done `0Put Chand")
-			Sleep(250)
-			return false
-		end
-	end
+                type = 3,
+                value = 5640,
+                x = GetLocal().pos.x,
+                y = GetLocal().pos.y,
+                px = gemsrightx2,
+                py = gemsrighty2,
+                state = 16
+            })
+			Sleep(300)
+            SendPacketRaw(false, {
+                type = 3,
+                value = 5640,
+                x = GetLocal().pos.x,
+                y = GetLocal().pos.y,
+                px = gemsrightx2 + 1,
+                py = gemsrighty2,
+                state = 16
+            })
+            Sleep(300)
+            SendPacketRaw(false, {
+                type = 3,
+                value = 5640,
+                x = GetLocal().pos.x,
+                y = GetLocal().pos.y,
+                px = gemsrightx2 - 1,
+                py = gemsrighty2,
+                state = 16
+            })
+            Sleep(300)
+            FindPath(gemsleftx2, gemslefty2, 100)
+            Sleep(150)
+            SendPacketRaw(false, {
+                type = 3,
+                value = 5640,
+                x = GetLocal().pos.x,
+                y = GetLocal().pos.y,
+                px = gemsleftx2,
+                py = gemslefty2,
+                state = 16
+            })
+            Sleep(300)
+            SendPacketRaw(false, {
+                type = 3,
+                value = 5640,
+                x = GetLocal().pos.x,
+                y = GetLocal().pos.y,
+                px = gemsleftx2 + 1,
+                py = gemslefty2,
+                state = 16
+            })
+			Sleep(300)
+            SendPacketRaw(false, {
+                type = 3,
+                value = 5640,
+                x = GetLocal().pos.x,
+                y = GetLocal().pos.y,
+                px = gemsleftx2 - 1,
+                py = gemslefty2,
+                state = 16
+            })
+            Sleep(250)
+            FindPath(gemsleftx4, gemslefty4, 100)
+            Sleep(150)
+            SendPacketRaw(false, {
+                type = 3,
+                value = 5640,
+                x = GetLocal().pos.x,
+                y = GetLocal().pos.y,
+                px = gemsleftx3,
+                py = gemslefty4,
+                state = 16
+            })
+            SendPacket(2, "action|input\n|text|`2Done `0Put Chand")
+            Sleep(3000)
+        end)
+    end)
+    
+    if not success then
+        ProxyOverlay("`4Error in manualPlant: "..tostring(err))
+        LogToConsole("Error in manualPlant: "..tostring(err))
+    end
 end
 
 -- Modify the existing functions to include auto-detection
