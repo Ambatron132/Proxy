@@ -384,7 +384,7 @@ end)
 
 
 ----REMOVE PARTICLE
-[[function removeparticle(packet)
+function removeparticle(packet)
     if packet.type == 17 or packet.type == 36 then
         return true
     end
