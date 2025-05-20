@@ -1430,108 +1430,113 @@ end
 
 function PlantAndro()
 	Sleep(500)
+    -- Replace RunThread with coroutine
+    local thread = coroutine.create(function()
+		Sleep(200)
+		FindPath(gemsrightx1, gemsrighty1, 100)
+		Sleep(150)
+		SendPacketRaw(false, {
+			type = 3,
+			value = 5640,
+			x = GetLocal().pos.x,
+			y = GetLocal().pos.y,
+			px = gemsrightx1,
+			py = gemsrighty1,
+			state = 16
+		})
+		Sleep(200)
 
-	local routine = coroutine.wrap(function()
-		local success, err = pcall(function()
-			Sleep(200)
-			FindPath(gemsrightx1, gemsrighty1, 100)
-			Sleep(150)
-			SendPacketRaw(false, {
-				type = 3,
-				value = 5640,
-				x = GetLocal().pos.x,
-				y = GetLocal().pos.y,
-				px = gemsrightx1,
-				py = gemsrighty1,
-				state = 16
-			})
-			Sleep(50)
-			FindPath(gemsrightx2, gemsrighty2, 100)
-			Sleep(150)
-			SendPacketRaw(false, {
-				type = 3,
-				value = 5640,
-				x = GetLocal().pos.x,
-				y = GetLocal().pos.y,
-				px = gemsrightx2,
-				py = gemsrighty2,
-				state = 16
-			})
-			Sleep(50)
-			FindPath(gemsrightx3, gemsrighty3, 100)
-			Sleep(150)
-			SendPacketRaw(false, {
-				type = 3,
-				value = 5640,
-				x = GetLocal().pos.x,
-				y = GetLocal().pos.y,
-				px = gemsrightx3,
-				py = gemsrighty3,
-				state = 16
-			})
-			Sleep(50)
-			FindPath(gemsleftx1, gemslefty1, 100)
-			Sleep(150)
-			SendPacketRaw(false, {
-				type = 3,
-				value = 5640,
-				x = GetLocal().pos.x,
-				y = GetLocal().pos.y,
-				px = gemsleftx1,
-				py = gemslefty1,
-				state = 16
-			})
-			Sleep(50)
-			FindPath(gemsleftx2, gemslefty2, 100)
-			Sleep(100)
-			SendPacketRaw(false, {
-				type = 3,
-				value = 5640,
-				x = GetLocal().pos.x,
-				y = GetLocal().pos.y,
-				px = gemsleftx2,
-				py = gemslefty2,
-				state = 16
-			})
-			Sleep(50)
-			FindPath(gemsleftx3, gemslefty3, 100)
-			Sleep(150)
-			SendPacketRaw(false, {
-				type = 3,
-				value = 5640,
-				x = GetLocal().pos.x,
-				y = GetLocal().pos.y,
-				px = gemsleftx3,
-				py = gemslefty3,
-				state = 16
-			})
-			Sleep(50)
-			FindPath(gemsleftx4, gemslefty4, 100)
-			Sleep(150)
-			SendPacketRaw(false, {
-				type = 3,
-				value = 5640,
-				x = GetLocal().pos.x,
-				y = GetLocal().pos.y,
-				px = gemsleftx3,
-				py = gemslefty4,
-				state = 16
-			})
-			SendPacket(2, "action|input\n|text|`9P`6u`9t `6C`9h`6a`9n`6d `2Done")
-			Sleep(300)
-		end)
+		FindPath(gemsrightx2, gemsrighty2, 100)
+		Sleep(200)
+		SendPacketRaw(false, {
+			type = 3,
+			value = 5640,
+			x = GetLocal().pos.x,
+			y = GetLocal().pos.y,
+			px = gemsrightx2,
+			py = gemsrighty2,
+			state = 16
+		})
+		Sleep(200)
 
-		if not success then
-			LogToConsole("`4[PlantAndro coroutine ERROR]: " .. tostring(err))
-		end
-	end)
+		FindPath(gemsrightx3, gemsrighty3, 100)
+		Sleep(250)
+		SendPacketRaw(false, {
+			type = 3,
+			value = 5640,
+			x = GetLocal().pos.x,
+			y = GetLocal().pos.y,
+			px = gemsrightx3,
+			py = gemsrighty3,
+			state = 16
+		})
+		Sleep(200)
 
-	routine()
+		FindPath(gemsleftx1, gemslefty1, 100)
+		Sleep(250)
+		SendPacketRaw(false, {
+			type = 3,
+			value = 5640,
+			x = GetLocal().pos.x,
+			y = GetLocal().pos.y,
+			px = gemsleftx1,
+			py = gemslefty1,
+			state = 16
+		})
+		Sleep(200)
+
+		FindPath(gemsleftx2, gemslefty2, 100)
+		Sleep(250)
+		SendPacketRaw(false, {
+			type = 3,
+			value = 5640,
+			x = GetLocal().pos.x,
+			y = GetLocal().pos.y,
+			px = gemsleftx2,
+			py = gemslefty2,
+			state = 16
+		})
+		Sleep(200)
+
+		FindPath(gemsleftx3, gemslefty3, 100)
+		Sleep(250)
+		SendPacketRaw(false, {
+			type = 3,
+			value = 5640,
+			x = GetLocal().pos.x,
+			y = GetLocal().pos.y,
+			px = gemsleftx3,
+			py = gemslefty3,
+			state = 16
+		})
+		Sleep(200)
+
+		FindPath(gemsleftx4, gemslefty4, 100)
+		Sleep(200)
+		SendPacketRaw(false, {
+			type = 3,
+			value = 5640,
+			x = GetLocal().pos.x,
+			y = GetLocal().pos.y,
+			px = gemsleftx3,
+			py = gemslefty4,
+			state = 16
+		})
+		Sleep(300)
+
+        SendPacket(2, "action|input\n|text|`9P`6u`9t `6C`9h`6a`9n`6d `2Done")
+        Sleep(3000)
+    end)
+
+    local success, err = coroutine.resume(thread)
+    if not success then
+        LogToConsole("`4Coroutine error: " .. tostring(err))
+    end
 end
 
 
 function manualPlant()
-
+	Sleep(500)
 
 	RunThread(function()
 		local success, err = pcall(function()
