@@ -42,7 +42,7 @@ AddHook("OnDraw", "BTK", function()
             if ImGui.BeginTabItem("SETTINGS") then
 				ImGui.Text("PULL & CBGL")
 				
-                if ImGui.Button("PULL\nMODE", ImVec2(100, 100)) then
+                if ImGui.Button(" PULL\nMODE", ImVec2(100, 100)) then
                     hook(2, "action|input\n|text|/pm")
                 end
                 ImGui.SameLine()
