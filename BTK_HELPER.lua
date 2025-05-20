@@ -1429,7 +1429,7 @@ end
 
 
 function PlantAndro()
-    -- Replace RunThread with coroutine
+
     local thread = coroutine.create(function()
 		Sleep(200)
 		FindPath(gemsrightx1, gemsrighty1, 100)
@@ -1443,7 +1443,7 @@ function PlantAndro()
 			py = gemsrighty1,
 			state = 16
 		})
-		Sleep(200)
+		Sleep(100)
 
 		FindPath(gemsrightx2, gemsrighty2, 100)
 		Sleep(200)
@@ -1456,7 +1456,7 @@ function PlantAndro()
 			py = gemsrighty2,
 			state = 16
 		})
-		Sleep(200)
+		Sleep(100)
 
 		FindPath(gemsrightx3, gemsrighty3, 100)
 		Sleep(250)
@@ -1469,7 +1469,7 @@ function PlantAndro()
 			py = gemsrighty3,
 			state = 16
 		})
-		Sleep(200)
+		Sleep(100)
 
 		FindPath(gemsleftx1, gemslefty1, 100)
 		Sleep(250)
@@ -1482,7 +1482,7 @@ function PlantAndro()
 			py = gemslefty1,
 			state = 16
 		})
-		Sleep(200)
+		Sleep(100)
 
 		FindPath(gemsleftx2, gemslefty2, 100)
 		Sleep(250)
@@ -1495,7 +1495,7 @@ function PlantAndro()
 			py = gemslefty2,
 			state = 16
 		})
-		Sleep(200)
+		Sleep(100)
 
 		FindPath(gemsleftx3, gemslefty3, 100)
 		Sleep(250)
@@ -1508,7 +1508,7 @@ function PlantAndro()
 			py = gemslefty3,
 			state = 16
 		})
-		Sleep(200)
+		Sleep(100)
 
 		FindPath(gemsleftx4, gemslefty4, 100)
 		Sleep(200)
@@ -1522,7 +1522,6 @@ function PlantAndro()
 			state = 16
 		})
 		Sleep(300)
-
         SendPacket(2, "action|input\n|text|`9P`6u`9t `6C`9h`6a`9n`6d `2Done")
         Sleep(3000)
     end)
@@ -1536,7 +1535,6 @@ end
 
 function manualPlant()
 	Sleep(500)
-
 	RunThread(function()
 		local success, err = pcall(function()
 			Sleep(200)
