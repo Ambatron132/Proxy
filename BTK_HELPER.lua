@@ -28,7 +28,7 @@ AddHook("OnDraw", "BTK", function()
 				ImGui.SameLine()
 				if ImGui.Button(" PUT\nCHAND", ImVec2(155, 100)) then
 					if useCoroutine then
-						hook(2, "action|input\n|text|/cg")      -- Uses coroutine (better for Android)
+						hook(2, "action|input\n|text|/pa")      -- Uses coroutine (better for Android)
 					elseif useRunThread then
 						hook(2, "action|input\n|text|/pc")    -- Uses RunThread (better for PC)
 					else
@@ -42,7 +42,7 @@ AddHook("OnDraw", "BTK", function()
             if ImGui.BeginTabItem("SETTINGS") then
 				ImGui.Text("PULL & CBGL")
 				
-                if ImGui.Button(" PULL\nMODE", ImVec2(100, 100)) then
+                if ImGui.Button("PULL\nMODE", ImVec2(100, 100)) then
                     hook(2, "action|input\n|text|/pm")
                 end
                 ImGui.SameLine()
