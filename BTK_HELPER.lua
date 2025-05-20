@@ -1331,7 +1331,6 @@ end
 
 
 function PlantAndro()
-	Sleep(250)
 	local routine = coroutine.wrap(function()
 		local success, err = pcall(function()
 			Sleep(200)
