@@ -646,7 +646,7 @@ end
 
 
 LogToConsole("`9Script Will Run In `25 `9Seconds")
-SendPacket(2, "action|input\n|text|`0Free Proxy `9BTK `2ON!")
+SendPacket(2, "action|input\n|text|`6F`9r`6e`9e `6P`9r`6o`9x`6y `9BTK `2ON!")
 Sleep(1000)
 
 
