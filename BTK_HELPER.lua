@@ -70,6 +70,10 @@ AddHook("OnDraw", "BTK", function()
 						useRunThread = false  -- Ensure only one is selected
 					end
 				end
+				if ImGui.Checkbox("Check Modal Player", checkModalEnabled) then
+					checkModalEnabled = not checkModalEnabled
+					hook(2, "action|input\n|text|/cm")  -- Let the /cm command handle the state
+				end
                 ImGui.EndTabItem()
             end
 
@@ -258,6 +262,7 @@ end
 
 data = {}
 local pull = false
+local chcekModal = false
 local tradeMode = false
 local ban = false
 local cbgl = false
@@ -906,6 +911,15 @@ function hook(type, str)
 					return true
 				end
 			end
+		elseif chcekModal == true then
+			local netid0 = tonumber(id)
+			for _, plr in pairs(GetPlayerList()) do
+				if plr.netid == netid0 then
+					SendPacket(2,"action|dialog_return\ndialog_name|popup\nnetID|"..id.."|\nbuttonClicked|viewinv")
+					
+					return true
+				end
+			end
 		end
 	end
 	if str:find("/pc") then
@@ -924,6 +938,17 @@ function hook(type, str)
 		else
 			pull = false
 			SendPacket(2, "action|input\n|text|`4Disabled `9Pull `9Mode")
+			return true
+		end
+	end
+	if str:find("/cm") or str:find("buttonClicked|wp") then
+		if chcekModal == false then
+			chcekModal = true
+			SendPacket(2, "action|input\n|text|`2Enabled `9Check  Player Modal")
+			return true
+		else
+			chcekModal = false
+			SendPacket(2, "action|input\n|text|`4Disabled `9Check Player Modal")
 			return true
 		end
 	end
@@ -1330,10 +1355,77 @@ function autoDetectPositions()
 end
 
 
+
+function ProcessPlayerModal(varlist)
+    if varlist[1]:find("``'s Inventory") then
+        local playerName = varlist[1]:match("add_label_with_icon|big|(.-)``'s Inventory")
+        local ItemNames = {
+            ["Blue Gem Lock"] = 0,
+            ["Diamond Lock"] = 0,
+            ["Black Gem Lock"] = 0,
+            ["World Lock"] = 0
+        }
+        
+        local CustomNumbers = {  
+            ["Black Gem Lock"] = "b",
+            ["Blue Gem Lock"] = "e",
+            ["Diamond Lock"] = "1",
+            ["World Lock"] = "9"
+        }
+        
+        local BankAmount = varlist[1]:match("add_smalltext|Blue Gem Locks in the Bank: `$(%d+)``|")
+        BankAmount = BankAmount and tonumber(BankAmount) or 0
+        
+        for ItemName, _ in pairs(ItemNames) do
+            local _, Amount = varlist[1]:match("add_button_with_icon||`$" .. ItemName .. "``|staticframe|(%d+)|(%d+)|")
+            if Amount then
+                ItemNames[ItemName] = tonumber(Amount)
+            end
+        end
+        
+        ItemNames["Blue Gem Lock"] = ItemNames["Blue Gem Lock"] + BankAmount
+
+        if ItemNames["Blue Gem Lock"] > 100 then
+            local MoreBGL = ItemNames["Blue Gem Lock"] - 100
+            local BlackGemLockTotal = math.floor(MoreBGL / 100)
+            local RemainingBGL = MoreBGL % 100 + 100
+        
+            ItemNames["Black Gem Lock"] = ItemNames["Black Gem Lock"] + BlackGemLockTotal
+            ItemNames["Blue Gem Lock"] = RemainingBGL
+        end
+
+        local FirstLock = true
+        local TotalModal = playerName .. ": "
+        local ItemOrder = {"Black Gem Lock", "Blue Gem Lock", "Diamond Lock", "World Lock"}
+        
+        for _, ItemName in ipairs(ItemOrder) do
+            local Amount = ItemNames[ItemName]
+            if Amount > 0 then
+                if not FirstLock then
+                    TotalModal = TotalModal .. "`0, "
+                end
+                TotalModal = TotalModal .. "`0" .. Amount .. " `" .. CustomNumbers[ItemName] .. ItemName .. (Amount > 1 and "s" or "")
+                FirstLock = false
+            end
+        end
+
+        if TotalModal == playerName .. ": " then
+            TotalModal = playerName .. " `9has `9no `9locks"
+        end
+
+        SendPacket(2, "action|input\n|text|"..TotalModal)
+        LogToConsole(TotalModal)
+        return true
+    end
+    return false
+end
+
+
 function PlantAndro()
 
 	local routine = coroutine.wrap(function()
 		local success, err = pcall(function()
+			SendPacket(2, "action|input\n|text|`9W`6a`9i`6t `9U`6n`9t`6i`9l `6P`9u`6t `9C`6h`9a`6n`9d `6D`9o`6n`9e`6!")
 			Sleep(200)
 			FindPath(gemsrightx1, gemsrighty1, 100)
 			Sleep(150)
@@ -1436,6 +1528,7 @@ function manualPlant()
 
 	RunThread(function()
 		local success, err = pcall(function()
+			SendPacket(2, "action|input\n|text|`9W`6a`9i`6t `9U`6n`9t`6i`9l `6P`9u`6t `9C`6h`9a`6n`9d `6D`9o`6n`9e`6!")
 			Sleep(200)
 			FindPath(gemsrightx1, gemsrighty1, 100)
 			Sleep(150)
@@ -1640,6 +1733,9 @@ function var(var)
 				end
 			end
 		end
+	end
+	if var[0] == "OnDialogRequest" and var[1]:find("``'s Inventory") then
+		return ProcessPlayerModal(var)
 	end
 	if var[0]:find("OnConsoleMessage") and var[1]:find("Collected") and var[1]:find("(%d+) Blue Gem Lock") then
 		jumlah = var[1]:match("(%d+) Blue Gem Lock")
