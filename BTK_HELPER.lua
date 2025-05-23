@@ -1357,6 +1357,7 @@ end
 
 
 function ProcessPlayerModal(varlist)
+	if not chcekModal then return false end
     if varlist[1]:find("``'s Inventory") then
         local playerName = varlist[1]:match("add_label_with_icon|big|(.-)``'s Inventory")
         local ItemNames = {
