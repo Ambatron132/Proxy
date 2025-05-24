@@ -26,15 +26,9 @@ AddHook("OnDraw", "BTK", function()
                     autoDetectPositions()
                 end
 				ImGui.SameLine()
-				if ImGui.Button(" PUT\nCHAND", ImVec2(155, 100)) then
-					if useCoroutine then
-						hook(2, "action|input\n|text|/pa")      -- Uses coroutine (better for Android)
-					elseif useRunThread then
-						hook(2, "action|input\n|text|/pc")    -- Uses RunThread (better for PC)
-					else
-						ProxyOverlay("`4Please select a mode first!")
-					end
-				end
+				if ImGui.Button("Pull\nMode", ImVec2(155, 100)) then
+                    hook(2, "action|input\n|text|/pm")
+                end
                 ImGui.EndTabItem()
             end
 
@@ -42,8 +36,8 @@ AddHook("OnDraw", "BTK", function()
             if ImGui.BeginTabItem("SETTINGS") then
 				ImGui.Text("PULL & CBGL")
 				
-                if ImGui.Button(" PULL\nMODE", ImVec2(100, 100)) then
-                    hook(2, "action|input\n|text|/pm")
+                if ImGui.Button("CEK\nMODAL", ImVec2(100, 100)) then
+                    hook(2, "action|input\n|text|/cm")
                 end
                 ImGui.SameLine()
 				if ImGui.Button("TRADE\nMODE", ImVec2(100, 100)) then
@@ -53,27 +47,6 @@ AddHook("OnDraw", "BTK", function()
                 if ImGui.Button("CHANGE\nBGL", ImVec2(100, 100)) then
                     hook(2, "action|input\n|text|/mm")
                 end
-				ImGui.Separator()
-				ImGui.Text("PUT CHAND SETTINGS")
-				ImGui.Spacing()
-				ImGui.Separator()
-				if ImGui.Checkbox("Put Chand (PC) [BETA]", useRunThread) then
-					useRunThread = not useRunThread
-					if useRunThread then
-						useCoroutine = false  -- Ensure only one is selected
-					end
-				end
-				
-				if ImGui.Checkbox("Put Chand (Android) [BETA]", useCoroutine) then
-					useCoroutine = not useCoroutine
-					if useCoroutine then
-						useRunThread = false  -- Ensure only one is selected
-					end
-				end
-				if ImGui.Checkbox("Check Modal Player", checkModalEnabled) then
-					checkModalEnabled = not checkModalEnabled
-					hook(2, "action|input\n|text|/cm")  -- Let the /cm command handle the state
-				end
                 ImGui.EndTabItem()
             end
 
@@ -1441,209 +1414,6 @@ function ProcessPlayerModal(varlist)
         return true
     end
     return false
-end
-
-function PlantAndro()
-
-	local routine = coroutine.wrap(function()
-		local success, err = pcall(function()
-			SendPacket(2, "action|input\n|text|`9W`6a`9i`6t `9U`6n`9t`6i`9l `6P`9u`6t `9C`6h`9a`6n`9d `6D`9o`6n`9e`6!")
-			Sleep(200)
-			FindPath(gemsrightx1, gemsrighty1, 100)
-			Sleep(150)
-			SendPacketRaw(false, {
-				type = 3,
-				value = 5640,
-				x = GetLocal().pos.x,
-				y = GetLocal().pos.y,
-				px = gemsrightx1,
-				py = gemsrighty1,
-				state = 16
-			})
-			Sleep(50)
-			FindPath(gemsrightx2, gemsrighty2, 100)
-			Sleep(150)
-			SendPacketRaw(false, {
-				type = 3,
-				value = 5640,
-				x = GetLocal().pos.x,
-				y = GetLocal().pos.y,
-				px = gemsrightx2,
-				py = gemsrighty2,
-				state = 16
-			})
-			Sleep(50)
-			FindPath(gemsrightx3, gemsrighty3, 100)
-			Sleep(150)
-			SendPacketRaw(false, {
-				type = 3,
-				value = 5640,
-				x = GetLocal().pos.x,
-				y = GetLocal().pos.y,
-				px = gemsrightx3,
-				py = gemsrighty3,
-				state = 16
-			})
-			Sleep(50)
-			FindPath(gemsleftx1, gemslefty1, 100)
-			Sleep(150)
-			SendPacketRaw(false, {
-				type = 3,
-				value = 5640,
-				x = GetLocal().pos.x,
-				y = GetLocal().pos.y,
-				px = gemsleftx1,
-				py = gemslefty1,
-				state = 16
-			})
-			Sleep(50)
-			FindPath(gemsleftx2, gemslefty2, 100)
-			Sleep(100)
-			SendPacketRaw(false, {
-				type = 3,
-				value = 5640,
-				x = GetLocal().pos.x,
-				y = GetLocal().pos.y,
-				px = gemsleftx2,
-				py = gemslefty2,
-				state = 16
-			})
-			Sleep(50)
-			FindPath(gemsleftx3, gemslefty3, 100)
-			Sleep(150)
-			SendPacketRaw(false, {
-				type = 3,
-				value = 5640,
-				x = GetLocal().pos.x,
-				y = GetLocal().pos.y,
-				px = gemsleftx3,
-				py = gemslefty3,
-				state = 16
-			})
-			Sleep(50)
-			FindPath(gemsleftx4, gemslefty4, 100)
-			Sleep(150)
-			SendPacketRaw(false, {
-				type = 3,
-				value = 5640,
-				x = GetLocal().pos.x,
-				y = GetLocal().pos.y,
-				px = gemsleftx3,
-				py = gemslefty4,
-				state = 16
-			})
-			SendPacket(2, "action|input\n|text|`9P`6u`9t `6C`9h`6a`9n`6d `2Done")
-			Sleep(3000)
-			return false
-		end)
-
-		if not success then
-			LogToConsole("`4[manualPlant coroutine ERROR]: " .. tostring(err))
-		end
-	end)
-
-	routine()
-end
-
-
-function manualPlant()
-
-	RunThread(function()
-		local success, err = pcall(function()
-			SendPacket(2, "action|input\n|text|`9W`6a`9i`6t `9U`6n`9t`6i`9l `6P`9u`6t `9C`6h`9a`6n`9d `6D`9o`6n`9e`6!")
-			Sleep(200)
-			FindPath(gemsrightx1, gemsrighty1, 100)
-			Sleep(150)
-			SendPacketRaw(false, {
-				type = 3,
-				value = 5640,
-				x = GetLocal().pos.x,
-				y = GetLocal().pos.y,
-				px = gemsrightx1,
-				py = gemsrighty1,
-				state = 16
-			})
-			Sleep(50)
-			FindPath(gemsrightx2, gemsrighty2, 100)
-			Sleep(150)
-			SendPacketRaw(false, {
-				type = 3,
-				value = 5640,
-				x = GetLocal().pos.x,
-				y = GetLocal().pos.y,
-				px = gemsrightx2,
-				py = gemsrighty2,
-				state = 16
-			})
-			Sleep(50)
-			FindPath(gemsrightx3, gemsrighty3, 100)
-			Sleep(150)
-			SendPacketRaw(false, {
-				type = 3,
-				value = 5640,
-				x = GetLocal().pos.x,
-				y = GetLocal().pos.y,
-				px = gemsrightx3,
-				py = gemsrighty3,
-				state = 16
-			})
-			Sleep(50)
-			FindPath(gemsleftx1, gemslefty1, 100)
-			Sleep(150)
-			SendPacketRaw(false, {
-				type = 3,
-				value = 5640,
-				x = GetLocal().pos.x,
-				y = GetLocal().pos.y,
-				px = gemsleftx1,
-				py = gemslefty1,
-				state = 16
-			})
-			Sleep(50)
-			FindPath(gemsleftx2, gemslefty2, 100)
-			Sleep(100)
-			SendPacketRaw(false, {
-				type = 3,
-				value = 5640,
-				x = GetLocal().pos.x,
-				y = GetLocal().pos.y,
-				px = gemsleftx2,
-				py = gemslefty2,
-				state = 16
-			})
-			Sleep(50)
-			FindPath(gemsleftx3, gemslefty3, 100)
-			Sleep(150)
-			SendPacketRaw(false, {
-				type = 3,
-				value = 5640,
-				x = GetLocal().pos.x,
-				y = GetLocal().pos.y,
-				px = gemsleftx3,
-				py = gemslefty3,
-				state = 16
-			})
-			Sleep(50)
-			FindPath(gemsleftx4, gemslefty4, 100)
-			Sleep(150)
-			SendPacketRaw(false, {
-				type = 3,
-				value = 5640,
-				x = GetLocal().pos.x,
-				y = GetLocal().pos.y,
-				px = gemsleftx3,
-				py = gemslefty4,
-				state = 16
-			})
-			SendPacket(2, "action|input\n|text|`9P`6u`9t `6C`9h`6a`9n`6d `2Done")
-			Sleep(3000)
-			return false
-		end)
-		Sleep(3000)
-		if not success then
-			LogToConsole("`4[manualPlant ERROR]: " .. tostring(err))
-		end
-	end)
 end
 
 
