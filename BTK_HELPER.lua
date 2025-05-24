@@ -1361,74 +1361,73 @@ end
 function ProcessPlayerModal(varlist)
     if not chcekModal then return false end
     if varlist[1]:find("``'s Inventory") then
-        local ItemNames = {
-            ["Blue Gem Lock"] = 0,
-            ["Diamond Lock"] = 0,
-            ["Black Gem Lock"] = 0,
-            ["World Lock"] = 0
+        -- Robust player name extraction without using trim()
+        local rawName = varlist[1]:match("add_label_with_icon|big|(.-)``'s Inventory")
+        -- Manual string cleaning:
+        local playerName = rawName:gsub("[()]", ""):gsub("|", ""):gsub("#%d+", ""):gsub("``", ""):gsub("^%s*(.-)%s*$", "%1")
+        
+        -- Initialize lock tracking
+        local locks = {
+            ["Blue Gem Lock"] = {count = 0, color = "e", icon = "7188"},
+            ["Diamond Lock"] = {count = 0, color = "1", icon = "1796"},
+            ["Black Gem Lock"] = {count = 0, color = "b", icon = "11550"},
+            ["World Lock"] = {count = 0, color = "9", icon = "242"}
         }
         
-        local CustomNumbers = {  
-            ["Black Gem Lock"] = "b",
-            ["Blue Gem Lock"] = "e",
-            ["Diamond Lock"] = "c",
-            ["World Lock"] = "9"
-        }
+        -- Get bank amount
+        local bankBGL = varlist[1]:match("add_smalltext|Blue Gem Locks in the Bank: `$(%d+)``|")
+        bankBGL = bankBGL and tonumber(bankBGL) or 0
         
-        local BankAmount = varlist[1]:match("add_smalltext|Blue Gem Locks in the Bank: `$(%d+)``|")
-        BankAmount = BankAmount and tonumber(BankAmount) or 0
+        -- Count inventory items
+        for lockName, data in pairs(locks) do
+            local _, count = varlist[1]:match("add_button_with_icon||`$"..lockName.."``|staticframe|(%d+)|(%d+)|")
+            if count then data.count = tonumber(count) end
+        end
+
+        -- Build dialog UI
+        local dialog = "\nadd_label_with_icon|big|`w"..playerName.."|left|7188|"..
+                      "\nadd_spacer|small|"
         
-        for ItemName, _ in pairs(ItemNames) do
-            local _, Amount = varlist[1]:match("add_button_with_icon||`$" .. ItemName .. "``|staticframe|(%d+)|(%d+)|")
-            if Amount then
-                ItemNames[ItemName] = tonumber(Amount)
+        -- Add bank section if has bank BGL
+        if bankBGL > 0 then
+            dialog = dialog.."\nadd_label_with_icon|small|`9Bank|left|11550|"..
+                     "\nadd_textbox|`e"..bankBGL.." `eBlue Gem Locks|"..
+                     "\nadd_spacer|small|"
+        end
+        
+        -- Add inventory section
+        dialog = dialog.."\nadd_label_with_icon|small|`9Inventory|left|7188|"
+        
+        local hasLocks = false
+        local lockOrder = {"Black Gem Lock", "Blue Gem Lock", "Diamond Lock", "World Lock"}
+        
+        for _, lockName in ipairs(lockOrder) do
+            local data = locks[lockName]
+            if data.count > 0 then
+                dialog = dialog.."\nadd_label_with_icon|small|`"..data.color..data.count.." "..
+                         lockName..(data.count == 1 and "" or "s").."|left|"..data.icon.."|"
+                hasLocks = true
             end
         end
         
-        ItemNames["Blue Gem Lock"] = ItemNames["Blue Gem Lock"] + BankAmount
-
-        if ItemNames["Blue Gem Lock"] > 100 then
-            local MoreBGL = ItemNames["Blue Gem Lock"] - 100
-            local BlackGemLockTotal = math.floor(MoreBGL / 100)
-            local RemainingBGL = MoreBGL % 100 + 100
+        -- Add empty state if no locks
+        if not hasLocks and bankBGL == 0 then
+            dialog = dialog.."\nadd_textbox|`9Kosong|"
+        elseif not hasLocks then
+            dialog = dialog.."\nadd_textbox|`9Kosong|"
+        end
         
-            ItemNames["Black Gem Lock"] = ItemNames["Black Gem Lock"] + BlackGemLockTotal
-            ItemNames["Blue Gem Lock"] = RemainingBGL
-        end
-
-        local FirstLock = true
-        local chatMessage = "`2Total`w: "
-        local overlayLines = {}
-        local ItemOrder = {"Black Gem Lock", "Blue Gem Lock", "Diamond Lock", "World Lock"}
+        -- Close dialog
+        dialog = dialog.."\nadd_spacer|small|"..
+                 "\nadd_quick_exit||"..
+                 "\nend_dialog|lock_view|Close|"
         
-        for _, ItemName in ipairs(ItemOrder) do
-            local Amount = ItemNames[ItemName]
-            if Amount > 0 then
-                local itemDisplay = "`0"..Amount.." `"..CustomNumbers[ItemName]..ItemName..(Amount > 1 and "s" or "")
-                
-                -- Build chat message (single line)
-                if not FirstLock then
-                    chatMessage = chatMessage.."`0, "
-                end
-                chatMessage = chatMessage..itemDisplay
-                FirstLock = false
-                
-                -- Build overlay lines (multi-line)
-                table.insert(overlayLines, itemDisplay)
-            end
-        end
-
-        if chatMessage == "`9Total`w: " then
-            chatMessage = "`wPlayer Tidak Ada Modal"
-            ProxyOverlay(chatMessage)
-        else
-            -- Combine overlay lines with newlines
-            local overlayMessage = "`9Total`w:\n"..table.concat(overlayLines, "\n")
-            ProxyOverlay(overlayMessage)
-        end
-
-        --SendPacket(2, "action|input\n|text|"..chatMessage)
-        LogToConsole(chatMessage)
+        -- Display the UI dialog
+        SendVariantList({
+            [0] = "OnDialogRequest",
+            [1] = dialog
+        })
+        
         return true
     end
     return false
