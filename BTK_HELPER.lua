@@ -34,16 +34,34 @@ AddHook("OnDraw", "BTK", function()
 
 
             if ImGui.BeginTabItem("SETTINGS") then
-				ImGui.Text("PULL & CBGL")
-				
+				ImGui.Spacing()
+                ImGui.Separator()
+				ImGui.TextColored(ImVec4(1, 1, 0, 1), "CUSTOM PULL MESSAGE")
+                local changed
+                changed, newPullMessage = ImGui.InputText("New Message", newPullMessage, 100)
+                
+                -- Set message button
+                if ImGui.Button("Set Message", ImVec2(120, 30)) then
+                    if newPullMessage ~= "" then
+                        pullModeMessage = newPullMessage
+                        ProxyOverlay("`9Message Set To: `w"..pullModeMessage)
+                        newPullMessage = ""  -- Clear input field
+                    else
+                        ProxyOverlay("`4Please enter a message first!")
+                    end
+                end
+                ImGui.Spacing()
+				ImGui.Spacing()
+                ImGui.Separator()
+                ImGui.Text("PULL & CBGL")
                 if ImGui.Button("CEK\nMODAL", ImVec2(100, 100)) then
                     hook(2, "action|input\n|text|/cm")
                 end
                 ImGui.SameLine()
-				if ImGui.Button("TRADE\nMODE", ImVec2(100, 100)) then
+                if ImGui.Button("TRADE\nMODE", ImVec2(100, 100)) then
                     hook(2, "action|input\n|text|/wk")
                 end
-				ImGui.SameLine()
+                ImGui.SameLine()
                 if ImGui.Button("CHANGE\nBGL", ImVec2(100, 100)) then
                     hook(2, "action|input\n|text|/mm")
                 end
@@ -92,6 +110,52 @@ AddHook("OnDraw", "BTK", function()
 						ImGui.EndChild()
 						ImGui.EndTabItem()
 					end
+					if ImGui.BeginTabItem("TAX LOG") then
+						ImGui.BeginChild("TaxScrollRegion", ImVec2(0, 300), true)
+						local originalTotalTax = 0
+						for _, entry in ipairs(TaxHistory) do
+							originalTotalTax = originalTotalTax + entry.amount
+						end
+						local originalBGL = math.floor(originalTotalTax / 10000)
+						local originalRemaining = originalTotalTax % 10000
+						local originalDL = math.floor(originalRemaining / 100)
+						local originalWL = originalRemaining % 100
+						ImGui.Text("Total Tax Hoster:")
+						ImGui.TextWrapped(string.format("%d BGL %d DL %d WL", originalBGL, originalDL, originalWL))
+						local sharedTax = math.floor(originalTotalTax / 2)
+						local sharedBGL = math.floor(sharedTax / 10000)
+						local sharedRemaining = sharedTax % 10000
+						local sharedDL = math.floor(sharedRemaining / 100)
+						local sharedWL = sharedRemaining % 100
+						ImGui.Text("Pendapatan Bersih:")
+						ImGui.TextWrapped(string.format("%d BGL %d DL %d WL", sharedBGL, sharedDL, sharedWL))
+						ImGui.Separator()
+						if #TaxHistory == 0 then
+						else
+							for i = #TaxHistory, 1, -1 do
+								local entry = TaxHistory[i]
+								local bgl = math.floor(entry.amount / 10000)
+								local remaining = entry.amount % 10000
+								local dl = math.floor(remaining / 100)
+								local wl = remaining % 100
+								
+								local originalBGL = math.floor(entry.originalAmount / 10000)
+								local originalRemaining = entry.originalAmount % 10000
+								local originalDL = math.floor(originalRemaining / 100)
+								local originalWL = originalRemaining % 100
+								
+								ImGui.TextWrapped(string.format("%d. Tax: %d BGL %d DL %d WL [%d BGL %d DL]",
+									#TaxHistory - i + 1,
+									bgl, dl, wl,
+	
+									originalBGL, originalDL, originalWL))
+							end
+						end
+						
+						ImGui.EndChild()
+						ImGui.EndTabItem()
+					end
+					
 						ImGui.EndTabBar()
 					end
 					ImGui.EndTabItem()
@@ -126,63 +190,31 @@ AddHook("OnDraw", "BTK", function()
 					
 					ImGui.EndTabItem()
 				end
-				if ImGui.BeginTabItem("TAX LOG") then
-					ImGui.BeginChild("TaxScrollRegion", ImVec2(0, 300), true)
-					local originalTotalTax = 0
-					for _, entry in ipairs(TaxHistory) do
-						originalTotalTax = originalTotalTax + entry.amount
-					end
-					local originalBGL = math.floor(originalTotalTax / 10000)
-					local originalRemaining = originalTotalTax % 10000
-					local originalDL = math.floor(originalRemaining / 100)
-					local originalWL = originalRemaining % 100
-					ImGui.Text("Total Tax Hoster:")
-					ImGui.TextWrapped(string.format("%d BGL %d DL %d WL", originalBGL, originalDL, originalWL))
-					local sharedTax = math.floor(originalTotalTax / 2)
-					local sharedBGL = math.floor(sharedTax / 10000)
-					local sharedRemaining = sharedTax % 10000
-					local sharedDL = math.floor(sharedRemaining / 100)
-					local sharedWL = sharedRemaining % 100
-					ImGui.Text("Pendapatan Bersih:")
-					ImGui.TextWrapped(string.format("%d BGL %d DL %d WL", sharedBGL, sharedDL, sharedWL))
+				if ImGui.BeginTabItem("UPDATE LOG") then
+					ImGui.TextColored(ImVec4(0, 1, 0, 1), "Latest Update: 24/5/2025")
+					ImGui.BulletText("Remove Spammer Slave Chat & Avatar")
+					ImGui.BulletText("Remove Particle Effects")
+					ImGui.BulletText("Auto Setup Pos")
+					ImGui.BulletText("Spam Text Configuration")
+					ImGui.BulletText("Withdraw / Deposit Commands")
+					ImGui.BulletText("Pull Mode / Auto CBGL")
+					ImGui.BulletText("Drop / Collect Logs")
+					ImGui.BulletText("Bet History Logs")
+					ImGui.BulletText("Tax Calculation Logs")
+					ImGui.BulletText("Check Modal Player")
+					ImGui.BulletText("Improve Setup Pos")
+					ImGui.BulletText("Removing Put Chand")
+					ImGui.BulletText("CUSTOM PULL MESSAGE")
+					ImGui.Spacing()
 					ImGui.Separator()
-					if #TaxHistory == 0 then
-					else
-						for i = #TaxHistory, 1, -1 do
-							local entry = TaxHistory[i]
-							local bgl = math.floor(entry.amount / 10000)
-							local remaining = entry.amount % 10000
-							local dl = math.floor(remaining / 100)
-							local wl = remaining % 100
-							
-							local originalBGL = math.floor(entry.originalAmount / 10000)
-							local originalRemaining = entry.originalAmount % 10000
-							local originalDL = math.floor(originalRemaining / 100)
-							local originalWL = originalRemaining % 100
-							
-							ImGui.TextWrapped(string.format("%d. Tax: %d BGL %d DL %d WL [%d BGL %d DL]",
-								#TaxHistory - i + 1,
-								bgl, dl, wl,
-
-								originalBGL, originalDL, originalWL))
-						end
-					end
-					
-					ImGui.EndChild()
-					
-					-- Clear button
-					if ImGui.Button("Clear Tax History", ImVec2(150, 30)) then
-						TaxHistory = {}
-					end
-					
+					ImGui.TextColored(ImVec4(1, 1, 0, 1), "Version: 2.1")
 					ImGui.EndTabItem()
 				end
-	
 				ImGui.EndTabBar()
 			end
 		end
-		ImGui.End()
-	end)
+	ImGui.End()
+end)
 
 
 
@@ -277,6 +309,8 @@ local taxset = 5
 local dawlock = false
 TaxHistory = {} -- Stores all tax collection records
 local useCoroutine = true
+pullModeMessage = "Gas Ga?(evil)"  -- Default message
+local newPullMessage = ""  -- For input field
 
 function ShowTaxLog()
     local totalTax = 0
@@ -871,7 +905,7 @@ function hook(type, str)
 			for _, plr in pairs(GetPlayerList()) do
 				if plr.netid == netid0 then
 					SendPacket(2,"action|dialog_return\ndialog_name|popup\nnetID|"..id.."|\nbuttonClicked|pull")
-					SendPacket(2, "action|input\n|text|"..plr.name.." `wGas Ga?(evil)")
+					SendPacket(2, "action|input\n|text|"..pullModeMessage)
 					return true
 				end
 			end 
