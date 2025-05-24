@@ -944,11 +944,11 @@ function hook(type, str)
 	if str:find("/cm") or str:find("buttonClicked|wp") then
 		if chcekModal == false then
 			chcekModal = true
-			SendPacket(2, "action|input\n|text|`2Enabled `9Check  Player Modal")
+			SendPacket(2, "action|input\n|text|`2Enabled `9Check  Modal")
 			return true
 		else
 			chcekModal = false
-			SendPacket(2, "action|input\n|text|`4Disabled `9Check Player Modal")
+			SendPacket(2, "action|input\n|text|`4Disabled `9Check Modal")
 			return true
 		end
 	end
@@ -1356,10 +1356,11 @@ end
 
 
 
+
+
 function ProcessPlayerModal(varlist)
-	if not chcekModal then return false end
+    if not chcekModal then return false end
     if varlist[1]:find("``'s Inventory") then
-        local playerName = varlist[1]:match("add_label_with_icon|big|(.-)``'s Inventory")
         local ItemNames = {
             ["Blue Gem Lock"] = 0,
             ["Diamond Lock"] = 0,
@@ -1370,7 +1371,7 @@ function ProcessPlayerModal(varlist)
         local CustomNumbers = {  
             ["Black Gem Lock"] = "b",
             ["Blue Gem Lock"] = "e",
-            ["Diamond Lock"] = "1",
+            ["Diamond Lock"] = "c",
             ["World Lock"] = "9"
         }
         
@@ -1396,31 +1397,42 @@ function ProcessPlayerModal(varlist)
         end
 
         local FirstLock = true
-        local TotalModal = playerName .. ": "
+        local chatMessage = "`2Total`w: "
+        local overlayLines = {}
         local ItemOrder = {"Black Gem Lock", "Blue Gem Lock", "Diamond Lock", "World Lock"}
         
         for _, ItemName in ipairs(ItemOrder) do
             local Amount = ItemNames[ItemName]
             if Amount > 0 then
+                local itemDisplay = "`0"..Amount.." `"..CustomNumbers[ItemName]..ItemName..(Amount > 1 and "s" or "")
+                
+                -- Build chat message (single line)
                 if not FirstLock then
-                    TotalModal = TotalModal .. "`0, "
+                    chatMessage = chatMessage.."`0, "
                 end
-                TotalModal = TotalModal .. "`0" .. Amount .. " `" .. CustomNumbers[ItemName] .. ItemName .. (Amount > 1 and "s" or "")
+                chatMessage = chatMessage..itemDisplay
                 FirstLock = false
+                
+                -- Build overlay lines (multi-line)
+                table.insert(overlayLines, itemDisplay)
             end
         end
 
-        if TotalModal == playerName .. ": " then
-            TotalModal = playerName .. " `9has `9no `9locks"
+        if chatMessage == "`9Total`w: " then
+            chatMessage = "`wPlayer Tidak Ada Modal"
+            ProxyOverlay(chatMessage)
+        else
+            -- Combine overlay lines with newlines
+            local overlayMessage = "`9Total`w:\n"..table.concat(overlayLines, "\n")
+            ProxyOverlay(overlayMessage)
         end
 
-        SendPacket(2, "action|input\n|text|"..TotalModal)
-        LogToConsole(TotalModal)
+        --SendPacket(2, "action|input\n|text|"..chatMessage)
+        LogToConsole(chatMessage)
         return true
     end
     return false
 end
-
 
 function PlantAndro()
 
