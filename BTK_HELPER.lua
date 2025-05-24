@@ -1325,32 +1325,42 @@ AddHook("onsendpacket", "any", hook)
 function autoDetectPositions()
     local xhost = math.floor(GetLocal().pos.x / 32)
     local yhost = math.floor(GetLocal().pos.y / 32)
-    local ChandTop = 0
-    local ChandDown = 0
+    local ChandTop = 0  -- Count objects above host
+    local ChandDown = 0 -- Count objects below host
 
-    -- Count chandeliers
     for _, tile in pairs(GetTiles()) do
         if math.abs(tile.x - xhost) <= 5 and math.abs(tile.y - yhost) <= 5 then
             if tile.fg == 340 then
-				if tile.y == yhost - 1 then
-					ChandTop = ChandTop + 1
-				elseif tile.y == yhost + 1 then
-					ChandDown = ChandDown + 1
-				end
-			end
-		end
-	end
-    -- New improved decision logic
+                if tile.y == yhost - 1 then
+                    ChandTop = ChandTop + 1
+                elseif tile.y == yhost + 1 then
+                    ChandDown = ChandDown + 1
+                end
+            end
+        end
+    end
+
+    for _, object in pairs(GetObjectList()) do
+        local objX = math.floor(object.pos.x / 32)
+        local objY = math.floor(object.pos.y / 32)
+
+        if math.abs(objX - xhost) <= 5 then
+            if object.id == 112 then
+                if objY == yhost - 1 then
+                    ChandTop = ChandTop + 1
+                elseif objY == yhost + 1 then
+                    ChandDown = ChandDown + 1
+                end
+            end
+        end
+    end
+
     if ChandTop > ChandDown and ChandTop >= 3 then
         SetTop()
     elseif ChandDown > ChandTop and ChandDown >= 3 then
         SetDown()
     else
-        if yhost - 1 then
-            SetTop()
-        else
-            SetDown()
-        end
+        SetTop()
     end
 end
 
