@@ -41,7 +41,7 @@ AddHook("OnDraw", "BTK", function()
                 changed, newPullMessage = ImGui.InputText("New Message", newPullMessage, 100)
                 
                 -- Set message button
-                if ImGui.Button("Set Message", ImVec2(120, 30)) then
+                if ImGui.Button("Set Message", ImVec2(125, 50)) then
                     if newPullMessage ~= "" then
                         pullModeMessage = newPullMessage
                         ProxyOverlay("`9Message Set To: `w"..pullModeMessage)
@@ -1402,18 +1402,19 @@ function ProcessPlayerModal(varlist)
         end
 
         -- Build dialog UI
-        local dialog = "\nadd_label_with_icon|big|`w"..playerName.."|left|7188|"..
+        local dialog = "\nadd_label_with_icon|big|`w"..playerName.."|left|11816|"..
                       "\nadd_spacer|small|"
         
         -- Add bank section if has bank BGL
         if bankBGL > 0 then
             dialog = dialog.."\nadd_label_with_icon|small|`9Bank|left|11550|"..
-                     "\nadd_textbox|`e"..bankBGL.." `eBlue Gem Locks|"..
+					 "\nadd_label_with_icon|small|`e"..bankBGL.." `eBlue Gem Locks|left|7188|"..
                      "\nadd_spacer|small|"
         end
         
         -- Add inventory section
         dialog = dialog.."\nadd_label_with_icon|small|`9Inventory|left|7188|"
+		
         
         local hasLocks = false
         local lockOrder = {"Black Gem Lock", "Blue Gem Lock", "Diamond Lock", "World Lock"}
@@ -1429,9 +1430,9 @@ function ProcessPlayerModal(varlist)
         
         -- Add empty state if no locks
         if not hasLocks and bankBGL == 0 then
-            dialog = dialog.."\nadd_textbox|`9Kosong|"
+            dialog = dialog.."\nadd_label_with_icon|small|`4Kosong|left|6128|"
         elseif not hasLocks then
-            dialog = dialog.."\nadd_textbox|`9Kosong|"
+            dialog = dialog.."\nadd_label_with_icon|small|`4Kosong|left|6128|"
         end
         
         -- Close dialog
