@@ -220,6 +220,38 @@ end)
 
 
 
+function open()
+	opening = "\nadd_label_with_icon|big|`9Update Log|left|2480|"..
+"\nadd_spacer|small|"..
+"\nadd_label_with_icon|small|`^Change Log: `227/5/2025|left|6128|"..
+"\nadd_textbox|`2Version : `52.1|"..
+"\nadd_textbox|Remove Spammer Slave Chat & Avatar|"..
+"\nadd_textbox|Remove Particle Effects|"..
+"\nadd_textbox|Auto Setup Pos|"..
+"\nadd_textbox|Spam Text Configuration|"..
+"\nadd_textbox|Withdraw / Deposit Commands|"..
+"\nadd_textbox|Pull Mode / Auto CBGL|"..
+"\nadd_textbox|Drop / Collect Logs|"..
+"\nadd_textbox|Bet History Logs|"..
+"\nadd_textbox|Tax Calculation Logs|"..
+"\nadd_textbox|Check Modal Player|"..
+"\nadd_textbox|Improve Setup Pos|"..
+"\nadd_textbox|Removing Put Chand|"..
+"\nadd_textbox|CUSTOM PULL MESSAGE|"..
+"\nadd_textbox|Put Chand: /c [PC] - /put [Andro]|"..
+"\nadd_spacer|small|"..
+"\nadd_label_with_icon|small|`^Information|left|5956|"..
+"\nadd_textbox|`9/cmd `wShows commands|"..
+"\nadd_spacer|small|"..
+"\nadd_quick_exit||"..
+"\nend_dialog|cl|Close|"
+	SendVariantList({
+		[0] = "OnDialogRequest",
+		[1] = opening
+	})
+end
+
+open()
 
 
 
