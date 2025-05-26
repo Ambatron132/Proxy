@@ -191,7 +191,7 @@ AddHook("OnDraw", "BTK", function()
 					ImGui.EndTabItem()
 				end
 				if ImGui.BeginTabItem("UPDATE LOG") then
-					ImGui.TextColored(ImVec4(0, 1, 0, 1), "Latest Update: 24/5/2025")
+					ImGui.TextColored(ImVec4(0, 1, 0, 1), "Latest Update: 27/5/2025")
 					ImGui.BulletText("Remove Spammer Slave Chat & Avatar")
 					ImGui.BulletText("Remove Particle Effects")
 					ImGui.BulletText("Auto Setup Pos")
@@ -205,9 +205,10 @@ AddHook("OnDraw", "BTK", function()
 					ImGui.BulletText("Improve Setup Pos")
 					ImGui.BulletText("Removing Put Chand")
 					ImGui.BulletText("CUSTOM PULL MESSAGE")
+					ImGui.BulletText("Put Chand: /c [PC] - /put [Andro]")
 					ImGui.Spacing()
 					ImGui.Separator()
-					ImGui.TextColored(ImVec4(1, 1, 0, 1), "Version: 2.1")
+					ImGui.TextColored(ImVec4(1, 1, 0, 1), "Version: 2.2")
 					ImGui.EndTabItem()
 				end
 				ImGui.EndTabBar()
@@ -929,12 +930,17 @@ function hook(type, str)
 			end
 		end
 	end
-	if str:find("/pc") then
-		manualPlant()
+	if str:find("/c") then
+		RunThread(function()
+			manualPlant()
+		end)
 		return true
 	end
-	if str:find("/pa") then
-		PlantAndro()
+	if str:find("/put") then
+		local routine = coroutine.warp(function()
+			manualPlant()
+		end)
+		routine()
 		return true
 	end
 	if str:find("/pm") or str:find("buttonClicked|wp") then
@@ -1329,6 +1335,100 @@ end
 end
 AddHook("onsendpacket", "any", hook)
 
+
+function manualPlant()
+    if not SetPos() then
+        ProxyOverlay("`4SET POS FIRST!")
+        return
+    end
+    
+    ProxyOverlay("`9Placing Chand...")
+    FindPath(gemsleftx1, gemslefty1)
+    Sleep(150)
+    SendPacketRaw(false, {
+        type = 3,
+        value = 5640,  -- Chandelier ID
+        x = GetLocal().pos.x,
+        y = GetLocal().pos.y,
+        px = gemsleftx1,
+        py = gemslefty1,
+        state = 16
+    })
+    Sleep(50)
+    
+    FindPath(gemsleftx2, gemslefty2)
+    Sleep(150)
+    SendPacketRaw(false, {
+        type = 3,
+        value = 5640,
+        x = GetLocal().pos.x,
+        y = GetLocal().pos.y,
+        px = gemsleftx2,
+        py = gemslefty2,
+        state = 16
+    })
+    Sleep(50)
+    
+    FindPath(gemsleftx3, gemslefty3)
+    Sleep(150)
+    SendPacketRaw(false, {
+        type = 3,
+        value = 5640,
+        x = GetLocal().pos.x,
+        y = GetLocal().pos.y,
+        px = gemsleftx3,
+        py = gemslefty3,
+        state = 16
+    })
+    Sleep(50)
+    
+    -- Place chandeliers on right side
+    FindPath(gemsrightx1, gemsrighty1)
+    Sleep(150)
+    SendPacketRaw(false, {
+        type = 3,
+        value = 5640,
+        x = GetLocal().pos.x,
+        y = GetLocal().pos.y,
+        px = gemsrightx1,
+        py = gemsrighty1,
+        state = 16
+    })
+    Sleep(50)
+    
+    FindPath(gemsrightx2, gemsrighty2)
+    Sleep(150)
+    SendPacketRaw(false, {
+        type = 3,
+        value = 5640,
+        x = GetLocal().pos.x,
+        y = GetLocal().pos.y,
+        px = gemsrightx2,
+        py = gemsrighty2,
+        state = 16
+    })
+    Sleep(50)
+    
+    FindPath(gemsrightx3, gemsrighty3)
+    Sleep(150)
+    SendPacketRaw(false, {
+        type = 3,
+        value = 5640,
+        x = GetLocal().pos.x,
+        y = GetLocal().pos.y,
+        px = gemsrightx3,
+        py = gemsrighty3,
+        state = 16
+    })
+    Sleep(50)
+    
+    -- Return to back position
+    FindPath(gemsleftx4, gemslefty4)
+    SendPacket(2, "action|input\n|text|Gas Bet!(lol)")
+    ProxyOverlay("`2Done!")
+    Sleep(500)
+end
+
 function autoDetectPositions()
     local xhost = math.floor(GetLocal().pos.x / 32)
     local yhost = math.floor(GetLocal().pos.y / 32)
@@ -1555,7 +1655,7 @@ function var(var)
 		for _, tile in pairs(GetTiles()) do
 			if tile.fg == 3898 then
 				if GetItemCount(1796) >= 100 or s >= 99 then
-					SendPacket(2, "action|dialog_return\ndialog_name|telephone\nnum|53785|\nx|" .. tile.x .. "|\ny|" .. tile.y .. "|\nbuttonClicked|bglconvert")
+					SendPacket(2, "action|dialog_return\ndialog_name|telephone\nnum|53785|\nx|" .. math.floor(tile.x) .. "|\ny|" .. math.floor(tile.y) .. "|\nbuttonClicked|bglconvert")
 					--ProxyOverlay("`2Successfully `9Change Blue Gem Lock")
 				end
 			end
