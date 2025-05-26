@@ -940,7 +940,7 @@ function hook(type, str)
 			end
 		end
 	end
-	if str:find("/c") then
+	if str:find("/pc") then
 		RunThread(function()
 			manualPlant()
 		end)
