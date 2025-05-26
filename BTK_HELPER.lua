@@ -55,7 +55,7 @@ AddHook("OnDraw", "BTK", function()
                 ImGui.Separator()
                 ImGui.Text("PULL & CBGL")
                 if ImGui.Button("CEK\nMODAL", ImVec2(100, 100)) then
-                    hook(2, "action|input\n|text|/cm")
+                    hook(2, "action|input\n|text|/mm")
                 end
                 ImGui.SameLine()
                 if ImGui.Button("TRADE\nMODE", ImVec2(100, 100)) then
@@ -63,7 +63,7 @@ AddHook("OnDraw", "BTK", function()
                 end
                 ImGui.SameLine()
                 if ImGui.Button("CHANGE\nBGL", ImVec2(100, 100)) then
-                    hook(2, "action|input\n|text|/mm")
+                    hook(2, "action|input\n|text|/cbgl")
                 end
                 ImGui.EndTabItem()
             end
@@ -954,7 +954,7 @@ function hook(type, str)
 			return true
 		end
 	end
-	if str:find("/cm") or str:find("buttonClicked|wp") then
+	if str:find("/mm") then
 		if chcekModal == false then
 			chcekModal = true
 			SendPacket(2, "action|input\n|text|`2Enabled `9Check  Modal")
@@ -987,7 +987,7 @@ function hook(type, str)
 			return true
 		end
 	end
-	if str:find("/mm") or str:find("buttonClicked|cbgl") then
+	if str:find("/cbgl") or str:find("buttonClicked|cbgl") then
 		if cbgl == false then
 			cbgl = true
 			ProxyOverlay("`2Enabled `9Fast Change Blue Gem Lock")
