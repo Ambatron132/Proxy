@@ -190,27 +190,6 @@ AddHook("OnDraw", "BTK", function()
 					
 					ImGui.EndTabItem()
 				end
-				if ImGui.BeginTabItem("UPDATE LOG") then
-					ImGui.TextColored(ImVec4(0, 1, 0, 1), "Latest Update: 27/5/2025")
-					ImGui.BulletText("Remove Spammer Slave Chat & Avatar")
-					ImGui.BulletText("Remove Particle Effects")
-					ImGui.BulletText("Auto Setup Pos")
-					ImGui.BulletText("Spam Text Configuration")
-					ImGui.BulletText("Withdraw / Deposit Commands")
-					ImGui.BulletText("Pull Mode / Auto CBGL")
-					ImGui.BulletText("Drop / Collect Logs")
-					ImGui.BulletText("Bet History Logs")
-					ImGui.BulletText("Tax Calculation Logs")
-					ImGui.BulletText("Check Modal Player")
-					ImGui.BulletText("Improve Setup Pos")
-					ImGui.BulletText("Removing Put Chand")
-					ImGui.BulletText("CUSTOM PULL MESSAGE")
-					ImGui.BulletText("Put Chand: /c [PC] - /put [Andro]")
-					ImGui.Spacing()
-					ImGui.Separator()
-					ImGui.TextColored(ImVec4(1, 1, 0, 1), "Version: 2.2")
-					ImGui.EndTabItem()
-				end
 				ImGui.EndTabBar()
 			end
 		end
@@ -223,22 +202,21 @@ end)
 function open()
 	opening = "\nadd_label_with_icon|big|`9Update Log|left|2480|"..
 "\nadd_spacer|small|"..
-"\nadd_label_with_icon|small|`^Change Log: `227/5/2025|left|6128|"..
-"\nadd_textbox|`2Version : `52.1|"..
-"\nadd_textbox|Remove Spammer Slave Chat & Avatar|"..
-"\nadd_textbox|Remove Particle Effects|"..
-"\nadd_textbox|Auto Setup Pos|"..
-"\nadd_textbox|Spam Text Configuration|"..
-"\nadd_textbox|Withdraw / Deposit Commands|"..
-"\nadd_textbox|Pull Mode / Auto CBGL|"..
-"\nadd_textbox|Drop / Collect Logs|"..
-"\nadd_textbox|Bet History Logs|"..
-"\nadd_textbox|Tax Calculation Logs|"..
-"\nadd_textbox|Check Modal Player|"..
-"\nadd_textbox|Improve Setup Pos|"..
-"\nadd_textbox|Removing Put Chand|"..
-"\nadd_textbox|CUSTOM PULL MESSAGE|"..
-"\nadd_textbox|Put Chand: /c [PC] - /put [Andro]|"..
+"\nadd_textbox|`9Last Udate: `227/5/2025|"..
+"\nadd_textbox|`wRemove Spammer Slave Chat & Avatar|"..
+"\nadd_textbox|`wRemove Particle Effects|"..
+"\nadd_textbox|`wAuto Setup Pos|"..
+"\nadd_textbox|`wSpam Text Configuration|"..
+"\nadd_textbox|`wWithdraw / Deposit Commands|"..
+"\nadd_textbox|`wPull Mode / Auto CBGL|"..
+"\nadd_textbox|`wDrop / Collect Logs|"..
+"\nadd_textbox|`wBet History Logs|"..
+"\nadd_textbox|`wTax Calculation Logs|"..
+"\nadd_textbox|`wCheck Modal Player|"..
+"\nadd_textbox|`wImprove Setup Pos|"..
+"\nadd_textbox|`wRemoving Put Chand|"..
+"\nadd_textbox|`wCUSTOM PULL MESSAGE|"..
+"\nadd_textbox|`wPut Chand: /c [PC] - /put [Andro]|"..
 "\nadd_spacer|small|"..
 "\nadd_label_with_icon|small|`^Information|left|5956|"..
 "\nadd_textbox|`9/cmd `wShows commands|"..
@@ -969,7 +947,7 @@ function hook(type, str)
 		return true
 	end
 	if str:find("/put") then
-		local routine = coroutine.warp(function()
+		local routine = coroutine.wrap(function()
 			manualPlant()
 		end)
 		routine()
