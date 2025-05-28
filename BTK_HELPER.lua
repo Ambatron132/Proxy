@@ -1210,10 +1210,6 @@ check_autospam|0]])
 		tele()
 		return true
 	end
-	if str:find("buttonClicked|back") then
-	 xxx()  -- Return to main menu
-	 return true
-    end
 	if str:find("buttonClicked|wrench") then
 		wset()
 		return true
