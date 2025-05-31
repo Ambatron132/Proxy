@@ -151,8 +151,12 @@ AddHook("OnDraw", "BTK", function()
 									originalBGL, originalDL, originalWL))
 							end
 						end
-						
-						ImGui.EndChild()
+					ImGui.EndChild()
+					
+					-- Clear button
+					if ImGui.Button("Clear Tax History", ImVec2(150, 30)) then
+						TaxHistory = {}
+					end
 						ImGui.EndTabItem()
 					end
 					
