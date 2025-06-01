@@ -959,33 +959,33 @@ function hook(type, str)
 	end
 	if str:find("/pm") or str:find("buttonClicked|wp") then
 		if pull == false then
-			pull = true
+			pull, tradeMode, chcekModal = true, false, false
 			SendPacket(2, "action|input\n|text|`2Enabled `9Pull `9Mode")
 			return true
 		else
-			pull = false
+			pull, tradeMode, chcekModal = false, false, false
 			SendPacket(2, "action|input\n|text|`4Disabled `9Pull `9Mode")
 			return true
 		end
 	end
 	if str:find("/mm") then
 		if chcekModal == false then
-			chcekModal = true
+			pull, tradeMode, chcekModal = false, false, true
 			SendPacket(2, "action|input\n|text|`2Enabled `9Check  Modal")
 			return true
 		else
-			chcekModal = false
+			pull, tradeMode, chcekModal = false, false, false
 			SendPacket(2, "action|input\n|text|`4Disabled `9Check Modal")
 			return true
 		end
 	end
 	if str:find("/wk") or str:find("buttonClicked|wk") then
 		if tradeMode == false then
-			tradeMode = true
+			pull, tradeMode, chcekModal = false, true, false
 			SendPacket(2, "action|input\n|text|`2Enabled `#Trade `9Mode")
 			return true
 		else
-			tradeMode = false
+			pull, tradeMode, chcekModal = false, false, false
 			SendPacket(2, "action|input\n|text|`4Disabled `#Trade `9Mode")
 			return true
 		end
